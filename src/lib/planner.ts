@@ -75,8 +75,20 @@ const CATEGORY_TARGET_BANDS: Record<string, { min: number; max: number }> = {
   protein: { min: 0.2, max: 0.3 },
   fat: { min: 0.15, max: 0.25 },
   vegetable: { min: 0.05, max: 0.1 },
-  morale: { min: 0.05, max: 0.1 },
+  morale: { min: 0, max: 0.05 },
   micronutrient: { min: 0, max: 0.05 },
+};
+
+const CATEGORY_MAX_UNITS: Record<string, number> = {
+  morale: 3,
+};
+
+const CATEGORY_MIN_UNITS_OVERRIDE: Record<string, number> = {
+  morale: 0,
+};
+
+const CATEGORY_MAX_BUDGET_SHARE: Record<string, number> = {
+  morale: 0.05,
 };
 
 function caloriesPerUnit(item: FoodItem): number | null {
@@ -102,6 +114,31 @@ function passesDietaryFlags(item: FoodItem, flags: DietaryFlags): boolean {
 
 function rankWithinCategory(items: FoodItem[]): FoodItem[] {
   return [...items].sort((a, b) => (scoreItem(b) ?? -1) - (scoreItem(a) ?? -1));
+}
+
+function getCategoryBudget(lines: Map<string, RankedItem>, category: string): number {
+  return Array.from(lines.values())
+    .filter((line) => line.category === category)
+    .reduce((sum, line) => sum + line.estimatedCostGbp, 0);
+}
+
+function getCategoryQuantity(lines: Map<string, RankedItem>, category: string): number {
+  return Array.from(lines.values())
+    .filter((line) => line.category === category)
+    .reduce((sum, line) => sum + line.quantity, 0);
+}
+
+function canAddUnitWithinCaps(lines: Map<string, RankedItem>, item: FoodItem, budgetGbp: number): boolean {
+  const maxUnits = CATEGORY_MAX_UNITS[item.category];
+  if (maxUnits != null && getCategoryQuantity(lines, item.category) + 1 > maxUnits) return false;
+
+  const maxBudgetShare = CATEGORY_MAX_BUDGET_SHARE[item.category];
+  if (maxBudgetShare != null) {
+    const projectedBudget = getCategoryBudget(lines, item.category) + item.typical_unit_price_gbp;
+    if (projectedBudget > budgetGbp * maxBudgetShare) return false;
+  }
+
+  return true;
 }
 
 function addUnit(lines: Map<string, RankedItem>, item: FoodItem) {
@@ -148,7 +185,7 @@ export function buildPlan(input: HouseholdInput, foods: FoodItem[]): PlannerResu
       eligible.filter((item) => item.category === category && scoreItem(item) != null),
     );
     const pick = candidates[0];
-    const minUnits = CATEGORY_MIN_UNITS[category] ?? 1;
+    const minUnits = CATEGORY_MIN_UNITS_OVERRIDE[category] ?? CATEGORY_MIN_UNITS[category] ?? 1;
     if (!pick) {
       droppedCategories.push(category);
       requiredQueue.shift();
@@ -156,7 +193,11 @@ export function buildPlan(input: HouseholdInput, foods: FoodItem[]): PlannerResu
     }
 
     let allocated = 0;
-    while (allocated < minUnits && remainingBudget >= pick.typical_unit_price_gbp) {
+    while (
+      allocated < minUnits &&
+      remainingBudget >= pick.typical_unit_price_gbp &&
+      canAddUnitWithinCaps(rankedLines, pick, budgetGbp)
+    ) {
       addUnit(rankedLines, pick);
       remainingBudget -= pick.typical_unit_price_gbp;
       allocated += 1;
@@ -198,6 +239,7 @@ export function buildPlan(input: HouseholdInput, foods: FoodItem[]): PlannerResu
 
     const next = candidatePool.find((item) => {
       if (item.typical_unit_price_gbp > remainingBudget) return false;
+      if (!canAddUnitWithinCaps(rankedLines, item, budgetGbp)) return false;
       const existing = rankedLines.get(item.id);
       const existingCalories = existing?.totalCalories ?? 0;
       const nextUnitCalories = caloriesPerUnit(item) ?? 0;

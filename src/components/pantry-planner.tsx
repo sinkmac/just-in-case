@@ -68,7 +68,7 @@ export function PantryPlanner() {
       acc[line.category].push(line);
       return acc;
     }, {});
-  }, [result.ranked]);
+  }, [result]);
 
   const approxDaysCovered = Math.floor(result.totalCaloriesPlanned / Math.max(1, result.dailyCaloriesNeeded));
 
@@ -76,7 +76,6 @@ export function PantryPlanner() {
     <div className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8 print-shell">
         <header className="no-print mb-8 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--brand)]">Lighthouse</p>
           <h1 className="mt-2 text-3xl font-bold text-[var(--brand-dark)]">Just In Case</h1>
           <p className="mt-2 text-sm text-[var(--muted)]">Smart preparation. Just in case.</p>
           <p className="mt-4 max-w-2xl text-sm leading-6 text-[var(--muted)]">
