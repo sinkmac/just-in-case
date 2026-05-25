@@ -271,7 +271,7 @@ export function PantryPlanner() {
         </main>
 
         <footer className="no-print mt-8 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm">
-          <p className="text-sm font-semibold text-[var(--brand-dark)]">A Lighthouse tool — lighthouse.scot</p>
+          <p className="text-sm font-semibold text-[var(--brand-dark)]">Just In Case</p>
           <p className="mt-2 text-sm text-[var(--muted)]">Fixed point in uncertain times</p>
           <p className="mt-4 text-xs text-[var(--muted)]">Some links are affiliate links. We earn a small commission at no cost to you.</p>
         </footer>
