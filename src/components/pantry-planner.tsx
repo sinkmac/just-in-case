@@ -273,6 +273,12 @@ export function PantryPlanner() {
         <footer className="no-print mt-8 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm">
           <p className="text-sm font-semibold text-[var(--brand-dark)]">Just In Case</p>
           <p className="mt-2 text-sm text-[var(--muted)]">Fixed point in uncertain times</p>
+          <nav className="mt-4 flex flex-wrap gap-3 text-sm text-[var(--muted)]">
+            <a href="/about">About</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/contact">Contact</a>
+            <a href="/affiliate-disclosure">Affiliate disclosure</a>
+          </nav>
           <p className="mt-4 text-xs text-[var(--muted)]">Some links are affiliate links. We earn a small commission at no cost to you.</p>
         </footer>
       </div>

@@ -13,9 +13,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://justincase.scot"),
   title: "Just In Case — Emergency Food Calculator for UK Households",
   description:
-    "Calculate exactly how much long-life food your household needs. Balanced across food groups, ranked by value. Free UK emergency food planner.",
+    "Calculate how much long-life food your UK household can buy within budget, with shelf-stable categories, calories, storage estimates, and Amazon-linked shopping routes.",
+  alternates: { canonical: "https://justincase.scot/" },
+  openGraph: {
+    title: "Just In Case — Emergency Food Calculator for UK Households",
+    description:
+      "A free UK just-in-case pantry calculator for long-life food, budget reality, storage space, and printable shopping lists.",
+    url: "https://justincase.scot/",
+    type: "website",
+    siteName: "Just In Case",
+  },
 };
 
 export default function RootLayout({

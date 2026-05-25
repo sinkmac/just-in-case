@@ -1,5 +1,31 @@
 import { PantryPlanner } from "@/components/pantry-planner";
 
+const siteSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      name: "Just In Case",
+      url: "https://justincase.scot/",
+      description: "A UK emergency food calculator and just-in-case pantry planner."
+    },
+    {
+      "@type": "WebApplication",
+      name: "Just In Case pantry planner",
+      url: "https://justincase.scot/",
+      description: "A free UK tool that calculates long-life food quantities by household size, weeks of supply, budget, dietary filters, calories and storage.",
+      applicationCategory: "LifestyleApplication",
+      operatingSystem: "Web",
+      offers: { "@type": "Offer", price: "0", priceCurrency: "GBP" }
+    },
+    {
+      "@type": "Organization",
+      name: "AI Scotland Productions",
+      url: "https://aiscotlandproductions.com"
+    }
+  ]
+};
+
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -50,6 +76,10 @@ const faqSchema = {
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
