@@ -14,7 +14,7 @@ Just In Case helps a household work out what long-life food to buy for a given b
 - Next.js App Router
 - Tailwind CSS
 - Vercel hosting
-- Amazon Associates links (`biteforecast2-21`) with search fallback when ASIN is placeholder
+- Amazon Associates links (`biteforecas00-21`) with search fallback when ASIN is placeholder
 
 ## Domains to check
 - justincase.scot

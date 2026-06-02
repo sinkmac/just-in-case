@@ -29,10 +29,10 @@ function formatCurrency(value: number) {
 
 function buildAmazonHref(item: FoodItem) {
   if (item.amazon_asin && item.amazon_asin !== "XXXXXXXXXX") {
-    return `https://www.amazon.co.uk/dp/${item.amazon_asin}?tag=biteforecast2-21`;
+    return `https://www.amazon.co.uk/dp/${item.amazon_asin}?tag=biteforecas00-21`;
   }
 
-  return `https://www.amazon.co.uk/s?k=${encodeURIComponent(item.name)}&tag=biteforecast2-21`;
+  return `https://www.amazon.co.uk/s?k=${encodeURIComponent(item.name)}&tag=biteforecas00-21`;
 }
 
 export function PantryPlanner() {
