@@ -10,6 +10,35 @@ type DietaryFlags = {
   noDairy: boolean;
 };
 
+type DurationTier = "weekend" | "fortnight" | "month" | "season";
+
+const TIER_DATA: Record<DurationTier, { label: string; weeks: number; register: string; pictogram: string }> = {
+  weekend: {
+    label: "A rough weekend",
+    weeks: 3 / 7,
+    register: "Power cut, burst main, snowed in. The official-guidance level, and one shop covers it entirely.",
+    pictogram: "▦",
+  },
+  fortnight: {
+    label: "A bad fortnight",
+    weeks: 2,
+    register: "Empty shelves, a supply hiccup that drags. Enough depth that a strange fortnight is an inconvenience, not a crisis.",
+    pictogram: "▣",
+  },
+  month: {
+    label: "A hard month",
+    weeks: 4,
+    register: "A serious disruption. This is where most households should aim &mdash; and it still fits in one cupboard.",
+    pictogram: "▣ 📦",
+  },
+  season: {
+    label: "A long season",
+    weeks: 12,
+    register: "At this depth you&rsquo;re not storing food anymore &mdash; you&rsquo;re keeping a working larder. Everything here should be food you already eat, bought deeper and rotated through. Expect a shelving unit, not a shelf.",
+    pictogram: "🏗️",
+  },
+};
+
 const categoryLabels: Record<string, string> = {
   staple_carb: "Staple carbs",
   protein: "Protein",
@@ -18,6 +47,84 @@ const categoryLabels: Record<string, string> = {
   morale: "Morale",
   micronutrient: "Micronutrients",
 };
+
+const categoryIntros: Record<string, string> = {
+  fat: "The most calories per pound and per litre of anything you can store. One jar of oil quietly outworks a whole shelf of tins &mdash; that&rsquo;s why it&rsquo;s first.",
+  staple_carb: "The bulk of every plan: cheap, dense, and boring on purpose. Rice and pasta are what everything else gets served on top of.",
+  protein: "Keeps muscles working and hunger honest. Tins are ready the moment you open them; dried lentils store smaller and cost less, but need water and heat.",
+  vegetable: "Not for calories &mdash; for staying human. A tin of sweetcorn is fibre, vitamins, and the difference between a meal and a ration.",
+  micronutrient: "Calories keep you alive. These keep you well. Small, light, and worth their shelf space many times over.",
+  morale: "A crisis pantry without chocolate gets abandoned. This is not a joke category &mdash; food you look forward to is food you&rsquo;ll actually rotate and eat.",
+};
+
+function litresToShelfTerms(litres: number): string {
+  if (litres < 5) return "a shoebox";
+  if (litres < 15) return "half a cupboard shelf";
+  if (litres < 30) return "roughly one cupboard shelf";
+  if (litres < 60) return "two cupboard shelves, or one under-bed box";
+  return "a full cupboard &mdash; or one cheap shelving unit in a hall or garage";
+}
+
+type SpaceOption = "shoebox" | "half-shelf" | "one-shelf" | "cupboard";
+
+const SPACE_LITRES: Record<SpaceOption, number> = {
+  "shoebox": 8,
+  "half-shelf": 15,
+  "one-shelf": 30,
+  "cupboard": 60,
+};
+
+const BUTTON_LABELS: Record<SpaceOption, string> = {
+  "shoebox": "A shoebox",
+  "half-shelf": "Half a shelf",
+  "one-shelf": "One shelf",
+  "cupboard": "A whole cupboard",
+};
+
+const SPACE_LABELS: Record<SpaceOption, string> = {
+  "shoebox": "a shoebox",
+  "half-shelf": "half a shelf",
+  "one-shelf": "one shelf",
+  "cupboard": "a whole cupboard",
+};
+
+type SwapEntry = {
+  id: string;
+  fromName: string;
+  toName: string;
+  litresReclaimedPerUnit: number;
+  badgeText?: string;
+  tradeOff: string;
+};
+
+const SWAPS: SwapEntry[] = [
+  {
+    id: "chickpeas-to-lentils",
+    fromName: "Tinned chickpeas",
+    toName: "Red lentils",
+    litresReclaimedPerUnit: 0.25,
+    tradeOff: "Red lentils need water and about 20 minutes of heat. Tinned chickpeas you open and eat.",
+  },
+  {
+    id: "oats-to-rice",
+    fromName: "Rolled oats",
+    toName: "White rice",
+    litresReclaimedPerUnit: 0.7,
+    tradeOff: "Rice is more compact than oats but less versatile for breakfast. You give up porridge for shelf space.",
+  },
+  {
+    id: "lentils-to-beans",
+    fromName: "Red lentils",
+    toName: "Tinned beans",
+    litresReclaimedPerUnit: 0,
+    badgeText: "ready without heat",
+    tradeOff: "Takes up more shelf space &mdash; but it&rsquo;s a meal you can eat straight from the tin when the hob&rsquo;s out of action.",
+  },
+];
+
+function sumCategoryLitres(lines: { totalStorageLitres: number }[]): number {
+  return lines.reduce((sum, line) => sum + line.totalStorageLitres, 0);
+}
 
 function formatCurrency(value: number) {
   return new Intl.NumberFormat("en-GB", {
@@ -35,17 +142,69 @@ function buildAmazonHref(item: FoodItem) {
   return `https://www.amazon.co.uk/s?k=${encodeURIComponent(item.name)}&tag=biteforecast2-21`;
 }
 
+function TierPictogram({ tier, reducedFill }: { tier: DurationTier; reducedFill?: number }) {
+  const cabinet = (
+    <>
+      <rect x="2" y="2" width="48" height="60" rx="3" fill="#F7F1E3" stroke="#5C4630" strokeWidth="2"/>
+    </>
+  );
+
+  const shelf = (y: number, filled: boolean) => (
+    <rect x="6" y={y} width="40" height="7" rx="1" fill={filled ? "#8A4B2E" : "#E9DFC8"}/>
+  );
+
+  const SHELF_Y = [53, 42, 31, 20, 9];
+
+  let fillCount: number;
+  if (reducedFill !== undefined) {
+    fillCount = Math.round(reducedFill * 5);
+  } else {
+    const fillMap: Record<DurationTier, number> = { weekend: 1, fortnight: 2, month: 3, season: 5 };
+    fillCount = fillMap[tier];
+  }
+
+  if (tier === "season" && reducedFill === undefined) {
+    // season default — two cabinets, both fully filled
+    return (
+      <svg width="78" height="64" viewBox="0 0 78 64" role="img" aria-label="Two cupboards pictogram, both fully filled, representing a season's worth of storage" className="inline-block align-middle">
+        <rect x="2" y="2" width="48" height="60" rx="3" fill="#F7F1E3" stroke="#5C4630" strokeWidth="2"/>
+        {SHELF_Y.map((y) => shelf(y, true))}
+        <rect x="54" y="14" width="22" height="48" rx="3" fill="#F7F1E3" stroke="#5C4630" strokeWidth="2"/>
+        <rect x="57" y="47" width="16" height="7" rx="1" fill="#8A4B2E"/>
+        <rect x="57" y="36" width="16" height="7" rx="1" fill="#8A4B2E"/>
+        <rect x="57" y="25" width="16" height="7" rx="1" fill="#8A4B2E"/>
+      </svg>
+    );
+  }
+
+  // Single cabinet, fill controlled by fillCount
+  const clamped = Math.max(0, Math.min(5, fillCount));
+  const label = `${clamped} of five shelves filled`;
+  return (
+    <svg width="52" height="64" viewBox="0 0 52 64" role="img" aria-label={`Cupboard pictogram, ${label}`} className="inline-block align-middle">
+      {cabinet}
+      {SHELF_Y.map((y, i) => shelf(y, i < clamped))}
+    </svg>
+  );
+}
+
 export function PantryPlanner() {
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(1);
   const [budgetGbp, setBudgetGbp] = useState(120);
-  const [weeks, setWeeks] = useState(4);
+  const [tier, setTier] = useState<DurationTier>("month");
   const [showDietary, setShowDietary] = useState(false);
   const [dietaryFlags, setDietaryFlags] = useState<DietaryFlags>({
     vegetarian: false,
     glutenFree: false,
     noDairy: false,
   });
+  const [childCalorieRatio, setChildCalorieRatio] = useState(0.6);
+  const [showAgeBands, setShowAgeBands] = useState(false);
+  const [selectedSpace, setSelectedSpace] = useState<SpaceOption | null>(null);
+  const [activeSwaps, setActiveSwaps] = useState<Set<string>>(new Set());
+  const [powerState, setPowerState] = useState<"working" | "out">("working");
+  const [waterState, setWaterState] = useState<"running" | "limited" | "none">("running");
 
   const result = useMemo(
     () =>
@@ -54,12 +213,13 @@ export function PantryPlanner() {
           adults,
           children,
           budgetGbp,
-          weeks,
+          weeks: TIER_DATA[tier].weeks,
           dietaryFlags,
+          childCalorieRatio,
         },
         foods as FoodItem[],
       ),
-    [adults, children, budgetGbp, weeks, dietaryFlags],
+    [adults, children, budgetGbp, tier, dietaryFlags, childCalorieRatio],
   );
 
   const grouped = useMemo(() => {
@@ -70,21 +230,94 @@ export function PantryPlanner() {
     }, {});
   }, [result]);
 
-  const approxDaysCovered = Math.floor(result.totalCaloriesPlanned / Math.max(1, result.dailyCaloriesNeeded));
+  const tierWeeks = TIER_DATA[tier].weeks;
+  const tierLabel = TIER_DATA[tier].label;
+  const tierLabelLower = tierLabel.toLowerCase().replace(/^a /, "");
+
+  const totalLitres = useMemo(() => {
+    return Object.values(grouped).reduce((sum, lines) => sum + sumCategoryLitres(lines), 0);
+  }, [grouped]);
+
+  const swapReclaimed = useMemo(() => {
+    let total = 0;
+    for (const swap of SWAPS) {
+      if (activeSwaps.has(swap.id)) {
+        const matched = result.ranked.find((r) => r.item.name === swap.fromName);
+        if (matched) {
+          total += matched.quantity * swap.litresReclaimedPerUnit;
+        }
+      }
+    }
+    return total;
+  }, [result.ranked, activeSwaps]);
+
+  const reducedLitres = Math.max(0, totalLitres - swapReclaimed);
+
+  const scenarioCounts = useMemo(() => {
+    const needsHeat = result.ranked.filter((r) => r.item.prep === "needs-heat").length;
+    const needsHeatNoCookSwap = result.ranked.filter(
+      (r) => r.item.prep === "needs-heat" && SWAPS.some((s) => s.fromName === r.item.name),
+    ).length;
+    return { needsHeat, needsHeatNoCookSwap };
+  }, [result.ranked]);
+
+  const verdict = useMemo(() => {
+    const coveredDays = Math.floor(result.totalCaloriesPlanned / Math.max(1, result.dailyCaloriesNeeded));
+    const targetDays = tierWeeks * 7;
+
+    // Shortfall — budget runs out before meeting the target
+    if (coveredDays < targetDays) {
+      const shortfallDays = targetDays - coveredDays;
+      const costPerDay = result.totalBudgetUsedGbp / Math.max(1, coveredDays);
+      const gap = Math.round(costPerDay * shortfallDays);
+
+      const modifiers: string[] = [];
+      if (result.varietyDisclosure) {
+        modifiers.push("Concentrated on fewer items to fit your budget.");
+      }
+      if (result.droppedCategories.length > 0) {
+        modifiers.push(`No ${result.droppedCategories.join(", ")} could be included within your budget.`);
+      }
+
+      return {
+        state: "short" as const,
+        message: `Your \u00A3${budgetGbp} covers about ${coveredDays} day${coveredDays !== 1 ? "s" : ""} of full meals for this household &mdash; ${shortfallDays} day${shortfallDays !== 1 ? "s" : ""} short of your ${tierLabelLower} target. You could close the gap for roughly \u00A3${gap} more, or start here and top up next shop.`,
+        modifiers,
+      };
+    }
+
+    const spare = result.remainingBudgetGbp;
+
+    // Exceeds target comfortably — significant budget leftover
+    if (spare > budgetGbp * 0.15) {
+      return {
+        state: "exceeds" as const,
+        message: `Your \u00A3${budgetGbp} covers your ${tierLabelLower} target with about \u00A3${spare} to spare. Before extending further: check your water. Most households run out of stored water long before stored food.`,
+        modifiers: [] as string[],
+      };
+    }
+
+    // Meets target — fully covered with modest leftover
+    return {
+      state: "meets" as const,
+      message: `Your \u00A3${budgetGbp} fully covers ${tierLabel.toLowerCase()} for this household, with about \u00A3${spare} left over. Spend the rest on the Essentials list below &mdash; that&rsquo;s what turns stored calories into actual dinners.`,
+      modifiers: [] as string[],
+    };
+  }, [result, tierWeeks, tierLabel, budgetGbp]);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8 print-shell">
         <header className="no-print mb-8 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm">
           <h1 className="mt-2 text-3xl font-bold text-[var(--brand-dark)]">Just In Case</h1>
-          <p className="mt-2 text-sm text-[var(--muted)]">Smart preparation. Just in case.</p>
+          <p className="mt-2 text-sm text-[var(--muted)]">A fixed point in uncertain times.</p>
           <p className="mt-4 max-w-2xl text-sm leading-6 text-[var(--muted)]">
-            Work out what long-life food to buy for your household, how far your budget really goes, and what to print before you shop.
+            Tell us who&rsquo;s in your house and what you can spend. We&rsquo;ll show you what long-life food to buy, why each thing earns its place, and how long it would actually keep your household fed. No bunker required &mdash; this all fits in a cupboard.
           </p>
         </header>
 
-        <main className="grid gap-6 lg:grid-cols-[340px_1fr]">
-          <section className="no-print rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm">
+        <main className="grid gap-6 lg:grid-cols-[340px_1fr] items-start">
+          <section className="no-print rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm lg:sticky lg:top-6">
             <div className="space-y-6">
               <div>
                 <label className="mb-2 block text-sm font-semibold">Adults</label>
@@ -127,16 +360,24 @@ export function PantryPlanner() {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-semibold">Weeks of supply</label>
-                <input
-                  type="range"
-                  min={1}
-                  max={12}
-                  value={weeks}
-                  onChange={(event) => setWeeks(Number(event.target.value))}
-                  className="w-full"
-                />
-                <p className="mt-1 text-sm text-[var(--muted)]">{weeks} week{weeks > 1 ? "s" : ""}</p>
+                <label className="mb-2 block text-sm font-semibold">Duration</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {(["weekend", "fortnight", "month", "season"] as DurationTier[]).map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setTier(t)}
+                      className={`rounded-lg border px-3 py-2 text-left text-sm transition-colors ${
+                        tier === t
+                          ? "border-[var(--brand)] bg-[var(--brand)] text-white"
+                          : "border-[var(--border)] bg-[var(--card)] text-[var(--muted)] hover:bg-[var(--accent)]"
+                      }`}
+                    >
+                      <span className="block text-xs font-semibold">{TIER_DATA[t].label}</span>
+                      <span className="mt-0.5 block text-[11px] leading-tight opacity-80">{TIER_DATA[t].register}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div className="rounded-2xl border border-[var(--border)] bg-[var(--accent)] p-4">
@@ -183,24 +424,79 @@ export function PantryPlanner() {
                 )}
               </div>
 
+              <div className="pt-2 border-t border-dashed border-[var(--border)]">
               <button
                 type="button"
                 onClick={() => window.print()}
-                className="w-full rounded-full bg-[var(--brand)] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[var(--brand-dark)]"
+                className="w-full rounded-full bg-[var(--brand)] px-5 py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-[var(--brand-dark)]"
               >
-                Print this list
+                🖨 Print this list
               </button>
+            </div>
             </div>
           </section>
 
           <section className="space-y-6">
             <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
-              <h2 className="text-2xl font-bold text-[var(--brand-dark)]">Plan your just-in-case pantry</h2>
-              <p className="mt-2 text-sm text-[var(--muted)]">What you need for {weeks} week{weeks > 1 ? "s" : ""}</p>
+              <h2 className="heading-serif text-2xl">Plan your just-in-case pantry</h2>
+              <p className="mt-2 text-sm text-[var(--muted)]">
+                <span className="mr-2"><TierPictogram tier={tier} reducedFill={activeSwaps.size > 0 ? reducedLitres / Math.max(1, totalLitres) : undefined} /></span>
+                {tierLabel}
+              </p>
               <div className="mt-4 grid gap-4 sm:grid-cols-3">
                 <div className="rounded-2xl bg-[var(--accent)] p-4">
-                  <p className="text-xs uppercase tracking-[0.15em] text-[var(--muted)]">Daily calories needed</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-xs uppercase tracking-[0.15em] text-[var(--muted)]">
+                      Daily calories needed
+                    </p>
+                    {children > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setShowAgeBands((v) => !v)}
+                        className="text-[10px] text-[var(--brand)] underline hover:text-[var(--brand-dark)]"
+                      >
+                        {showAgeBands ? "hide" : "change"}
+                      </button>
+                    )}
+                  </div>
                   <p className="mt-1 text-2xl font-bold">{result.dailyCaloriesNeeded.toLocaleString()}</p>
+                  {children > 0 && (
+                    <p className="mt-0.5 text-[11px] text-[var(--muted)]">
+                      assumes {childCalorieRatio === 0.5 ? "toddler" : childCalorieRatio === 0.8 ? "teen" : "school-age"} child
+                    </p>
+                  )}
+                  {showAgeBands && children > 0 && (
+                    <div className="mt-3 pt-3 border-t border-[var(--border)]">
+                      <p className="mb-2 text-[11px] font-semibold text-[var(--muted)]">Child age band</p>
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {[
+                          { label: "Toddler", sub: "1–3", ratio: 0.5 },
+                          { label: "School-age", sub: "4–10", ratio: 0.6 },
+                          { label: "Teen", sub: "11–17", ratio: 0.8 },
+                        ].map((band) => (
+                          <label
+                            key={band.ratio}
+                            className={`flex cursor-pointer flex-col items-center rounded-lg border px-2 py-1.5 text-center transition-colors ${
+                              childCalorieRatio === band.ratio
+                                ? "border-[var(--brand)] bg-[var(--brand)]/5 text-[var(--brand-dark)]"
+                                : "border-[var(--border)] bg-[var(--card)] text-[var(--muted)] hover:bg-[var(--accent)]"
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              name="childCalorieRatio"
+                              value={band.ratio}
+                              checked={childCalorieRatio === band.ratio}
+                              onChange={() => setChildCalorieRatio(band.ratio)}
+                              className="sr-only"
+                            />
+                            <span className="text-[11px] font-medium leading-tight">{band.label}</span>
+                            <span className="text-[10px] opacity-75">{band.sub}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div className="rounded-2xl bg-[var(--accent)] p-4">
                   <p className="text-xs uppercase tracking-[0.15em] text-[var(--muted)]">Calories planned</p>
@@ -211,68 +507,462 @@ export function PantryPlanner() {
                   <p className="mt-1 text-2xl font-bold">{formatCurrency(result.totalBudgetUsedGbp)}</p>
                 </div>
               </div>
-              <p className="mt-4 rounded-2xl border border-[var(--border)] bg-[#fff9e6] px-4 py-3 text-sm text-[#6b5500]">
-                Your budget covers approximately {approxDaysCovered} day{approxDaysCovered !== 1 ? "s" : ""} of full calories for this household, not the full {weeks}-week target.
-              </p>
+              {verdict.state === "short" ? (
+                <div className="verdict-panel">
+                  <p className="font-medium">{verdict.message}</p>
+                  {verdict.modifiers.length > 0 && (
+                    <ul className="mt-2 space-y-1 list-disc list-inside">
+                      {verdict.modifiers.map((modifier, index) => (
+                        <li key={index}>{modifier}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ) : (
+                <div className="verdict-panel">
+                  <p className="font-medium">{verdict.message}</p>
+                </div>
+              )}
             </div>
 
-            {Object.entries(grouped).map(([category, lines]) => (
-              <section key={category} className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
-                <h3 className="text-lg font-semibold text-[var(--brand-dark)]">{categoryLabels[category] ?? category}</h3>
-                <div className="mt-4 overflow-x-auto">
-                  <table className="min-w-full text-sm">
-                    <thead>
-                      <tr className="border-b border-[var(--border)] text-left text-[var(--muted)]">
-                        <th className="pb-2 pr-4">Item</th>
-                        <th className="pb-2 pr-4">Calories / unit</th>
-                        <th className="pb-2 pr-4">Shelf life</th>
-                        <th className="pb-2 pr-4">Cost</th>
-                        <th className="pb-2 pr-4">Storage</th>
-                        <th className="pb-2 pr-4">Qty</th>
-                        <th className="pb-2 pr-4">Buy</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {lines.map((line) => (
-                        <tr key={line.item.id} className="border-b border-[var(--border)] last:border-b-0">
-                          <td className="py-3 pr-4 font-medium">{line.item.name}</td>
-                          <td className="py-3 pr-4">{Math.round(line.caloriesPerUnit ?? 0).toLocaleString()}</td>
-                          <td className="py-3 pr-4">{line.item.shelf_life_months} months</td>
-                          <td className="py-3 pr-4">{formatCurrency(line.estimatedCostGbp)}</td>
-                          <td className="py-3 pr-4">{line.totalStorageLitres.toFixed(1)}L</td>
-                          <td className="py-3 pr-4">{line.quantity}</td>
-                          <td className="py-3 pr-4">
-                            <a
-                              href={buildAmazonHref(line.item)}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="rounded-full border border-[var(--brand)] px-3 py-2 text-xs font-semibold text-[var(--brand)] no-print"
+            <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
+              <h3 className="heading-serif text-sm">Space audit</h3>
+              <p className="mt-1 text-xs text-[var(--muted)]">What storage space do you have?</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {(["shoebox", "half-shelf", "one-shelf", "cupboard"] as SpaceOption[]).map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => setSelectedSpace(selectedSpace === s ? null : s)}
+                    className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                      selectedSpace === s
+                        ? "bg-[var(--brand)] text-white border-[var(--brand)]"
+                        : "border-[var(--border)] bg-[var(--card)] text-[var(--muted)] hover:bg-[var(--accent)]"
+                    }`}
+                  >
+                    {BUTTON_LABELS[s]}
+                  </button>
+                ))}
+              </div>
+
+              {selectedSpace && (
+                <>
+                  <p className="mt-3 text-sm text-[var(--muted)]">
+                    {SPACE_LABELS[selectedSpace].charAt(0).toUpperCase() + SPACE_LABELS[selectedSpace].slice(1)} holds about{" "}
+                    {Math.round((SPACE_LITRES[selectedSpace] / Math.max(1, totalLitres)) * 100)}% of this plan.
+                  </p>
+
+                  {(() => {
+                    const ranked = [...SWAPS]
+                      .map((swap) => {
+                        const matched = result.ranked.find((r) => r.item.name === swap.fromName);
+                        const qty = matched?.quantity ?? 0;
+                        const reclaimed = qty * swap.litresReclaimedPerUnit;
+                        return { ...swap, qty, reclaimed };
+                      })
+                      .filter((s) => s.qty > 0)
+                      .filter((s) => s.litresReclaimedPerUnit > 0)
+                      .sort((a, b) => b.reclaimed - a.reclaimed)
+                      .slice(0, 2);
+
+                    if (ranked.length === 0) return null;
+
+                    return (
+                      <div className="mt-4 space-y-3">
+                        <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">
+                          Suggested swaps
+                        </p>
+                        {ranked.map((swap) => {
+                          const isActive = activeSwaps.has(swap.id);
+                          return (
+                            <div
+                              key={swap.id}
+                              className={`rounded-xl border p-3 text-sm transition-colors ${
+                                isActive
+                                  ? "border-[var(--brand)] bg-[var(--brand)]/5"
+                                  : "border-[var(--border)] bg-[var(--card)]"
+                              }`}
                             >
-                              Buy on Amazon
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                              <div className="flex items-start justify-between gap-2">
+                                <div>
+                                  <p className="font-medium text-[var(--brand-dark)]">
+                                    {swap.fromName} &rarr; {swap.toName}
+                                  </p>
+                                  <p className="mt-0.5 text-xs text-[var(--brand)]">
+                                    {swap.badgeText ?? `Reclaims ${litresToShelfTerms(swap.reclaimed)}`}
+                                  </p>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const next = new Set(activeSwaps);
+                                    if (isActive) next.delete(swap.id);
+                                    else next.add(swap.id);
+                                    setActiveSwaps(next);
+                                  }}
+                                  className={`shrink-0 rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
+                                    isActive
+                                      ? "bg-[var(--brand)] text-white border-[var(--brand)]"
+                                      : "border-[var(--border)] text-[var(--muted)] hover:bg-[var(--accent)]"
+                                  }`}
+                                >
+                                  {isActive ? "Applied" : "See this applied"}
+                                </button>
+                              </div>
+                              <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
+                                {swap.tradeOff}
+                              </p>
+                            </div>
+                          );
+                        })}
+                        {activeSwaps.size > 0 && (
+                          <p className="mt-2 text-xs text-[var(--muted)] italic">
+                            Applying {activeSwaps.size === 1 ? "this swap" : "these swaps"} would fit this plan in
+                            your {SPACE_LABELS[selectedSpace]}, with{" "}
+                            {litresToShelfTerms(Math.max(0, SPACE_LITRES[selectedSpace] - reducedLitres))} left over.
+                          </p>
+                        )}
+                      </div>
+                    );
+                  })()}
+                </>
+              )}
+            </div>
+
+            <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
+              <h3 className="heading-serif text-sm">Scenario</h3>
+              <p className="mt-1 text-xs text-[var(--muted)]">What are your utilities like?</p>
+
+              <div className="mt-4">
+                <p className="text-xs font-medium text-[var(--muted)] mb-2">Power</p>
+                <div className="flex flex-wrap gap-2">
+                  {(["working", "out"] as const).map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => setPowerState(p)}
+                      className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                        powerState === p
+                          ? "bg-[var(--brand)] text-white border-[var(--brand)]"
+                          : "border-[var(--border)] bg-[var(--card)] text-[var(--muted)] hover:bg-[var(--accent)]"
+                      }`}
+                    >
+                      {p === "working" ? "Working" : "Out"}
+                    </button>
+                  ))}
                 </div>
-              </section>
-            ))}
+              </div>
+
+              <div className="mt-3">
+                <p className="text-xs font-medium text-[var(--muted)] mb-2">Running water</p>
+                <div className="flex flex-wrap gap-2">
+                  {(["running", "limited", "none"] as const).map((w) => (
+                    <button
+                      key={w}
+                      type="button"
+                      onClick={() => setWaterState(w)}
+                      className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                        waterState === w
+                          ? "bg-[var(--brand)] text-white border-[var(--brand)]"
+                          : "border-[var(--border)] bg-[var(--card)] text-[var(--muted)] hover:bg-[var(--accent)]"
+                      }`}
+                    >
+                      {w === "running" ? "Running" : w === "limited" ? "Limited" : "None"}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {(powerState !== "working" || waterState !== "running") && (
+                <div className="mt-4 verdict-panel">
+                  <p>
+                    {powerState === "out" && waterState === "running" && (
+                      <>No power means no cooking. {scenarioCounts.needsHeat} item{scenarioCounts.needsHeat !== 1 ? "s" : ""} below need{scenarioCounts.needsHeat === 1 ? "s" : ""} a hob or kettle &mdash; they&rsquo;re flagged, and we&rsquo;ve suggested {scenarioCounts.needsHeatNoCookSwap} ready-to-eat swap{scenarioCounts.needsHeatNoCookSwap !== 1 ? "s" : ""} that {scenarioCounts.needsHeatNoCookSwap === 1 ? "needs nothing done to it" : "need nothing done to them"}.</>
+                    )}
+                    {powerState === "working" && waterState === "limited" && (
+                      <>Limited water means cooking is possible but rationed. Dried foods that need boiling now cost you stored water too &mdash; check the flagged items below.</>
+                    )}
+                    {powerState === "working" && waterState === "none" && (
+                      <>No running water changes the maths on everything dried. At 3 litres a person a day just to drink, water becomes the real constraint &mdash; not food.</>
+                    )}
+                    {powerState === "out" && waterState === "none" && (
+                      <>With neither power nor water, only ready-to-eat food works. {scenarioCounts.needsHeat} item{scenarioCounts.needsHeat !== 1 ? "s" : ""} below need{scenarioCounts.needsHeat === 1 ? "s" : ""} cooking water or heat and {scenarioCounts.needsHeat === 1 ? "isn&rsquo;t" : "aren&rsquo;t"} realistic right now.</>
+                    )}
+                    {powerState === "out" && waterState === "limited" && (
+                      <>No power means no cooking. {scenarioCounts.needsHeat} item{scenarioCounts.needsHeat !== 1 ? "s" : ""} below need{scenarioCounts.needsHeat === 1 ? "s" : ""} a hob or kettle. Limited water means dried foods that need boiling also cost you stored water.</>
+                    )}
+                  </p>
+                </div>
+              )}
+
+              {powerState === "out" && (() => {
+                const relevantSwaps = SWAPS
+                  .map((swap) => {
+                    const matched = result.ranked.find((r) => r.item.name === swap.fromName);
+                    const qty = matched?.quantity ?? 0;
+                    const reclaimed = qty * swap.litresReclaimedPerUnit;
+                    return { ...swap, qty, reclaimed, sourcePrep: matched?.item.prep };
+                  })
+                  .filter((s) => s.qty > 0 && s.sourcePrep === "needs-heat" && (() => {
+                    const target = (foods as any[]).find((f) => f.name === s.toName);
+                    return target?.prep === "no-cook";
+                  })());
+
+                if (relevantSwaps.length === 0) return null;
+
+                return (
+                  <div className="mt-4 space-y-3">
+                    <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">
+                      Ready-to-eat alternatives
+                    </p>
+                    {relevantSwaps.map((swap) => {
+                      const isActive = activeSwaps.has(swap.id);
+                      return (
+                        <div
+                          key={swap.id}
+                          className={`rounded-xl border p-3 text-sm transition-colors ${
+                            isActive
+                              ? "border-[var(--brand)] bg-[var(--brand)]/5"
+                              : "border-[var(--border)] bg-[var(--card)]"
+                          }`}
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div>
+                              <p className="font-medium text-[var(--brand-dark)]">
+                                {swap.fromName} &rarr; {swap.toName}
+                              </p>
+                              <p className="mt-0.5 text-xs text-[var(--brand)]">
+                                {swap.badgeText ?? `Reclaims ${litresToShelfTerms(swap.reclaimed)}`}
+                              </p>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const next = new Set(activeSwaps);
+                                if (isActive) next.delete(swap.id);
+                                else next.add(swap.id);
+                                setActiveSwaps(next);
+                              }}
+                              className={`shrink-0 rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
+                                isActive
+                                  ? "bg-[var(--brand)] text-white border-[var(--brand)]"
+                                  : "border-[var(--border)] text-[var(--muted)] hover:bg-[var(--accent)]"
+                              }`}
+                            >
+                              {isActive ? "Applied" : "See this applied"}
+                            </button>
+                          </div>
+                          <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
+                            {swap.tradeOff}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
+            </div>
+
+            {(() => {
+              const entries = Object.entries(grouped);
+              const largeEntries = entries.filter(([, lines]) => lines.length >= 3);
+              const smallEntries = entries.filter(([, lines]) => lines.length <= 2);
+              const allLitres = entries.reduce((sum, [, lines]) => sum + sumCategoryLitres(lines), 0);
+
+              return (
+                <>
+                  {largeEntries.map(([category, lines]) => {
+                    const catLitres = sumCategoryLitres(lines);
+                    return (
+                      <section key={category} className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
+                        <h3 className="category-ticket">{categoryLabels[category] ?? category}</h3>
+                        {categoryIntros[category] && (
+                          <p className="category-rationale">
+                            {categoryIntros[category]}
+                            {tier === "season" && category === "micronutrient" && (
+                              <> Over a season, these stop being optional &mdash; variety is what keeps a long stretch healthy, not just fed.</>
+                            )}
+                          </p>
+                        )}
+                        <div className="mt-4 overflow-x-auto">
+                          <table className="min-w-full text-sm">
+                            <thead>
+                              <tr className="border-b border-dashed border-[var(--border)] text-left text-[var(--muted)]">
+                                <th className="pb-2 pr-4">Item</th>
+                                <th className="pb-2 pr-4">Calories / unit</th>
+                                <th className="pb-2 pr-4">Shelf life</th>
+                                <th className="pb-2 pr-4">Cost</th>
+                                <th className="pb-2 pr-4">Storage</th>
+                                <th className="pb-2 pr-4">Qty</th>
+                                <th className="pb-2 pr-4">Buy</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {lines.map((line) => (
+                                <tr key={line.item.id} className="border-b border-dashed border-[var(--border)] last:border-b-0">
+                                  <td className="py-3 pr-4 font-medium">
+                                    {line.item.name}
+                                    {powerState === "out" && line.item.prep && (
+                                      <span className={`ml-2 inline-block rounded-full px-2 py-0.5 text-[11px] font-medium ${
+                                        line.item.prep === "no-cook"
+                                          ? "bg-[#EDF2E8] text-[#2F4A24]"
+                                          : "bg-[#FCEBEB] text-[#791F1F]"
+                                      }`}>
+                                        {line.item.prep === "no-cook" ? "no cook" : "needs heat"}
+                                      </span>
+                                    )}
+                                  </td>
+                                  <td className="py-3 pr-4">{Math.round(line.caloriesPerUnit ?? 0).toLocaleString()}</td>
+                                  <td className="py-3 pr-4">{line.item.shelf_life_months} months</td>
+                                  <td className="py-3 pr-4">{formatCurrency(line.estimatedCostGbp)}</td>
+                                  <td className="py-3 pr-4">{line.totalStorageLitres.toFixed(1)}L</td>
+                                  <td className="py-3 pr-4">{line.quantity}</td>
+                                  <td className="py-3 pr-4">
+                                    <a
+                                      href={buildAmazonHref(line.item)}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      className="text-xs text-[var(--muted)] underline hover:text-[var(--brand)] no-print"
+                                    >
+                                      Buy on Amazon
+                                    </a>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                        <p className="shelf-line">Fits in {litresToShelfTerms(catLitres)}.</p>
+                      </section>
+                    );
+                  })}
+                  {smallEntries.length > 0 && (
+                    <section className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-4 shadow-sm print-card">
+                      <h3 className="heading-serif text-sm">Smaller categories</h3>
+                      <div className="mt-3 space-y-3">
+                        {smallEntries.map(([category, lines]) => {
+                          const catLitres = sumCategoryLitres(lines);
+                          return (
+                            <div key={category}>
+                              <p className="category-ticket !mb-0 !inline-block !text-xs !px-3 !py-1">
+                                {categoryLabels[category] ?? category}
+                              </p>
+                              {categoryIntros[category] && (
+                                <p className="category-rationale !text-[11px]">
+                                  {categoryIntros[category]}
+                                  {tier === "season" && category === "micronutrient" && (
+                                    <> Over a season, these stop being optional &mdash; variety is what keeps a long stretch healthy, not just fed.</>
+                                  )}
+                                </p>
+                              )}
+                              <table className="min-w-full text-xs">
+                                                              <thead>
+                                                                <tr className="border-b border-dashed border-[var(--border)] text-left text-[var(--muted)]">
+                                                                  <th className="pb-1 pr-3">Item</th>
+                                                                  <th className="pb-1 pr-3">Cal</th>
+                                                                  <th className="pb-1 pr-3">Cost</th>
+                                                                  <th className="pb-1 pr-3">Qty</th>
+                                                                  <th className="pb-1 pr-3">Buy</th>
+                                                                </tr>
+                                                              </thead>
+                                                              <tbody>
+                                                                {lines.map((line) => (
+                                                                  <tr key={line.item.id} className="border-b border-dashed border-[var(--border)] last:border-b-0">
+                                                                    <td className="py-1 pr-3 font-medium">
+                                                                                                          {line.item.name}
+                                                                                                          {powerState === "out" && line.item.prep && (
+                                                                                                            <span className={`ml-1 inline-block rounded-full px-1.5 py-0.5 text-[10px] font-medium ${
+                                                                                                              line.item.prep === "no-cook"
+                                                                                                                ? "bg-[#EDF2E8] text-[#2F4A24]"
+                                                                                                                : "bg-[#FCEBEB] text-[#791F1F]"
+                                                                                                            }`}>
+                                                                                                              {line.item.prep === "no-cook" ? "no cook" : "needs heat"}
+                                                                                                            </span>
+                                                                                                          )}
+                                                                                                        </td>
+                                                                                                        <td className="py-1 pr-3">{Math.round(line.caloriesPerUnit ?? 0).toLocaleString()}</td>
+                                                                                                        <td className="py-1 pr-3">{formatCurrency(line.estimatedCostGbp)}</td>
+                                                                                                        <td className="py-1 pr-3">{line.quantity}</td>
+                                                                    <td className="py-1 pr-3">
+                                        <a
+                                          href={buildAmazonHref(line.item)}
+                                          target="_blank"
+                                          rel="noreferrer"
+                                          className="text-[var(--muted)] underline hover:text-[var(--brand)] no-print"
+                                        >
+                                          Buy
+                                        </a>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                              <p className="shelf-line !text-[11px]">Fits in {litresToShelfTerms(catLitres)}.</p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </section>
+                  )}
+                  {allLitres > 0 && (
+                    <p className="shelf-line !text-sm italic">
+                      Everything above fits in {litresToShelfTerms(allLitres)}. Most households find the space before they find the money.
+                    </p>
+                  )}
+                </>
+              );
+            })()}
+
+            <div className="no-print flex justify-center pt-2">
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="rounded-full bg-[var(--brand)] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[var(--brand-dark)]"
+              >
+                🖨 Print this list
+              </button>
+            </div>
 
             <section className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
-              <h3 className="text-lg font-semibold text-[var(--brand-dark)]">Essentials and flavour</h3>
+              <h3 className="category-ticket">Essentials and flavour</h3>
+              <p className="mt-2 text-sm text-[var(--muted)] max-w-prose">Salt, coffee, spices, vinegar. Nearly zero calories, but they&rsquo;re what makes week three taste different from week one. Don&rsquo;t skip these.</p>
               <ul className="mt-3 space-y-2 text-sm text-[var(--muted)]">
                 {result.essentialsAndFlavour.map((item) => (
                   <li key={item.id}>• {item.name}</li>
                 ))}
               </ul>
             </section>
+
+            <section className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
+              <h3 className="category-ticket">Two things this list can&rsquo;t do</h3>
+              <div className="mt-3 space-y-3 text-sm leading-6 text-[var(--muted)]">
+                <p><strong>It can&rsquo;t store water for you.</strong> Dried food is compact because the water isn&rsquo;t in the tin &mdash; it&rsquo;s in your tap. If the taps stopped too, you&rsquo;d need about 3 litres per person per day before any of this list becomes dinner. Food first is fine; just know water is the other half.</p>
+                <p><strong>It can&rsquo;t guess your kitchen.</strong> The storage figures are honest estimates, not measurements. Brands and packaging vary &mdash; treat every volume here as &ldquo;roughly,&rdquo; and check a shelf&rsquo;s weight before loading it entirely with tins.</p>
+              </div>
+            </section>
+
+            <section className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
+              <h3 className="category-ticket">You don&rsquo;t have to do this in one shop</h3>
+              <div className="mt-3 space-y-3 text-sm leading-6 text-[var(--muted)]">
+                <p>Nobody buys a month of food in an afternoon. Add one category to your normal shop each week and you&rsquo;ll be fully covered inside two months, without ever feeling the cost. Print the list, stick it on the fridge, and cross things off as they come home.</p>
+                <p>Then eat it. The best just-in-case pantry is one you cook from and replace &mdash; food that rotates never expires, and a shelf you use is a shelf you trust.</p>
+                {tier === "season" && (
+                  <p>A three-month larder only works if it moves. Cook from it, replace what you use, and it will never expire on you.</p>
+                )}
+              </div>
+            </section>
           </section>
         </main>
 
+        <section className="no-print mt-8 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm">
+          <h3 className="heading-serif text-sm">About these numbers</h3>
+          <p className="mt-2 text-xs leading-5 text-[var(--muted)]">
+            Calorie figures come from standard UK nutrition data; prices are typical supermarket and Amazon prices, checked periodically rather than live. Just In Case is built and maintained by one person in Scotland, not a content farm. Some links earn us a small commission at no cost to you &mdash; it&rsquo;s how the site stays free, and it never changes what we recommend.
+          </p>
+        </section>
+
         <footer className="no-print mt-8 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm">
-          <p className="text-sm font-semibold text-[var(--brand-dark)]">Just In Case</p>
-          <p className="mt-2 text-sm text-[var(--muted)]">Fixed point in uncertain times</p>
+          <p className="text-sm font-semibold text-[var(--brand-dark)]">Just In Case &mdash; justincase.scot</p>
           <nav className="mt-4 flex flex-wrap gap-3 text-sm text-[var(--muted)]">
             <a href="/about">About</a>
             <a href="/privacy">Privacy</a>

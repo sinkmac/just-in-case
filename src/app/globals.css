@@ -1,22 +1,33 @@
 @import "tailwindcss";
-
-:root {
-  --background: #f4f7f8;
-  --foreground: #16212b;
-  --muted: #5f6e7d;
-  --card: #ffffff;
-  --border: #d8e0e6;
-  --brand: #1d70b8;
-  --brand-dark: #0f3b5f;
-  --accent: #e8f1f8;
-  --success: #00703c;
-}
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400&family=Public+Sans:wght@400;500&display=swap');
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: 'Public Sans', var(--font-public-sans), Arial, Helvetica, sans-serif;
+  --font-serif: 'Fraunces', var(--font-fraunces), Georgia, serif;
+}
+
+:root {
+  --background: #F7F1E3;
+  --foreground: #2E241A;
+  --muted: #7A6B52;
+  --secondary: #4A3D2C;
+  --card: #FFFDF6;
+  --border: #C4B694;
+  --strong-border: #A88F63;
+  --brand: #8A4B2E;
+  --brand-dark: #5C4630;
+  --accent: #FFFDF6;
+  --success: #2F4A24;
+  --warning-bg: #FFF6E9;
+  --warning-border: #E0C79A;
+  --success-bg: #EDF2E8;
+  --danger-bg: #FCEBEB;
+  --danger-text: #791F1F;
+  --cupboard-stroke: #5C4630;
+  --cupboard-fill: #F7F1E3;
+  --cupboard-empty: #E9DFC8;
 }
 
 * {
@@ -31,7 +42,91 @@ body {
   margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Public Sans', Arial, Helvetica, sans-serif;
+}
+
+/* ── Category tickets ── */
+
+.category-ticket {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--foreground);
+  background: #FFFDF6;
+  border: 1px solid var(--strong-border);
+  border-radius: 3px;
+  padding: 5px 16px;
+  display: inline-block;
+}
+
+.category-rationale {
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 12.5px;
+  color: #7A6B52;
+  line-height: 1.5;
+}
+
+/* ── Shelf-terms line ── */
+
+.shelf-line {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 12px;
+  color: #8A4B2E;
+}
+
+/* ── Verdict / consequence panel ── */
+
+.verdict-panel {
+  background: #FFF6E9;
+  border: 1px solid #E0C79A;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-family: 'Public Sans', Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  color: #5C4630;
+}
+
+/* ── Dashed section dividers ── */
+
+.section-divider {
+  border-top: 1px dashed #C4B694;
+}
+
+/* ── Dashed table rows ── */
+
+.dashed-row {
+  border-bottom: 1px dashed #C4B694;
+}
+
+/* ── Fraunces section/block headings ── */
+
+.heading-serif {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+/* ── Fraunces italic for intro rationales ── */
+
+.text-serif-italic {
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  color: #7A6B52;
+}
+
+/* ── Fraunces shelf description ── */
+
+.text-serif {
+  font-family: 'Fraunces', Georgia, serif;
+}
+
+/* ── Public Sans body ── */
+
+.text-sans {
+  font-family: 'Public Sans', Arial, Helvetica, sans-serif;
 }
 
 @media print {

@@ -22,5 +22,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: "https://justincase.scot/affiliate-disclosure",
       lastModified: new Date("2026-05-25"),
     },
+    {
+      url: "https://justincase.scot/guides/emergency-food-needs",
+      lastModified: new Date(),
+    },
+    {
+      url: "https://justincase.scot/guides/storage-without-bunker",
+      lastModified: new Date(),
+    },
+    {
+      url: "https://justincase.scot/guides/when-powers-out",
+      lastModified: new Date(),
+    },
+    {
+      url: "https://justincase.scot/guides/what-we-leave-out",
+      lastModified: new Date(),
+    },
   ];
 }

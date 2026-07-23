@@ -10,6 +10,7 @@ export type HouseholdInput = {
   budgetGbp: number;
   weeks: number;
   dietaryFlags?: DietaryFlags;
+  childCalorieRatio?: number;
 };
 
 export type FoodItem = {
@@ -27,6 +28,7 @@ export type FoodItem = {
   amazon_asin: string;
   category: string;
   region: string;
+  prep: "no-cook" | "needs-heat";
   notes?: string;
 };
 
@@ -50,6 +52,7 @@ export type PlannerResult = {
   ranked: RankedItem[];
   essentialsAndFlavour: FoodItem[];
   droppedCategories: string[];
+  varietyDisclosure: boolean;
 };
 
 const REQUIRED_CATEGORIES = [
@@ -170,8 +173,10 @@ export function buildPlan(input: HouseholdInput, foods: FoodItem[]): PlannerResu
   const budgetGbp = Math.max(0, input.budgetGbp);
   const dietaryFlags = input.dietaryFlags ?? {};
 
-  const dailyCaloriesNeeded = Math.round((adults + children * 0.6) * 2000);
+  const childRatio = input.childCalorieRatio ?? 0.6;
+  const dailyCaloriesNeeded = Math.round((adults + children * childRatio) * 2000);
   const totalCaloriesNeeded = dailyCaloriesNeeded * (weeks * 7);
+  const BASELINE_MAX_CALORIES_PER_ITEM = totalCaloriesNeeded * 0.15;
 
   const eligible = foods.filter((item) => passesDietaryFlags(item, dietaryFlags));
   const rankedLines = new Map<string, RankedItem>();
@@ -184,7 +189,14 @@ export function buildPlan(input: HouseholdInput, foods: FoodItem[]): PlannerResu
     const candidates = rankWithinCategory(
       eligible.filter((item) => item.category === category && scoreItem(item) != null),
     );
-    const pick = candidates[0];
+    // Prefer items that don't exceed the 15% baseline cap in the first pass.
+    // If every item in the category exceeds the cap, fall back to the best scorer.
+    const pick = candidates.find(item => {
+      const existing = rankedLines.get(item.id);
+      const existingCalories = existing?.totalCalories ?? 0;
+      const nextUnitCalories = caloriesPerUnit(item) ?? 0;
+      return existingCalories + nextUnitCalories <= BASELINE_MAX_CALORIES_PER_ITEM;
+    }) ?? candidates[0];
     const minUnits = CATEGORY_MIN_UNITS_OVERRIDE[category] ?? CATEGORY_MIN_UNITS[category] ?? 1;
     if (!pick) {
       droppedCategories.push(category);
@@ -215,7 +227,8 @@ export function buildPlan(input: HouseholdInput, foods: FoodItem[]): PlannerResu
   );
 
   let caloriesPlanned = Array.from(rankedLines.values()).reduce((sum, line) => sum + line.totalCalories, 0);
-  const maxCaloriesPerItem = totalCaloriesNeeded * 0.25;
+  const MAX_CAP = totalCaloriesNeeded * 0.25;
+  let maxCaloriesPerItem = BASELINE_MAX_CALORIES_PER_ITEM;
   const maxMoraleCalories = totalCaloriesNeeded * 0.1;
   const maxCategoryCalories = totalCaloriesNeeded * 0.4;
 
@@ -260,7 +273,15 @@ export function buildPlan(input: HouseholdInput, foods: FoodItem[]): PlannerResu
 
       return true;
     });
-    if (!next) break;
+    if (!next) {
+      // Progressive relaxation: if stuck at 15%, scale up in 5% increments
+      const newCap = Number((maxCaloriesPerItem + totalCaloriesNeeded * 0.05).toFixed(0));
+      if (newCap <= MAX_CAP && caloriesPlanned < totalCaloriesNeeded) {
+        maxCaloriesPerItem = newCap;
+        continue;
+      }
+      break;
+    }
     addUnit(rankedLines, next);
     remainingBudget -= next.typical_unit_price_gbp;
     caloriesPlanned += caloriesPerUnit(next) ?? 0;
@@ -278,6 +299,7 @@ export function buildPlan(input: HouseholdInput, foods: FoodItem[]): PlannerResu
 
   const totalBudgetUsedGbp = ranked.reduce((sum, line) => sum + line.estimatedCostGbp, 0);
   const totalCaloriesPlanned = ranked.reduce((sum, line) => sum + line.totalCalories, 0);
+  const varietyDisclosure = ranked.some(line => line.totalCalories > totalCaloriesNeeded * 0.15);
 
   return {
     dailyCaloriesNeeded,
@@ -288,5 +310,6 @@ export function buildPlan(input: HouseholdInput, foods: FoodItem[]): PlannerResu
     ranked,
     essentialsAndFlavour,
     droppedCategories,
+    varietyDisclosure,
   };
 }

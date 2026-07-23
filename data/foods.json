@@ -13,7 +13,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "staple_carb",
-    "region": "uk"
+    "region": "uk",
+    "prep": "needs-heat"
   },
   {
     "id": "dried-pasta",
@@ -29,7 +30,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "staple_carb",
-    "region": "uk"
+    "region": "uk",
+    "prep": "needs-heat"
   },
   {
     "id": "rolled-oats",
@@ -45,7 +47,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "staple_carb",
-    "region": "uk"
+    "region": "uk",
+    "prep": "needs-heat"
   },
   {
     "id": "instant-noodles",
@@ -61,7 +64,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "staple_carb",
-    "region": "uk"
+    "region": "uk",
+    "prep": "needs-heat"
   },
   {
     "id": "freeze-dried-noodles",
@@ -78,7 +82,8 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "staple_carb",
     "region": "uk",
-    "notes": "Freeze-dried superior to instant — longer shelf life, lighter, better morale value"
+    "notes": "Freeze-dried superior to instant \u2014 longer shelf life, lighter, better morale value",
+    "prep": "needs-heat"
   },
   {
     "id": "porridge-sachets",
@@ -94,7 +99,8 @@
     "dairy_free": false,
     "amazon_asin": "XXXXXXXXXX",
     "category": "staple_carb",
-    "region": "uk"
+    "region": "uk",
+    "prep": "needs-heat"
   },
   {
     "id": "crackers-oatcakes",
@@ -110,7 +116,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "staple_carb",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "red-lentils",
@@ -126,7 +133,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
-    "region": "uk"
+    "region": "uk",
+    "prep": "needs-heat"
   },
   {
     "id": "tinned-chickpeas",
@@ -142,7 +150,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "tinned-tuna",
@@ -158,7 +167,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "tinned-sardines",
@@ -174,7 +184,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "peanut-butter",
@@ -190,7 +201,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "powdered-milk",
@@ -206,7 +218,8 @@
     "dairy_free": false,
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "tinned-beans",
@@ -222,7 +235,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "almonds",
@@ -238,7 +252,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "walnuts",
@@ -254,7 +269,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "uht-milk",
@@ -270,7 +286,8 @@
     "dairy_free": false,
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "coconut-oil",
@@ -286,7 +303,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "fat",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "olive-oil",
@@ -302,7 +320,42 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "fat",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
+  },
+  {
+    "id": "vegetable-oil",
+    "name": "Vegetable oil (rapeseed)",
+    "cal_per_100g": 900,
+    "typical_unit_g": 1000,
+    "typical_unit_price_gbp": 1.65,
+    "shelf_life_months": 18,
+    "storage_litres_per_unit": 1.0,
+    "vegetarian": true,
+    "vegan": true,
+    "gluten_free": true,
+    "dairy_free": true,
+    "amazon_asin": "XXXXXXXXXX",
+    "category": "fat",
+    "region": "uk",
+    "prep": "no-cook"
+  },
+  {
+    "id": "lard",
+    "name": "Lard",
+    "cal_per_100g": 900,
+    "typical_unit_g": 500,
+    "typical_unit_price_gbp": 2.5,
+    "shelf_life_months": 24,
+    "storage_litres_per_unit": 0.55,
+    "vegetarian": false,
+    "vegan": false,
+    "gluten_free": true,
+    "dairy_free": true,
+    "amazon_asin": "XXXXXXXXXX",
+    "category": "fat",
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "tinned-tomatoes",
@@ -318,7 +371,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "vegetable",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "tinned-sweetcorn",
@@ -334,7 +388,42 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "vegetable",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
+  },
+  {
+    "id": "tomato-puree",
+    "name": "Tomato puree",
+    "cal_per_100g": 80,
+    "typical_unit_g": 200,
+    "typical_unit_price_gbp": 0.65,
+    "shelf_life_months": 24,
+    "storage_litres_per_unit": 0.2,
+    "vegetarian": true,
+    "vegan": true,
+    "gluten_free": true,
+    "dairy_free": true,
+    "amazon_asin": "XXXXXXXXXX",
+    "category": "vegetable",
+    "region": "uk",
+    "prep": "needs-heat"
+  },
+  {
+    "id": "tinned-peas",
+    "name": "Tinned peas",
+    "cal_per_100g": 70,
+    "typical_unit_g": 300,
+    "typical_unit_price_gbp": 0.55,
+    "shelf_life_months": 36,
+    "storage_litres_per_unit": 0.35,
+    "vegetarian": true,
+    "vegan": true,
+    "gluten_free": true,
+    "dairy_free": true,
+    "amazon_asin": "XXXXXXXXXX",
+    "category": "vegetable",
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "tinned-fruit",
@@ -350,7 +439,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "micronutrient",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "dried-mango",
@@ -366,7 +456,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "micronutrient",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "multivitamins",
@@ -382,7 +473,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "micronutrient",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "dark-chocolate",
@@ -398,7 +490,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "morale",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "instant-coffee",
@@ -414,7 +507,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "morale",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "honey",
@@ -430,7 +524,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "morale",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "salt",
@@ -446,7 +541,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "flavour",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "soy-sauce",
@@ -462,7 +558,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "flavour",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "vinegar",
@@ -478,7 +575,8 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "flavour",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   },
   {
     "id": "dried-herbs-spices",
@@ -494,6 +592,7 @@
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "flavour",
-    "region": "uk"
+    "region": "uk",
+    "prep": "no-cook"
   }
 ]
