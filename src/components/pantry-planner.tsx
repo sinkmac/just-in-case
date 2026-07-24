@@ -49,12 +49,12 @@ const categoryLabels: Record<string, string> = {
 };
 
 const categoryIntros: Record<string, string> = {
-  fat: "The most calories per pound and per litre of anything you can store. One jar of oil quietly outworks a whole shelf of tins — that's why it's first.",
-  staple_carb: "The bulk of every plan: cheap, dense, and boring on purpose. Rice and pasta are what everything else gets served on top of.",
-  protein: "Keeps muscles working and hunger honest. Tins are ready the moment you open them; dried lentils store smaller and cost less, but need water and heat.",
-  vegetable: "Not for calories — for staying human. A tin of sweetcorn is fibre, vitamins, and the difference between a meal and a ration.",
-  micronutrient: "Calories keep you alive. These keep you well. Small, light, and worth their shelf space many times over.",
-  morale: "A crisis pantry without chocolate gets abandoned. This is not a joke category — food you look forward to is food you'll actually rotate and eat.",
+  fat: "The most calories per pound and per litre of anything you can store. One jar of vegetable oil quietly outworks a whole shelf of tins — own-brand rapeseed oil is the best value here. Lard costs more per litre but adds cooking options when oil won't do.",
+  staple_carb: "The bulk of every plan: cheap, dense, and boring on purpose. Plain rice and pasta are the cheapest calories in the whole plan — own-brand at any supermarket is fine. Instant and specialty noodles cost several times more per kg for convenience and flavour variety; they're worth having for a change of pace, but don't let them push out the basics.",
+  protein: "Tinned beans, chickpeas, and lentils are the cheapest protein you can store — own-brand at Aldi or Lidl consistently leads on price. Tinned fish costs more per gram but adds variety and needs no cooking. Prices change, so always worth checking what's cheapest at your local shop.",
+  vegetable: "Not for calories — for staying human. Tinned tomatoes, sweetcorn, and peas are cheap year-round, and own-brand is just as good as anything branded. Buy whatever's on offer at your local supermarket.",
+  micronutrient: "Calories keep you alive. These keep you well. Dried fruit and tinned fruit are the most affordable sources here — own-brand dried apricots and raisins are a solid choice. A basic multivitamin fills any gaps without needing to think about it.",
+  morale: "A crisis pantry without chocolate gets abandoned. This is not a joke category — food you look forward to is food you'll actually rotate and eat. Own-brand chocolate and instant coffee are fine; honey keeps indefinitely.",
 };
 
 function litresToShelfTerms(litres: number): string {
