@@ -1342,6 +1342,7 @@ export function PantryPlanner() {
             <a href="/about">About</a>
             <a href="/privacy">Privacy</a>
             <a href="/contact">Contact</a>
+            <a href="/why">Why this exists</a>
             <a href="/affiliate-disclosure">Affiliate disclosure</a>
           </nav>
           <p className="mt-4 text-xs text-[var(--muted)]">Some links are affiliate links. We earn a small commission at no cost to you.</p>

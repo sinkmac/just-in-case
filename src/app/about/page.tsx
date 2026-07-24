@@ -40,6 +40,11 @@ export default function AboutPage() {
           </a>{" "}
           is a free, independent tool that does this well. It takes no commission and is not affiliated with this site.
         </p>
+        <p className="mt-6 text-base leading-7 text-[var(--muted)]">
+          <Link href="/why" className="underline hover:text-[var(--brand)]">
+            Why we built it this way
+          </Link>
+        </p>
       </div>
     </main>
   );
