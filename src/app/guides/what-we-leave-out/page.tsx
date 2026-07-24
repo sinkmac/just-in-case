@@ -87,6 +87,45 @@ export default function Page() {
               UK government emergency planning framework
             </Link> for evacuation rather than pantry planning.
           </p>
+          <p>
+            For your own area&rsquo;s flood risk, the{" "}
+            <a
+              href="https://www.gov.uk/check-flood-risk"
+              target="_blank"
+              rel="noreferrer"
+              className="text-[var(--brand)] underline"
+            >
+              UK government&rsquo;s check-your-flood-risk service
+            </a>{" "}
+            and{" "}
+            <a
+              href="https://www.sepa.org.uk/environment/water/flooding/"
+              target="_blank"
+              rel="noreferrer"
+              className="text-[var(--brand)] underline"
+            >
+              SEPA
+            </a>{" "}
+            (Scotland),{" "}
+            <a
+              href="https://naturalresources.wales/flooding"
+              target="_blank"
+              rel="noreferrer"
+              className="text-[var(--brand)] underline"
+            >
+              Natural Resources Wales
+            </a>
+            , or the{" "}
+            <a
+              href="https://www.gov.uk/check-flood-risk"
+              target="_blank"
+              rel="noreferrer"
+              className="text-[var(--brand)] underline"
+            >
+              Environment Agency
+            </a>{" "}
+            (England) publish free, official risk maps — worth checking directly rather than relying on a general guide.
+          </p>
 
           <div className="section-divider my-8" />
 

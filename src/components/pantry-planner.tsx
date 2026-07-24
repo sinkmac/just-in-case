@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import foods from "../../data/foods.json";
 import { buildPlan, type FoodItem } from "@/lib/planner";
 
@@ -315,6 +316,19 @@ export function PantryPlanner() {
             Tell us who's in your house and what you can spend. We'll show you what long-life food to buy, why each thing earns its place, and how long it would actually keep your household fed. No bunker required — this all fits in a cupboard.
           </p>
         </header>
+
+        <div className="no-print mb-6 rounded-2xl border border-[var(--border)] bg-[var(--accent)] p-4 shadow-sm">
+          <p className="text-sm font-medium text-[var(--brand-dark)]">
+            Not sure where to start?{" "}
+            <Link
+              href="/ready"
+              className="underline decoration-1 underline-offset-2 hover:text-[var(--brand)] transition-colors"
+            >
+              Take the readiness check
+            </Link>
+            {" "}— seventeen quick questions, about three minutes, and an honest picture of where your household stands right now.
+          </p>
+        </div>
 
         <main className="grid gap-6 lg:grid-cols-[340px_1fr] items-start">
           <section className="no-print rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm lg:sticky lg:top-6">
