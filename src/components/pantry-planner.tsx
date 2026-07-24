@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import foods from "../../data/foods.json";
-import { buildPlan, type FoodItem } from "@/lib/planner";
+import { buildPlan, buildCheapestPlan, type FoodItem, type CheapestPlanResult } from "@/lib/planner";
 
 type DietaryFlags = {
   vegetarian: boolean;
@@ -206,6 +206,7 @@ export function PantryPlanner() {
   const [activeSwaps, setActiveSwaps] = useState<Set<string>>(new Set());
   const [powerState, setPowerState] = useState<"working" | "out">("working");
   const [waterState, setWaterState] = useState<"running" | "limited" | "none">("running");
+  const [floorMode, setFloorMode] = useState(false);
 
   const result = useMemo(
     () =>
@@ -222,6 +223,30 @@ export function PantryPlanner() {
       ),
     [adults, children, budgetGbp, tier, dietaryFlags, childCalorieRatio],
   );
+
+  const cheapestPlan = useMemo(
+    () =>
+      buildCheapestPlan(
+        {
+          adults,
+          children,
+          weeks: TIER_DATA[tier].weeks,
+          dietaryFlags,
+          childCalorieRatio,
+        },
+        foods as FoodItem[],
+      ),
+    [adults, children, tier, dietaryFlags, childCalorieRatio],
+  );
+
+  const activeResult = floorMode ? cheapestPlan : result;
+  const activeGrouped = useMemo(() => {
+    return activeResult.ranked.reduce<Record<string, typeof activeResult.ranked>>((acc, line) => {
+      acc[line.category] ??= [];
+      acc[line.category].push(line);
+      return acc;
+    }, {});
+  }, [activeResult]);
 
   const grouped = useMemo(() => {
     return result.ranked.reduce<Record<string, typeof result.ranked>>((acc, line) => {
@@ -361,16 +386,47 @@ export function PantryPlanner() {
 
               <div>
                 <label className="mb-2 block text-sm font-semibold">Budget</label>
-                <input
-                  type="range"
-                  min={20}
-                  max={500}
-                  step={5}
-                  value={budgetGbp}
-                  onChange={(event) => setBudgetGbp(Number(event.target.value))}
-                  className="w-full"
-                />
-                <p className="mt-1 text-sm text-[var(--muted)]">{formatCurrency(budgetGbp)}</p>
+                {floorMode ? (
+                  <div className="rounded-xl border border-[var(--border)] bg-[var(--accent)] p-3">
+                    <p className="text-xs text-[var(--muted)]">Minimum needed</p>
+                    <p className="mt-1 text-lg font-bold text-[var(--brand-dark)]">
+                      {formatCurrency(cheapestPlan.totalCostGbp)}
+                    </p>
+                    <p className="mt-1 text-xs text-[var(--muted)] leading-relaxed">
+                      {cheapestPlan.totalCostGbp < 20
+                        ? `Good news — ${tierLabel.toLowerCase()} costs next to nothing to cover properly for this household.`
+                        : `The least this household could spend and still cope for ${tierLabelLower} is about ${formatCurrency(cheapestPlan.totalCostGbp)}.`
+                      }
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setFloorMode(false)}
+                      className="mt-2 text-xs font-medium text-[var(--brand)] underline"
+                    >
+                      Set a budget instead
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <input
+                      type="range"
+                      min={20}
+                      max={500}
+                      step={5}
+                      value={budgetGbp}
+                      onChange={(event) => setBudgetGbp(Number(event.target.value))}
+                      className="w-full"
+                    />
+                    <p className="mt-1 text-sm text-[var(--muted)]">{formatCurrency(budgetGbp)}</p>
+                    <button
+                      type="button"
+                      onClick={() => setFloorMode(true)}
+                      className="mt-2 text-xs font-medium text-[var(--brand)] underline"
+                    >
+                      What's the least I need to spend?
+                    </button>
+                  </>
+                )}
               </div>
 
               <div>
@@ -523,23 +579,31 @@ export function PantryPlanner() {
                 </div>
                 <div className="rounded-2xl bg-[var(--accent)] p-4">
                   <p className="text-xs uppercase tracking-[0.15em] text-[var(--muted)]">Calories planned</p>
-                  <p className="mt-1 text-2xl font-bold">{Math.round(result.totalCaloriesPlanned).toLocaleString()}</p>
+                  <p className="mt-1 text-2xl font-bold">{Math.round(activeResult.totalCaloriesPlanned).toLocaleString()}</p>
                 </div>
-                <div className="rounded-2xl bg-[var(--accent)] p-4">
-                  <p className="text-xs uppercase tracking-[0.15em] text-[var(--muted)]">Budget used</p>
-                  <p className="mt-1 text-2xl font-bold">{formatCurrency(result.totalBudgetUsedGbp)}</p>
-                </div>
+                {floorMode ? (
+                  <div className="rounded-2xl bg-[var(--accent)] p-4">
+                    <p className="text-xs uppercase tracking-[0.15em] text-[var(--muted)]">Minimum spend</p>
+                    <p className="mt-1 text-2xl font-bold">{formatCurrency(cheapestPlan.totalCostGbp)}</p>
+                  </div>
+                ) : (
+                  <div className="rounded-2xl bg-[var(--accent)] p-4">
+                    <p className="text-xs uppercase tracking-[0.15em] text-[var(--muted)]">Budget used</p>
+                    <p className="mt-1 text-2xl font-bold">{formatCurrency(result.totalBudgetUsedGbp)}</p>
+                  </div>
+                )}
               </div>
-              {verdict.state === "short" ? (
+              {floorMode ? (
                 <div className="verdict-panel">
-                  <p className="font-medium">{verdict.message}</p>
-                  {verdict.modifiers.length > 0 && (
-                    <ul className="mt-2 space-y-1 list-disc list-inside">
-                      {verdict.modifiers.map((modifier, index) => (
-                        <li key={index}>{modifier}</li>
-                      ))}
-                    </ul>
-                  )}
+                  <p className="font-medium">
+                    {cheapestPlan.totalCostGbp < 4
+                      ? `Good news — for this household, ${tierLabelLower} costs next to nothing to cover properly. ${formatCurrency(cheapestPlan.totalCostGbp)} and you're covered.`
+                      : `The least you could spend and still cope for ${tierLabelLower} is about ${formatCurrency(cheapestPlan.totalCostGbp)} — here's exactly what that buys.`
+                    }
+                  </p>
+                  <p className="mt-2 text-sm text-[var(--muted)]">
+                    This is the minimum, not the goal — spend more if you can, but this is what genuinely covers you if that's all there is.
+                  </p>
                 </div>
               ) : (
                 <div className="verdict-panel">
@@ -964,7 +1028,7 @@ export function PantryPlanner() {
             </div>
 
             {(() => {
-              const entries = Object.entries(grouped);
+              const entries = Object.entries(floorMode ? activeGrouped : grouped);
               const largeEntries = entries.filter(([, lines]) => lines.length >= 3);
               const smallEntries = entries.filter(([, lines]) => lines.length <= 2);
               const allLitres = entries.reduce((sum, [, lines]) => sum + sumCategoryLitres(lines), 0);

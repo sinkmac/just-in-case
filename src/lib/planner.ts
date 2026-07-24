@@ -313,3 +313,102 @@ export function buildPlan(input: HouseholdInput, foods: FoodItem[]): PlannerResu
     varietyDisclosure,
   };
 }
+
+export type CheapestPlanResult = {
+  dailyCaloriesNeeded: number;
+  totalCaloriesNeeded: number;
+  totalCaloriesPlanned: number;
+  totalCostGbp: number;
+  ranked: RankedItem[];
+  essentialsAndFlavour: FoodItem[];
+  droppedCategories: string[];
+};
+
+export function buildCheapestPlan(
+  input: Omit<HouseholdInput, 'budgetGbp'>,
+  foods: FoodItem[],
+): CheapestPlanResult {
+  const adults = Math.max(0, input.adults);
+  const children = Math.max(0, input.children);
+  const weeks = Math.max(1, input.weeks);
+  const dietaryFlags = input.dietaryFlags ?? {};
+
+  const childRatio = input.childCalorieRatio ?? 0.6;
+  const dailyCaloriesNeeded = Math.round((adults + children * childRatio) * 2000);
+  const totalCaloriesNeeded = dailyCaloriesNeeded * (weeks * 7);
+
+  const eligible = foods.filter((item) => passesDietaryFlags(item, dietaryFlags));
+  const rankedLines = new Map<string, RankedItem>();
+  const droppedCategories: string[] = [];
+  let totalCost = 0;
+
+  // Phase 1: For each required category, pick the cheapest item and allocate minimum units
+  for (const category of REQUIRED_CATEGORIES) {
+    const candidates = eligible
+      .filter((item) => item.category === category && caloriesPerUnit(item) != null && item.typical_unit_price_gbp > 0)
+      .sort((a, b) => a.typical_unit_price_gbp - b.typical_unit_price_gbp);
+
+    const pick = candidates[0];
+    const minUnits = CATEGORY_MIN_UNITS_OVERRIDE[category] ?? CATEGORY_MIN_UNITS[category] ?? 1;
+
+    if (!pick) {
+      droppedCategories.push(category);
+      continue;
+    }
+
+    for (let i = 0; i < minUnits; i++) {
+      addUnit(rankedLines, pick);
+      totalCost += pick.typical_unit_price_gbp;
+    }
+  }
+
+  // Phase 2: If total calories < needed, fill with cheapest calories-per-pound
+  let caloriesPlanned = Array.from(rankedLines.values()).reduce((sum, line) => sum + line.totalCalories, 0);
+
+  // Build a pool of cheapest-per-calorie items across all categories
+  const fillPool = eligible
+    .filter((item) => {
+      const cals = caloriesPerUnit(item);
+      return cals != null && cals > 0 && item.typical_unit_price_gbp > 0;
+    })
+    .sort((a, b) => {
+      const calsA = caloriesPerUnit(a)!;
+      const calsB = caloriesPerUnit(b)!;
+      // Sort by cheapest cost per calorie (price / calories)
+      return (a.typical_unit_price_gbp / calsA) - (b.typical_unit_price_gbp / calsB);
+    });
+
+  while (caloriesPlanned < totalCaloriesNeeded) {
+    const next = fillPool.find((item) => {
+      const existing = rankedLines.get(item.id);
+      const existingCals = existing?.totalCalories ?? 0;
+      const unitCals = caloriesPerUnit(item) ?? 0;
+      return existingCals + unitCals <= totalCaloriesNeeded * 0.25;
+    });
+
+    if (!next) break;
+
+    addUnit(rankedLines, next);
+    totalCost += next.typical_unit_price_gbp;
+    caloriesPlanned += caloriesPerUnit(next) ?? 0;
+  }
+
+  const essentialsAndFlavour = eligible.filter(
+    (item) => item.category === 'flavour' || item.cal_per_100g == null,
+  );
+
+  const ranked = Array.from(rankedLines.values()).sort((a, b) => {
+    if (a.category === b.category) return (b.score ?? -1) - (a.score ?? -1);
+    return a.category.localeCompare(b.category);
+  });
+
+  return {
+    dailyCaloriesNeeded,
+    totalCaloriesNeeded,
+    totalCaloriesPlanned: caloriesPlanned,
+    totalCostGbp: Number(totalCost.toFixed(2)),
+    ranked,
+    essentialsAndFlavour,
+    droppedCategories,
+  };
+}
