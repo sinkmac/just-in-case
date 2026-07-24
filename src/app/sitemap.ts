@@ -38,5 +38,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: "https://justincase.scot/guides/what-we-leave-out",
       lastModified: new Date(),
     },
+    {
+      url: "https://justincase.scot/guides/gear-worth-having",
+      lastModified: new Date(),
+    },
+    {
+      url: "https://justincase.scot/guides/car-kit",
+      lastModified: new Date(),
+    },
   ];
 }
