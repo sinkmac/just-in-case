@@ -441,9 +441,18 @@ export function PantryPlanner() {
               <h2 className="heading-serif text-2xl">Plan your just-in-case pantry</h2>
               <p className="mt-2 text-sm text-[var(--muted)]">
                 <span className="mr-2"><TierPictogram tier={tier} reducedFill={activeSwaps.size > 0 ? reducedLitres / Math.max(1, totalLitres) : undefined} /></span>
-                {tierLabel}
-              </p>
-              <div className="mt-4 grid gap-4 sm:grid-cols-3">
+                                {tierLabel}
+                              </p>
+                              {(() => {
+                                const days = Math.floor(result.totalCaloriesPlanned / Math.max(1, result.dailyCaloriesNeeded));
+                                const remaining = result.remainingBudgetGbp;
+                                return (
+                                  <p className="mt-4 text-sm font-medium text-[var(--brand-dark)]">
+                                    This covers your household for about {days} day{days !== 1 ? "s" : ""} — in one cupboard, for {formatCurrency(result.totalBudgetUsedGbp)}, with {formatCurrency(remaining)} left.
+                                  </p>
+                                );
+                              })()}
+                              <div className="mt-4 grid gap-4 sm:grid-cols-3">
                 <div className="rounded-2xl bg-[var(--accent)] p-4">
                   <div className="flex items-center gap-2">
                     <p className="text-xs uppercase tracking-[0.15em] text-[var(--muted)]">
@@ -627,6 +636,31 @@ export function PantryPlanner() {
                   })()}
                 </>
               )}
+
+              <div className="mt-4 space-y-3">
+                <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">
+                  Space-saving gear
+                </p>
+                <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-3 text-sm">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p className="font-medium text-[var(--brand-dark)]">Vacuum storage bags or sealer</p>
+                      <p className="mt-0.5 text-xs text-[var(--brand)]">The same food, using less space</p>
+                    </div>
+                    <a
+                      href="https://www.amazon.co.uk/s?k=vacuum+food+sealer&tag=biteforecast2-21"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
+                    >
+                      See on Amazon
+                    </a>
+                  </div>
+                  <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
+                    Don't vacuum-seal loose rice or pasta directly in shrink bags — sharp grain edges can pierce the film over time. The safer method is a rigid container with a vacuum valve lid.
+                  </p>
+                </div>
+              </div>
             </div>
 
             <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
@@ -692,6 +726,33 @@ export function PantryPlanner() {
                       <>No power means no cooking. {scenarioCounts.needsHeat} item{scenarioCounts.needsHeat !== 1 ? "s" : ""} below need{scenarioCounts.needsHeat === 1 ? "s" : ""} a hob or kettle. Limited water means dried foods that need boiling also cost you stored water.</>
                     )}
                   </p>
+                </div>
+              )}
+
+              {(waterState === "limited" || waterState === "none") && (
+                <div className="mt-4 space-y-3">
+                  <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">
+                    Water gear
+                  </p>
+                  <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-3 text-sm">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="font-medium text-[var(--brand-dark)]">Water purification tablets or filter</p>
+                        <p className="mt-0.5 text-xs text-[var(--brand)]">Necessary for treating an unclear or untreated source</p>
+                      </div>
+                      <a
+                        href="https://www.amazon.co.uk/s?k=water+purification+tablets&tag=biteforecast2-21"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
+                      >
+                        See on Amazon
+                      </a>
+                    </div>
+                    <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
+                      Filters remove bacteria and protozoa but not all viruses. Chlorine dioxide tablets handle a broader range but take longer to act. If you're treating from an unknown source, tablets are the safer bet.
+                    </p>
+                  </div>
                 </div>
               )}
 
