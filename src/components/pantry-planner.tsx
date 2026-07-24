@@ -721,6 +721,51 @@ export function PantryPlanner() {
                   </p>
                 </div>
               </div>
+              {selectedSpace && SPACE_LITRES[selectedSpace] < totalLitres && (
+                <div className="mt-4 space-y-3">
+                  <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">
+                    Need more space?
+                  </p>
+                  <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-3 text-sm">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="font-medium text-[var(--brand-dark)]">Wire / metal shelving unit</p>
+                        <p className="mt-0.5 text-xs text-[var(--brand)]">The cheapest way to get from a shelf to a shelving unit</p>
+                      </div>
+                      <a
+                        href="https://www.amazon.co.uk/s?k=wire+shelving+unit&tag=biteforecast2-21"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
+                      >
+                        See on Amazon
+                      </a>
+                    </div>
+                    <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
+                      A plain multi-tier shelf unit is the cheapest way to get from "a shelf" to "a shelving unit" — no need for anything fancier. Basic wire or metal shelving runs about £15–£30, is floor-standing, and holds several times what a single cupboard shelf can.
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-3 text-sm">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="font-medium text-[var(--brand-dark)]">Under-bed storage boxes</p>
+                        <p className="mt-0.5 text-xs text-[var(--brand)]">Use space you already have — zero extra floor space</p>
+                      </div>
+                      <a
+                        href="https://www.amazon.co.uk/s?k=under+bed+storage+boxes&tag=biteforecast2-21"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
+                      >
+                        See on Amazon
+                      </a>
+                    </div>
+                    <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
+                      If you don't have room for a shelf, under-bed boxes use space you already have and take up nothing extra. Stackable, cheap, and they keep tins and packets out of sight but still organised.
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
