@@ -207,6 +207,7 @@ export function PantryPlanner() {
   const [powerState, setPowerState] = useState<"working" | "out">("working");
   const [waterState, setWaterState] = useState<"running" | "limited" | "none">("running");
   const [floorMode, setFloorMode] = useState(false);
+  const [scheduleMode, setScheduleMode] = useState(false);
 
   const result = useMemo(
     () =>
@@ -276,6 +277,48 @@ export function PantryPlanner() {
     }
     return total;
   }, [result.ranked, activeSwaps]);
+
+  const schedule = useMemo(() => {
+    const items = activeResult.ranked
+      .map((r) => ({ name: r.item.name, qty: r.quantity, cost: r.estimatedCostGbp }))
+      .sort((a, b) => a.cost - b.cost);
+    const totalCost = items.reduce((s, i) => s + i.cost, 0);
+
+    if (items.length === 0 || totalCost === 0) return { weeks: [] as { label: string; items: typeof items; cost: number; runningTotal: number }[], totalWeeks: 0, totalCost: 0 };
+
+    let numWeeks = Math.max(1, Math.min(Math.round(totalCost / 20), 8));
+    if (tier === "weekend") numWeeks = Math.min(numWeeks, 1);
+    if (numWeeks < 1) numWeeks = 1;
+
+    const weeks: { label: string; items: typeof items; cost: number; runningTotal: number }[] = [];
+    for (let w = 0; w < numWeeks; w++) {
+      weeks.push({ label: `Week ${w + 1}`, items: [], cost: 0, runningTotal: 0 });
+    }
+
+    let itemIdx = 0;
+    for (const item of items) {
+      for (let q = 0; q < item.qty; q++) {
+        const unitCost = item.cost / item.qty;
+        weeks[itemIdx % numWeeks].items.push({ ...item, qty: 1, cost: unitCost });
+        weeks[itemIdx % numWeeks].cost += unitCost;
+        itemIdx++;
+      }
+    }
+
+    // Sort each week's items by cost descending (most expensive first)
+    for (const w of weeks) {
+      w.items.sort((a, b) => b.cost - a.cost);
+    }
+
+    // Compute running totals
+    let rt = 0;
+    for (const w of weeks) {
+      rt += w.cost;
+      w.runningTotal = rt;
+    }
+
+    return { weeks, totalWeeks: numWeeks, totalCost };
+  }, [activeResult, tier]);
 
   const reducedLitres = Math.max(0, totalLitres - swapReclaimed);
 
@@ -1207,7 +1250,14 @@ export function PantryPlanner() {
               );
             })()}
 
-            <div className="no-print flex justify-center pt-2">
+            <div className="no-print flex justify-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setScheduleMode((c) => !c)}
+                className="rounded-full border border-[var(--border)] bg-[var(--card)] px-6 py-3 text-sm font-medium text-[var(--muted)] shadow-sm transition hover:bg-[var(--accent)]"
+              >
+                {scheduleMode ? "Hide schedule" : "Spread this over several weeks"}
+              </button>
               <button
                 type="button"
                 onClick={() => window.print()}
@@ -1216,6 +1266,37 @@ export function PantryPlanner() {
                 🖨 Print this list
               </button>
             </div>
+
+            {scheduleMode && schedule.weeks.length > 0 && (
+              <section className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
+                <h3 className="category-ticket">Weekly shopping schedule</h3>
+                <p className="mt-2 text-sm text-[var(--muted)] max-w-prose">
+                  Buy a little each week and you'll have this fully covered by week {schedule.totalWeeks} — no big shop required.
+                </p>
+                <div className="mt-4 space-y-4">
+                  {schedule.weeks.map((week) => (
+                    <div key={week.label}>
+                      <p className="text-sm font-semibold text-[var(--brand-dark)]">{week.label}</p>
+                      <ul className="mt-1 space-y-1 text-sm text-[var(--muted)]">
+                        {week.items.map((item, idx) => (
+                          <li key={idx}>
+                            {item.name} ×{Math.round(item.qty)} — {new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 2 }).format(item.cost)}
+                          </li>
+                        ))}
+                      </ul>
+                      <p className="mt-1 text-xs text-[var(--muted)]">
+                        {new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 2 }).format(week.cost)} — running total:{" "}
+                        {new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 2 }).format(week.runningTotal)}
+                      </p>
+                      {week.label !== `Week ${schedule.totalWeeks}` && <hr className="my-3 border-dashed border-[var(--border)]" />}
+                    </div>
+                  ))}
+                  <p className="text-sm font-medium text-[var(--brand-dark)]">
+                    Total: {new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 2 }).format(schedule.totalCost)}
+                  </p>
+                </div>
+              </section>
+            )}
 
             <section className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
               <h3 className="category-ticket">Essentials and flavour</h3>
