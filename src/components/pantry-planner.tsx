@@ -28,13 +28,13 @@ const TIER_DATA: Record<DurationTier, { label: string; weeks: number; register: 
   month: {
     label: "A hard month",
     weeks: 4,
-    register: "A serious disruption. This is where most households should aim &mdash; and it still fits in one cupboard.",
+    register: "A serious disruption. This is where most households should aim — and it still fits in one cupboard.",
     pictogram: "▣ 📦",
   },
   season: {
     label: "A long season",
     weeks: 12,
-    register: "At this depth you&rsquo;re not storing food anymore &mdash; you&rsquo;re keeping a working larder. Everything here should be food you already eat, bought deeper and rotated through. Expect a shelving unit, not a shelf.",
+    register: "This is three months of food — too much to buy in one trip. Add a little extra each time you do your normal shop. Always eat your oldest tins and packets first, and replace them as you buy more, so nothing sits going out of date at the back of a cupboard. You'll need real shelving for this, not just a shelf.",
     pictogram: "🏗️",
   },
 };
@@ -49,12 +49,12 @@ const categoryLabels: Record<string, string> = {
 };
 
 const categoryIntros: Record<string, string> = {
-  fat: "The most calories per pound and per litre of anything you can store. One jar of oil quietly outworks a whole shelf of tins &mdash; that&rsquo;s why it&rsquo;s first.",
+  fat: "The most calories per pound and per litre of anything you can store. One jar of oil quietly outworks a whole shelf of tins — that's why it's first.",
   staple_carb: "The bulk of every plan: cheap, dense, and boring on purpose. Rice and pasta are what everything else gets served on top of.",
   protein: "Keeps muscles working and hunger honest. Tins are ready the moment you open them; dried lentils store smaller and cost less, but need water and heat.",
-  vegetable: "Not for calories &mdash; for staying human. A tin of sweetcorn is fibre, vitamins, and the difference between a meal and a ration.",
+  vegetable: "Not for calories — for staying human. A tin of sweetcorn is fibre, vitamins, and the difference between a meal and a ration.",
   micronutrient: "Calories keep you alive. These keep you well. Small, light, and worth their shelf space many times over.",
-  morale: "A crisis pantry without chocolate gets abandoned. This is not a joke category &mdash; food you look forward to is food you&rsquo;ll actually rotate and eat.",
+  morale: "A crisis pantry without chocolate gets abandoned. This is not a joke category — food you look forward to is food you'll actually rotate and eat.",
 };
 
 function litresToShelfTerms(litres: number): string {
@@ -62,7 +62,7 @@ function litresToShelfTerms(litres: number): string {
   if (litres < 15) return "half a cupboard shelf";
   if (litres < 30) return "roughly one cupboard shelf";
   if (litres < 60) return "two cupboard shelves, or one under-bed box";
-  return "a full cupboard &mdash; or one cheap shelving unit in a hall or garage";
+  return "a full cupboard — or one cheap shelving unit in a hall or garage";
 }
 
 type SpaceOption = "shoebox" | "half-shelf" | "one-shelf" | "cupboard";
@@ -118,7 +118,7 @@ const SWAPS: SwapEntry[] = [
     toName: "Tinned beans",
     litresReclaimedPerUnit: 0,
     badgeText: "ready without heat",
-    tradeOff: "Takes up more shelf space &mdash; but it&rsquo;s a meal you can eat straight from the tin when the hob&rsquo;s out of action.",
+    tradeOff: "Takes up more shelf space — but it's a meal you can eat straight from the tin when the hob's out of action.",
   },
 ];
 
@@ -281,7 +281,7 @@ export function PantryPlanner() {
 
       return {
         state: "short" as const,
-        message: `Your \u00A3${budgetGbp} covers about ${coveredDays} day${coveredDays !== 1 ? "s" : ""} of full meals for this household &mdash; ${shortfallDays} day${shortfallDays !== 1 ? "s" : ""} short of your ${tierLabelLower} target. You could close the gap for roughly \u00A3${gap} more, or start here and top up next shop.`,
+        message: `Your \u00A3${budgetGbp} covers about ${coveredDays} day${coveredDays !== 1 ? "s" : ""} of full meals for this household — ${shortfallDays} day${shortfallDays !== 1 ? "s" : ""} short of your ${tierLabelLower} target. You could close the gap for roughly \u00A3${gap} more, or start here and top up next shop.`,
         modifiers,
       };
     }
@@ -300,7 +300,7 @@ export function PantryPlanner() {
     // Meets target — fully covered with modest leftover
     return {
       state: "meets" as const,
-      message: `Your \u00A3${budgetGbp} fully covers ${tierLabel.toLowerCase()} for this household, with about \u00A3${spare} left over. Spend the rest on the Essentials list below &mdash; that&rsquo;s what turns stored calories into actual dinners.`,
+      message: `Your \u00A3${budgetGbp} fully covers ${tierLabel.toLowerCase()} for this household, with about \u00A3${spare} left over. Spend the rest on the Essentials list below — that's what turns stored calories into actual dinners.`,
       modifiers: [] as string[],
     };
   }, [result, tierWeeks, tierLabel, budgetGbp]);
@@ -312,7 +312,7 @@ export function PantryPlanner() {
           <h1 className="mt-2 text-3xl font-bold text-[var(--brand-dark)]">Just In Case</h1>
           <p className="mt-2 text-sm text-[var(--muted)]">A fixed point in uncertain times.</p>
           <p className="mt-4 max-w-2xl text-sm leading-6 text-[var(--muted)]">
-            Tell us who&rsquo;s in your house and what you can spend. We&rsquo;ll show you what long-life food to buy, why each thing earns its place, and how long it would actually keep your household fed. No bunker required &mdash; this all fits in a cupboard.
+            Tell us who's in your house and what you can spend. We'll show you what long-life food to buy, why each thing earns its place, and how long it would actually keep your household fed. No bunker required — this all fits in a cupboard.
           </p>
         </header>
 
@@ -677,16 +677,16 @@ export function PantryPlanner() {
                 <div className="mt-4 verdict-panel">
                   <p>
                     {powerState === "out" && waterState === "running" && (
-                      <>No power means no cooking. {scenarioCounts.needsHeat} item{scenarioCounts.needsHeat !== 1 ? "s" : ""} below need{scenarioCounts.needsHeat === 1 ? "s" : ""} a hob or kettle &mdash; they&rsquo;re flagged, and we&rsquo;ve suggested {scenarioCounts.needsHeatNoCookSwap} ready-to-eat swap{scenarioCounts.needsHeatNoCookSwap !== 1 ? "s" : ""} that {scenarioCounts.needsHeatNoCookSwap === 1 ? "needs nothing done to it" : "need nothing done to them"}.</>
+                      <>No power means no cooking. {scenarioCounts.needsHeat} item{scenarioCounts.needsHeat !== 1 ? "s" : ""} below need{scenarioCounts.needsHeat === 1 ? "s" : ""} a hob or kettle — they're flagged, and we've suggested {scenarioCounts.needsHeatNoCookSwap} ready-to-eat swap{scenarioCounts.needsHeatNoCookSwap !== 1 ? "s" : ""} that {scenarioCounts.needsHeatNoCookSwap === 1 ? "needs nothing done to it" : "need nothing done to them"}.</>
                     )}
                     {powerState === "working" && waterState === "limited" && (
-                      <>Limited water means cooking is possible but rationed. Dried foods that need boiling now cost you stored water too &mdash; check the flagged items below.</>
+                      <>Limited water means cooking is possible but rationed. Dried foods that need boiling now cost you stored water too — check the flagged items below.</>
                     )}
                     {powerState === "working" && waterState === "none" && (
-                      <>No running water changes the maths on everything dried. At 3 litres a person a day just to drink, water becomes the real constraint &mdash; not food.</>
+                      <>No running water changes the maths on everything dried. At 3 litres a person a day just to drink, water becomes the real constraint — not food.</>
                     )}
                     {powerState === "out" && waterState === "none" && (
-                      <>With neither power nor water, only ready-to-eat food works. {scenarioCounts.needsHeat} item{scenarioCounts.needsHeat !== 1 ? "s" : ""} below need{scenarioCounts.needsHeat === 1 ? "s" : ""} cooking water or heat and {scenarioCounts.needsHeat === 1 ? "isn&rsquo;t" : "aren&rsquo;t"} realistic right now.</>
+                      <>With neither power nor water, only ready-to-eat food works. {scenarioCounts.needsHeat} item{scenarioCounts.needsHeat !== 1 ? "s" : ""} below need{scenarioCounts.needsHeat === 1 ? "s" : ""} cooking water or heat and {scenarioCounts.needsHeat === 1 ? "isn't" : "aren't"} realistic right now.</>
                     )}
                     {powerState === "out" && waterState === "limited" && (
                       <>No power means no cooking. {scenarioCounts.needsHeat} item{scenarioCounts.needsHeat !== 1 ? "s" : ""} below need{scenarioCounts.needsHeat === 1 ? "s" : ""} a hob or kettle. Limited water means dried foods that need boiling also cost you stored water.</>
@@ -780,7 +780,7 @@ export function PantryPlanner() {
                           <p className="category-rationale">
                             {categoryIntros[category]}
                             {tier === "season" && category === "micronutrient" && (
-                              <> Over a season, these stop being optional &mdash; variety is what keeps a long stretch healthy, not just fed.</>
+                              <> Over a season, these stop being optional — variety is what keeps a long stretch healthy, not just fed.</>
                             )}
                           </p>
                         )}
@@ -851,7 +851,7 @@ export function PantryPlanner() {
                                 <p className="category-rationale !text-[11px]">
                                   {categoryIntros[category]}
                                   {tier === "season" && category === "micronutrient" && (
-                                    <> Over a season, these stop being optional &mdash; variety is what keeps a long stretch healthy, not just fed.</>
+                                    <> Over a season, these stop being optional — variety is what keeps a long stretch healthy, not just fed.</>
                                   )}
                                 </p>
                               )}
@@ -925,7 +925,7 @@ export function PantryPlanner() {
 
             <section className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
               <h3 className="category-ticket">Essentials and flavour</h3>
-              <p className="mt-2 text-sm text-[var(--muted)] max-w-prose">Salt, coffee, spices, vinegar. Nearly zero calories, but they&rsquo;re what makes week three taste different from week one. Don&rsquo;t skip these.</p>
+              <p className="mt-2 text-sm text-[var(--muted)] max-w-prose">Salt, coffee, spices, vinegar. Nearly zero calories, but they're what makes week three taste different from week one. Don't skip these.</p>
               <ul className="mt-3 space-y-2 text-sm text-[var(--muted)]">
                 {result.essentialsAndFlavour.map((item) => (
                   <li key={item.id}>• {item.name}</li>
@@ -934,18 +934,18 @@ export function PantryPlanner() {
             </section>
 
             <section className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
-              <h3 className="category-ticket">Two things this list can&rsquo;t do</h3>
+              <h3 className="category-ticket">Two things this list can't do</h3>
               <div className="mt-3 space-y-3 text-sm leading-6 text-[var(--muted)]">
-                <p><strong>It can&rsquo;t store water for you.</strong> Dried food is compact because the water isn&rsquo;t in the tin &mdash; it&rsquo;s in your tap. If the taps stopped too, you&rsquo;d need about 3 litres per person per day before any of this list becomes dinner. Food first is fine; just know water is the other half.</p>
-                <p><strong>It can&rsquo;t guess your kitchen.</strong> The storage figures are honest estimates, not measurements. Brands and packaging vary &mdash; treat every volume here as &ldquo;roughly,&rdquo; and check a shelf&rsquo;s weight before loading it entirely with tins.</p>
+                <p><strong>It can't store water for you.</strong> Dried food is compact because the water isn't in the tin — it's in your tap. If the taps stopped too, you'd need about 3 litres per person per day before any of this list becomes dinner. Food first is fine; just know water is the other half.</p>
+                It can't guess your kitchen. The storage figures are honest estimates, not measurements. Brands and packaging vary — treat every volume here as “roughly,” and check a shelf's weight before loading it entirely with tins.
               </div>
             </section>
 
             <section className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
-              <h3 className="category-ticket">You don&rsquo;t have to do this in one shop</h3>
+              <h3 className="category-ticket">You don't have to do this in one shop</h3>
               <div className="mt-3 space-y-3 text-sm leading-6 text-[var(--muted)]">
-                <p>Nobody buys a month of food in an afternoon. Add one category to your normal shop each week and you&rsquo;ll be fully covered inside two months, without ever feeling the cost. Print the list, stick it on the fridge, and cross things off as they come home.</p>
-                <p>Then eat it. The best just-in-case pantry is one you cook from and replace &mdash; food that rotates never expires, and a shelf you use is a shelf you trust.</p>
+                <p>Nobody buys a month of food in an afternoon. Add one category to your normal shop each week and you'll be fully covered inside two months, without ever feeling the cost. Print the list, stick it on the fridge, and cross things off as they come home.</p>
+                <p>Then eat it. The best just-in-case pantry is one you cook from and replace — food that rotates never expires, and a shelf you use is a shelf you trust.</p>
                 {tier === "season" && (
                   <p>A three-month larder only works if it moves. Cook from it, replace what you use, and it will never expire on you.</p>
                 )}
@@ -957,12 +957,12 @@ export function PantryPlanner() {
         <section className="no-print mt-8 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm">
           <h3 className="heading-serif text-sm">About these numbers</h3>
           <p className="mt-2 text-xs leading-5 text-[var(--muted)]">
-            Calorie figures come from standard UK nutrition data; prices are typical supermarket and Amazon prices, checked periodically rather than live. Just In Case is built and maintained by one person in Scotland, not a content farm. Some links earn us a small commission at no cost to you &mdash; it&rsquo;s how the site stays free, and it never changes what we recommend.
+            Calorie figures come from standard UK nutrition data; prices are typical supermarket and Amazon prices, checked periodically rather than live. Just In Case is built and maintained by one person in Scotland, not a content farm. Some links earn us a small commission at no cost to you — it's how the site stays free, and it never changes what we recommend.
           </p>
         </section>
 
         <footer className="no-print mt-8 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm">
-          <p className="text-sm font-semibold text-[var(--brand-dark)]">Just In Case &mdash; justincase.scot</p>
+          <p className="text-sm font-semibold text-[var(--brand-dark)]">Just In Case — justincase.scot</p>
           <nav className="mt-4 flex flex-wrap gap-3 text-sm text-[var(--muted)]">
             <a href="/about">About</a>
             <a href="/privacy">Privacy</a>
