@@ -600,7 +600,7 @@
     "name": "Tinned mackerel",
     "cal_per_100g": 200,
     "typical_unit_g": 125,
-    "typical_unit_price_gbp": 1.1,
+    "typical_unit_price_gbp": 0.85,
     "shelf_life_months": 36,
     "storage_litres_per_unit": 0.16,
     "vegetarian": false,

@@ -523,6 +523,11 @@ export default function Page() {
             );
           })}
         </div>
+        {q.id === 'q16' && (
+          <p className="mt-2 text-xs leading-relaxed text-[var(--muted)]">
+            Worth having ready: photos or copies of your passport, driving licence, tenancy or mortgage documents, and insurance policy — kept somewhere secure, or backed up online. Free, and one less thing to think about in a hurry.
+          </p>
+        )}
       </div>
     );
   };

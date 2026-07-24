@@ -53,7 +53,7 @@ const categoryIntros: Record<string, string> = {
   staple_carb: "The bulk of every plan: cheap, dense, and boring on purpose. Plain rice and pasta are the cheapest calories in the whole plan — own-brand at any supermarket is fine. Instant and specialty noodles cost several times more per kg for convenience and flavour variety; they're worth having for a change of pace, but don't let them push out the basics.",
   protein: "Tinned beans, chickpeas, and lentils are the cheapest protein you can store — own-brand at Aldi or Lidl consistently leads on price. Tinned fish costs more per gram but adds variety and needs no cooking. Prices change, so always worth checking what's cheapest at your local shop.",
   vegetable: "Not for calories — for staying human. Tinned tomatoes, sweetcorn, and peas are cheap year-round, and own-brand is just as good as anything branded. Buy whatever's on offer at your local supermarket.",
-  micronutrient: "Calories keep you alive. These keep you well. Dried fruit and tinned fruit are the most affordable sources here — own-brand dried apricots and raisins are a solid choice. A basic multivitamin fills any gaps without needing to think about it.",
+  micronutrient: "Calories keep you alive. These keep you well. Dried fruit and tinned fruit are the most affordable sources here — own-brand dried apricots and raisins are a solid choice. A basic multivitamin fills any gaps without needing to think about it. If you're two weeks or more into stored food, you can grow fresh greens with almost nothing: a spoonful of dried red lentils or peas in a jar of water will sprout in 3–5 days — no soil, no garden, no special kit needed. A tray of microgreens on a windowsill takes 7–14 days and gives you fresh, nutrient-dense leaves from the same approach. A proper sprouting jar or microgreens tray makes it easier, but the jar-of-water method costs nothing beyond what's already in your cupboard.",
   morale: "A crisis pantry without chocolate gets abandoned. This is not a joke category — food you look forward to is food you'll actually rotate and eat. Own-brand chocolate and instant coffee are fine; honey keeps indefinitely.",
 };
 
@@ -660,6 +660,66 @@ export function PantryPlanner() {
                     Don't vacuum-seal loose rice or pasta directly in shrink bags — sharp grain edges can pierce the film over time. The safer method is a rigid container with a vacuum valve lid.
                   </p>
                 </div>
+
+                <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-3 text-sm">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p className="font-medium text-[var(--brand-dark)]">Foil / space emergency blanket</p>
+                      <p className="mt-0.5 text-xs text-[var(--brand)]">Compact, lightweight heat retention</p>
+                    </div>
+                    <a
+                      href="https://www.amazon.co.uk/s?k=emergency+space+blanket&tag=biteforecast2-21"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
+                    >
+                      See on Amazon
+                    </a>
+                  </div>
+                  <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
+                    A compact, lightweight way to retain body heat if normal heating fails. Costs a few pounds and takes up almost no space.
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-3 text-sm">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p className="font-medium text-[var(--brand-dark)]">Fire blanket</p>
+                      <p className="mt-0.5 text-xs text-[var(--brand)]">The simplest kitchen fire safety tool</p>
+                    </div>
+                    <a
+                      href="https://www.amazon.co.uk/s?k=fire+blanket+kitchen&tag=biteforecast2-21"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
+                    >
+                      See on Amazon
+                    </a>
+                  </div>
+                  <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
+                    A fire blanket is the more universal starting point — cheaper than an extinguisher, needs no training, and covers the most common domestic fire type (pan fires).
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-3 text-sm">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p className="font-medium text-[var(--brand-dark)]">ABC powder fire extinguisher</p>
+                      <p className="mt-0.5 text-xs text-[var(--brand)]">Broader coverage for households who want it</p>
+                    </div>
+                    <a
+                      href="https://www.amazon.co.uk/s?k=ABC+powder+fire+extinguisher&tag=biteforecast2-21"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
+                    >
+                      See on Amazon
+                    </a>
+                  </div>
+                  <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
+                    A step up from the fire blanket — covers wood, paper, flammable liquids, and electrical fires. One extinguisher per floor is the standard recommendation.
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -753,6 +813,26 @@ export function PantryPlanner() {
                       Filters remove bacteria and protozoa but not all viruses. Chlorine dioxide tablets handle a broader range but take longer to act. If you're treating from an unknown source, tablets are the safer bet.
                     </p>
                   </div>
+
+                  <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-3 text-sm">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="font-medium text-[var(--brand-dark)]">Water butt for rainwater collection</p>
+                        <p className="mt-0.5 text-xs text-[var(--brand)]">A backup source when mains water is disrupted</p>
+                      </div>
+                      <a
+                        href="https://www.amazon.co.uk/s?k=water+butt+rainwater+collection&tag=biteforecast2-21"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
+                      >
+                        See on Amazon
+                      </a>
+                    </div>
+                    <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
+                      A water butt collects rainwater for use when mains water is disrupted. Some UK councils and charities give water butts away free to households in fuel or water poverty — worth checking local schemes before buying, if you're eligible.
+                    </p>
+                  </div>
                 </div>
               )}
 
@@ -838,12 +918,27 @@ export function PantryPlanner() {
                       <section key={category} className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
                         <h3 className="category-ticket">{categoryLabels[category] ?? category}</h3>
                         {categoryIntros[category] && (
-                          <p className="category-rationale">
-                            {categoryIntros[category]}
-                            {tier === "season" && category === "micronutrient" && (
-                              <> Over a season, these stop being optional — variety is what keeps a long stretch healthy, not just fed.</>
+                          <>
+                            <p className="category-rationale">
+                              {categoryIntros[category]}
+                              {tier === "season" && category === "micronutrient" && (
+                                <> Over a season, these stop being optional — variety is what keeps a long stretch healthy, not just fed.</>
+                              )}
+                            </p>
+                            {category === "micronutrient" && (
+                              <p className="mt-1 text-xs text-[var(--brand)]">
+                                A sprouting jar or microgreens tray makes it easier —{" "}
+                                <a
+                                  href="https://www.amazon.co.uk/s?k=sprouting+jar+kit&tag=biteforecast2-21"
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="underline hover:text-[var(--brand-dark)]"
+                                >
+                                  see options on Amazon
+                                </a>
+                              </p>
                             )}
-                          </p>
+                          </>
                         )}
                         <div className="mt-4 overflow-x-auto">
                           <table className="min-w-full text-sm">
@@ -909,12 +1004,27 @@ export function PantryPlanner() {
                                 {categoryLabels[category] ?? category}
                               </p>
                               {categoryIntros[category] && (
-                                <p className="category-rationale !text-[11px]">
-                                  {categoryIntros[category]}
-                                  {tier === "season" && category === "micronutrient" && (
-                                    <> Over a season, these stop being optional — variety is what keeps a long stretch healthy, not just fed.</>
+                                <>
+                                  <p className="category-rationale !text-[11px]">
+                                    {categoryIntros[category]}
+                                    {tier === "season" && category === "micronutrient" && (
+                                      <> Over a season, these stop being optional — variety is what keeps a long stretch healthy, not just fed.</>
+                                    )}
+                                  </p>
+                                  {category === "micronutrient" && (
+                                    <p className="mt-1 text-xs text-[var(--brand)]">
+                                      A sprouting jar or microgreens tray makes it easier —{" "}
+                                      <a
+                                        href="https://www.amazon.co.uk/s?k=sprouting+jar+kit&tag=biteforecast2-21"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="underline hover:text-[var(--brand-dark)]"
+                                      >
+                                        see options on Amazon
+                                      </a>
+                                    </p>
                                   )}
-                                </p>
+                                </>
                               )}
                               <table className="min-w-full text-xs">
                                                               <thead>
