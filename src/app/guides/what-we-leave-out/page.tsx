@@ -166,6 +166,18 @@ export default function Page() {
             your cupboard, and your household — and nothing it leaves out will surprise
             you.
           </p>
+
+          <div className="section-divider my-8" />
+          <p>
+            If things go on longer or get worse than a cupboard can cover,{" "}
+            <Link
+              href="/guides/if-things-get-really-bad"
+              className="text-[var(--brand)] underline"
+            >
+              there&rsquo;s a separate page about where to turn
+            </Link>{" "}
+            when that happens.
+          </p>
         </div>
       </div>
     </main>

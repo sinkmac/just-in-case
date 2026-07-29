@@ -48,6 +48,18 @@ export default function Page() {
           </p>
 
           <p>
+            That&rsquo;s also why we have a page about{" "}
+            <Link
+              href="/guides/if-things-get-really-bad"
+              className="text-[var(--brand)] underline"
+            >
+              what to do when a cupboard isn&rsquo;t the whole answer
+            </Link>{" "}
+            — because knowing where our own advice stops is part of staying calm
+            about it.
+          </p>
+
+          <p>
             <strong>Honest, not padded.</strong> If own-brand tinned beans from your nearest supermarket are genuinely the cheapest way to eat well, we&rsquo;ll say so — even though we make nothing when you buy them. We&rsquo;d rather be right than paid.
           </p>
 
