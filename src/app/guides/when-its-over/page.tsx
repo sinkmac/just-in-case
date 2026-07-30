@@ -115,7 +115,7 @@ export default function Page() {
           <p>
             If you are unsure about a particular food, the{" "}
             <a
-              href="https://food.gov.uk/safety-hygiene/food-safety-in-a-power-cut-advice-for-consumers"
+              href="https://www.gov.uk/government/publications/food-safety-in-a-power-cut-advice-for-consumers/food-safety-in-a-power-cut-advice-for-consumers"
               target="_blank"
               rel="noreferrer"
               className="text-[var(--brand)] underline"
