@@ -174,6 +174,18 @@ export default function Page() {
             </li>
           </ol>
         </div>
+
+        <div className="section-divider my-8" />
+        <p className="text-sm text-[var(--muted)]">
+          If you are past the worst of it,{" "}
+          <Link
+            href="/guides/when-its-over"
+            className="text-[var(--brand)] underline"
+          >
+            here is what to do the morning after
+          </Link>
+          .
+        </p>
       </div>
     </main>
   );

@@ -47,6 +47,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
     },
     {
+      url: "https://justincase.scot/guides/when-its-over",
+      lastModified: new Date(),
+    },
+    {
       url: "https://justincase.scot/why",
       lastModified: new Date(),
     },
