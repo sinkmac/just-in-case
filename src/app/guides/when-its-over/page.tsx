@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getVerification, formatCheckDate } from "@/lib/guide-verification";
 
 export const metadata: Metadata = {
   title: "When It's Over — Just In Case",
@@ -123,6 +124,10 @@ export default function Page() {
               Food Standards Agency
             </a>{" "}
             is the authority. Check with them rather than take our word for it.
+          </p>
+
+          <p className="text-xs text-[var(--muted)]">
+            Figures checked {formatCheckDate(getVerification('when-its-over')!.lastVerified)}
           </p>
 
           <p className="font-bold text-[var(--foreground)]">
