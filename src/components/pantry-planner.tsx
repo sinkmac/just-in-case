@@ -135,6 +135,13 @@ function formatCurrency(value: number) {
   }).format(value);
 }
 
+// "A small comfort" fixed-inclusion line — added as a flat extra to every plan's
+// till total. Not part of the optimised category tables, and never competes for
+// calorie budget or is swapped by the solver. Scenario Mode tags it needs-heat
+// when the power's out, exactly like the table items.
+const COMFORT_TEA_NAME = "Tea bags, 80-pack";
+const COMFORT_TEA_COST = 1.45;
+
 function buildAmazonHref(item: FoodItem) {
   if (item.amazon_asin && item.amazon_asin !== "XXXXXXXXXX") {
     return `https://www.amazon.co.uk/dp/${item.amazon_asin}?tag=biteforecast2-21`;
@@ -241,6 +248,14 @@ export function PantryPlanner() {
   );
 
   const activeResult = floorMode ? cheapestPlan : result;
+
+  // Till figures: the food plan cost plus the flat small-comfort addition.
+  // The solver results stay untouched (the calorie-adequacy verdict and the
+  // budget-used card reflect the food plan only).
+  const tillPlanCost = result.totalBudgetUsedGbp + COMFORT_TEA_COST;
+  const tillLeft = Math.max(0, result.remainingBudgetGbp - COMFORT_TEA_COST);
+  const tillMinCost = cheapestPlan.totalCostGbp + COMFORT_TEA_COST;
+
   const activeGrouped = useMemo(() => {
     return activeResult.ranked.reduce<Record<string, typeof activeResult.ranked>>((acc, line) => {
       acc[line.category] ??= [];
@@ -433,12 +448,12 @@ export function PantryPlanner() {
                   <div className="rounded-xl border border-[var(--border)] bg-[var(--accent)] p-3">
                     <p className="text-xs text-[var(--muted)]">Minimum needed</p>
                     <p className="mt-1 text-lg font-bold text-[var(--brand-dark)]">
-                      {formatCurrency(cheapestPlan.totalCostGbp)}
+                      {formatCurrency(tillMinCost)}
                     </p>
                     <p className="mt-1 text-xs text-[var(--muted)] leading-relaxed">
                       {cheapestPlan.totalCostGbp < 20
                         ? `Good news — ${tierLabel.toLowerCase()} costs next to nothing to cover properly for this household.`
-                        : `The least this household could spend and still cope for ${tierLabelLower} is about ${formatCurrency(cheapestPlan.totalCostGbp)}.`
+                        : `The least this household could spend and still cope for ${tierLabelLower} is about ${formatCurrency(tillMinCost)}.`
                       }
                     </p>
                     <button
@@ -558,10 +573,9 @@ export function PantryPlanner() {
                               </p>
                               {(() => {
                                 const days = Math.floor(result.totalCaloriesPlanned / Math.max(1, result.dailyCaloriesNeeded));
-                                const remaining = result.remainingBudgetGbp;
                                 return (
                                   <p className="mt-4 text-sm font-medium text-[var(--brand-dark)]">
-                                    This covers your household for about {days} day{days !== 1 ? "s" : ""} — in one cupboard, for {formatCurrency(result.totalBudgetUsedGbp)}, with {formatCurrency(remaining)} left.
+                                    This covers your household for about {days} day{days !== 1 ? "s" : ""} — in one cupboard, for {formatCurrency(tillPlanCost)}, with {formatCurrency(tillLeft)} left.
                                   </p>
                                 );
                               })()}
@@ -627,7 +641,7 @@ export function PantryPlanner() {
                 {floorMode ? (
                   <div className="rounded-2xl bg-[var(--accent)] p-4">
                     <p className="text-xs uppercase tracking-[0.15em] text-[var(--muted)]">Minimum spend</p>
-                    <p className="mt-1 text-2xl font-bold">{formatCurrency(cheapestPlan.totalCostGbp)}</p>
+                    <p className="mt-1 text-2xl font-bold">{formatCurrency(tillMinCost)}</p>
                   </div>
                 ) : (
                   <div className="rounded-2xl bg-[var(--accent)] p-4">
@@ -640,8 +654,8 @@ export function PantryPlanner() {
                 <div className="verdict-panel">
                   <p className="font-medium">
                     {cheapestPlan.totalCostGbp < 4
-                      ? `Good news — for this household, ${tierLabelLower} costs next to nothing to cover properly. ${formatCurrency(cheapestPlan.totalCostGbp)} and you're covered.`
-                      : `The least you could spend and still cope for ${tierLabelLower} is about ${formatCurrency(cheapestPlan.totalCostGbp)} — here's exactly what that buys.`
+                      ? `Good news — for this household, ${tierLabelLower} costs next to nothing to cover properly. ${formatCurrency(tillMinCost)} and you're covered.`
+                      : `The least you could spend and still cope for ${tierLabelLower} is about ${formatCurrency(tillMinCost)} — here's exactly what that buys.`
                     }
                   </p>
                   <p className="mt-2 text-sm text-[var(--muted)]">
@@ -1106,6 +1120,11 @@ export function PantryPlanner() {
                             )}
                           </>
                         )}
+                        {category === "protein" && tier !== "weekend" && (
+                          <p className="mt-2 text-sm text-[var(--brand)]">
+                            At least one item in this list needs no cooking and no water — if the power's out, you can still eat.
+                          </p>
+                        )}
                         <div className="mt-4 overflow-x-auto">
                           <table className="min-w-full text-sm">
                             <thead>
@@ -1124,6 +1143,11 @@ export function PantryPlanner() {
                                 <tr key={line.item.id} className="border-b border-dashed border-[var(--border)] last:border-b-0">
                                   <td className="py-3 pr-4 font-medium">
                                     {line.item.name}
+                                    {tier !== "weekend" && line.item.noCookReady && (
+                                      <span className="ml-2 inline-block rounded-full px-2 py-0.5 text-[11px] font-medium bg-[#EDF2E8] text-[#2F4A24]">
+                                        Eat straight from the tin
+                                      </span>
+                                    )}
                                     {powerState === "out" && line.item.prep && (
                                       <span className={`ml-2 inline-block rounded-full px-2 py-0.5 text-[11px] font-medium ${
                                         line.item.prep === "no-cook"
@@ -1192,6 +1216,11 @@ export function PantryPlanner() {
                                   )}
                                 </>
                               )}
+                              {category === "protein" && tier !== "weekend" && (
+                                <p className="mt-1 text-[11px] text-[var(--brand)]">
+                                  At least one item in this list needs no cooking and no water — if the power's out, you can still eat.
+                                </p>
+                              )}
                               <table className="min-w-full text-xs">
                                                               <thead>
                                                                 <tr className="border-b border-dashed border-[var(--border)] text-left text-[var(--muted)]">
@@ -1206,8 +1235,13 @@ export function PantryPlanner() {
                                                                 {lines.map((line) => (
                                                                   <tr key={line.item.id} className="border-b border-dashed border-[var(--border)] last:border-b-0">
                                                                     <td className="py-1 pr-3 font-medium">
-                                                                                                          {line.item.name}
-                                                                                                          {powerState === "out" && line.item.prep && (
+                                                                          {line.item.name}
+                                                                          {tier !== "weekend" && line.item.noCookReady && (
+                                                                            <span className="ml-1 inline-block rounded-full px-1.5 py-0.5 text-[10px] font-medium bg-[#EDF2E8] text-[#2F4A24]">
+                                                                              Eat straight from the tin
+                                                                            </span>
+                                                                          )}
+                                                                          {powerState === "out" && line.item.prep && (
                                                                                                             <span className={`ml-1 inline-block rounded-full px-1.5 py-0.5 text-[10px] font-medium ${
                                                                                                               line.item.prep === "no-cook"
                                                                                                                 ? "bg-[#EDF2E8] text-[#2F4A24]"
@@ -1249,6 +1283,26 @@ export function PantryPlanner() {
                 </>
               );
             })()}
+
+            <section className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
+              <h3 className="category-ticket">A small comfort</h3>
+              <p className="mt-2 text-sm text-[var(--muted)] max-w-prose">
+                This isn't for calories. A hot drink — or whatever yours is — costs next to nothing and makes a hard day easier. Included in every plan.
+              </p>
+              <ul className="mt-3 space-y-2 text-sm text-[var(--muted)]">
+                <li>
+                  {COMFORT_TEA_NAME} — {formatCurrency(COMFORT_TEA_COST)}
+                  {powerState === "out" && (
+                    <span className="ml-2 inline-block rounded-full px-2 py-0.5 text-[11px] font-medium bg-[#FCEBEB] text-[#791F1F]">
+                      needs heat
+                    </span>
+                  )}
+                </li>
+              </ul>
+              <p className="mt-2 text-sm text-[var(--brand)]">
+                Coffee or hot chocolate work the same way, for about the same price.
+              </p>
+            </section>
 
             <div className="no-print flex justify-center gap-3 pt-2">
               <button
@@ -1292,7 +1346,7 @@ export function PantryPlanner() {
                     </div>
                   ))}
                   <p className="text-sm font-medium text-[var(--brand-dark)]">
-                    Total: {new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 2 }).format(schedule.totalCost)}
+                    Total: {new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 2 }).format(schedule.totalCost + COMFORT_TEA_COST)}
                   </p>
                 </div>
               </section>

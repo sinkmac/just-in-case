@@ -610,6 +610,7 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
     "region": "uk",
+    "noCookReady": true,
     "prep": "no-cook"
   },
   {
@@ -627,6 +628,7 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
     "region": "uk",
+    "noCookReady": true,
     "prep": "no-cook"
   },
   {

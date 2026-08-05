@@ -29,6 +29,7 @@ export type FoodItem = {
   category: string;
   region: string;
   prep: "no-cook" | "needs-heat";
+  noCookReady?: boolean;
   notes?: string;
 };
 
