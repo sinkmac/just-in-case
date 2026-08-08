@@ -365,7 +365,7 @@ export function PantryPlanner() {
 
       return {
         state: "short" as const,
-        message: `Your \u00A3${budgetGbp} covers about ${coveredDays} day${coveredDays !== 1 ? "s" : ""} of full meals for this household — ${shortfallDays} day${shortfallDays !== 1 ? "s" : ""} short of your ${tierLabelLower} target. You could close the gap for roughly \u00A3${gap} more, or start here and top up next shop.`,
+        message: `Your \u00A3${budgetGbp} covers about ${coveredDays} day${coveredDays !== 1 ? "s" : ""} of full meals for this household — ${shortfallDays} day${shortfallDays !== 1 ? "s" : ""} short of your ${tierLabelLower} target. You could close the gap for roughly \u00A3${gap} more — or start here, and top up on your next shop. Either way, you're further along than most households ever get.`,
         modifiers,
       };
     }
@@ -394,7 +394,13 @@ export function PantryPlanner() {
       <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8 print-shell">
         <header className="no-print mb-8 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm">
           <h1 className="mt-2 text-3xl font-bold text-[var(--brand-dark)]">Just In Case</h1>
-          <p className="mt-2 text-sm text-[var(--muted)]">A fixed point in uncertain times.</p>
+          <p className="mt-2 text-sm text-[var(--muted)]">Planning for the future you hope never comes. But just might.</p>
+          <p className="mt-4 max-w-2xl text-sm leading-6 text-[var(--muted)]">
+            There are really only two big decisions here: what you're going to buy, and where you're going to keep it. Get those right and everything else follows.
+          </p>
+          <p className="mt-4 max-w-2xl text-sm leading-6 text-[var(--muted)]">
+            Most emergency food advice skips straight past both — it just tells you to "stock up." We don't think that's much use on its own. So below, you'll find plans built around what actually keeps well, feeds a household properly, and fits the space most people really have — not a bunker, just a cupboard, a shelf, maybe a bit under the bed.
+          </p>
           <p className="mt-4 max-w-2xl text-sm leading-6 text-[var(--muted)]">
             Tell us who's in your house and what you can spend. We'll show you what long-life food to buy, why each thing earns its place, and how long it would actually keep your household fed. No bunker required — this all fits in a cupboard.
           </p>
@@ -671,7 +677,7 @@ export function PantryPlanner() {
 
             <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
               <h3 className="heading-serif text-sm">Space audit</h3>
-              <p className="mt-1 text-xs text-[var(--muted)]">What storage space do you have?</p>
+              <p className="mt-1 text-xs text-[var(--muted)]">What storage space do you have? It's the most honest constraint — most households find the space before they find the money.</p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {(["shoebox", "half-shelf", "one-shelf", "cupboard"] as SpaceOption[]).map((s) => (
                   <button
@@ -1386,7 +1392,11 @@ export function PantryPlanner() {
         <section className="no-print mt-8 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm">
           <h3 className="heading-serif text-sm">About these numbers</h3>
           <p className="mt-2 text-xs leading-5 text-[var(--muted)]">
-            Calorie figures come from standard UK nutrition data; prices are typical supermarket and Amazon prices, checked periodically rather than live. Just In Case is built and maintained by one person in Scotland, not a content farm. Some links earn us a small commission at no cost to you — it's how the site stays free, and it never changes what we recommend.
+            Calorie figures come from standard UK nutrition data; prices are typical supermarket and Amazon prices, checked periodically rather than live. Prices and guidance were last checked in July 2026 —{" "}
+            <a href="/changelog" className="underline hover:text-[var(--brand)]">
+              see what changed
+            </a>
+            . Just In Case is built and maintained by one person in Scotland, not a content farm. Some links earn us a small commission at no cost to you — it's how the site stays free, and it never changes what we recommend.
           </p>
         </section>
 
@@ -1397,6 +1407,7 @@ export function PantryPlanner() {
             <a href="/privacy">Privacy</a>
             <a href="/contact">Contact</a>
             <a href="/why">Why this exists</a>
+            <a href="/changelog">What's changed</a>
             <a href="/affiliate-disclosure">Affiliate disclosure</a>
           </nav>
           <p className="mt-4 text-xs text-[var(--muted)]">Some links are affiliate links. We earn a small commission at no cost to you.</p>

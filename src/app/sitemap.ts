@@ -54,5 +54,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: "https://justincase.scot/why",
       lastModified: new Date(),
     },
+    {
+      url: "https://justincase.scot/changelog",
+      lastModified: new Date(),
+    },
   ];
 }

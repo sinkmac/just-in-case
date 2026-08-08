@@ -72,7 +72,7 @@ export default function Page() {
           </p>
 
           <p>
-            <strong>Yours, not ours.</strong> Nothing you tell this site is stored, sold, or seen by us — not your answers, not your plan, not even which mode you used. We don&rsquo;t need your data to help you.
+            <strong>Yours, not ours.</strong> Nothing you tell this site is stored, sold, or seen by us — not your answers, not your plans, not even which mode you used. We don&rsquo;t need your data to help you.
           </p>
 
           <p>

@@ -1,0 +1,31 @@
+{
+  "_comment": "Quiet changelog. Entries newest first. lastChecked = month of the most recent re-verification pass (prices/guidance); bump it on each check. kinds: item | price | recheck | gear | copy | guide",
+  "lastChecked": "2026-07",
+  "entries": [
+    {
+      "date": "2026-08-05",
+      "kind": "copy",
+      "text": "Added 'eat straight from the tin' badges and a small comfort line to every plan."
+    },
+    {
+      "date": "2026-07-31",
+      "kind": "recheck",
+      "text": "Guide pages re-verified, with check dates shown and a build-time check that keeps them current."
+    },
+    {
+      "date": "2026-07-24",
+      "kind": "price",
+      "text": "Tinned mackerel corrected to \u00A30.85 per 125g tin, matching typical own-brand pricing."
+    },
+    {
+      "date": "2026-07-24",
+      "kind": "gear",
+      "text": "Added gear suggestions: vacuum storage, water purification, foil blanket, fire blanket, extinguisher, water butt, shelving and under-bed boxes."
+    },
+    {
+      "date": "2026-07-24",
+      "kind": "copy",
+      "text": "Added sprouting and microgreens guidance to the micronutrients section, and an important-documents note to the readiness check."
+    }
+  ]
+}
