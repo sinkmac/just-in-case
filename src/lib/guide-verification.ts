@@ -20,7 +20,7 @@ export interface GuideVerification {
  * All guide pages under src/app/guides/.
  *
  * Pages not listed in the brief's table get 6 as the conservative default.
- * "power-out-changes" in the brief maps to the actual page "when-powers-out".
+ * The page the brief called "Power out" ships under the slug "when-powers-out".
  */
 export const guideVerifications: GuideVerification[] = [
   { slug: 'when-its-over',          lastVerified: '2026-07', verifyWithin: 6  },
