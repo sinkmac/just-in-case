@@ -23,32 +23,40 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date("2026-05-25"),
     },
     {
+      url: "https://justincase.scot/guides",
+      lastModified: new Date("2026-08-10"),
+    },
+    {
       url: "https://justincase.scot/guides/emergency-food-needs",
-      lastModified: new Date(),
+      lastModified: new Date("2026-05-03"),
     },
     {
       url: "https://justincase.scot/guides/storage-without-bunker",
-      lastModified: new Date(),
+      lastModified: new Date("2026-07-24"),
     },
     {
       url: "https://justincase.scot/guides/when-powers-out",
-      lastModified: new Date(),
+      lastModified: new Date("2026-07-24"),
     },
     {
       url: "https://justincase.scot/guides/what-we-leave-out",
-      lastModified: new Date(),
+      lastModified: new Date("2026-07-24"),
     },
     {
       url: "https://justincase.scot/guides/gear-worth-having",
-      lastModified: new Date(),
+      lastModified: new Date("2026-07-24"),
     },
     {
       url: "https://justincase.scot/guides/car-kit",
-      lastModified: new Date(),
+      lastModified: new Date("2026-07-24"),
+    },
+    {
+      url: "https://justincase.scot/guides/if-things-get-really-bad",
+      lastModified: new Date("2026-07-30"),
     },
     {
       url: "https://justincase.scot/guides/when-its-over",
-      lastModified: new Date(),
+      lastModified: new Date("2026-07-30"),
     },
     {
       url: "https://justincase.scot/why",
