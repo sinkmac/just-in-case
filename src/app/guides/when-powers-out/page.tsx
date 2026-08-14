@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import GuideFooter from "@/components/guide-footer";
 
 export const metadata: Metadata = {
   title: "What Actually Changes When the Power's Out — Just In Case",
@@ -141,6 +142,8 @@ export default function Page() {
             outage is the point.
           </p>
         </div>
+
+        <GuideFooter currentSlug="when-powers-out" />
       </div>
     </main>
   );

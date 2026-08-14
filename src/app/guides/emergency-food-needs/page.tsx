@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import GuideFooter from "@/components/guide-footer";
 
 export const metadata: Metadata = {
   title: "How Much Emergency Food Does Your Household Actually Need — Just In Case",
@@ -145,6 +146,8 @@ export default function Page() {
             when you need the food.
           </p>
         </div>
+
+        <GuideFooter currentSlug="emergency-food-needs" />
       </div>
     </main>
   );

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import GuideFooter from "@/components/guide-footer";
 
 export const metadata: Metadata = {
   title: "Storage Without a Bunker: Making a Cupboard Do More — Just In Case",
@@ -134,6 +135,8 @@ export default function Page() {
             before you buy — no bunker required.
           </p>
         </div>
+
+        <GuideFooter currentSlug="storage-without-bunker" />
       </div>
     </main>
   );

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import GuideFooter from "@/components/guide-footer";
 import { getVerification, formatCheckDate } from "@/lib/guide-verification";
 
 export const metadata: Metadata = {
@@ -312,6 +313,8 @@ export default function Page() {
             That is the whole job. The rest can wait for a normal week.
           </p>
         </div>
+
+        <GuideFooter currentSlug="when-its-over" />
       </div>
     </main>
   );

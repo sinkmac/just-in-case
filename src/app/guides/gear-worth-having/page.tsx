@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import GuideFooter from "@/components/guide-footer";
 
 export const metadata: Metadata = {
   title: "Gear Worth Having — Just In Case",
@@ -136,6 +137,8 @@ export default function Page() {
             If you drive, you might also want the <Link href="/guides/car-kit" className="text-[var(--brand)] underline">basic car kit</Link> — most of it overlaps with what&rsquo;s listed here.
           </p>
         </div>
+
+        <GuideFooter currentSlug="gear-worth-having" />
       </div>
     </main>
   );

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import GuideFooter from "@/components/guide-footer";
 
 export const metadata: Metadata = {
   title: "What We Deliberately Leave Out — Just In Case",
@@ -179,6 +180,8 @@ export default function Page() {
             when that happens.
           </p>
         </div>
+
+        <GuideFooter currentSlug="what-we-leave-out" />
       </div>
     </main>
   );

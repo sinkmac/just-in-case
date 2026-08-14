@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import GuideFooter from "@/components/guide-footer";
 
 export const metadata: Metadata = {
   title: "If Things Get Really Bad — Just In Case",
@@ -187,6 +188,8 @@ export default function Page() {
           .
         </p>
       </div>
+
+      <GuideFooter currentSlug="if-things-get-really-bad" />
     </main>
   );
 }

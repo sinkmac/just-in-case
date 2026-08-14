@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import GuideFooter from "@/components/guide-footer";
 
 export const metadata: Metadata = {
   title: "A Basic Car Kit — Just In Case",
@@ -72,6 +73,8 @@ export default function Page() {
             None of this needs to be expensive or elaborate — the whole point is having the ordinary, boring things ready before an ordinary, boring problem happens on a cold night on the wrong stretch of road.
           </p>
         </div>
+
+        <GuideFooter currentSlug="car-kit" />
       </div>
     </main>
   );
