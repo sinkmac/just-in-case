@@ -404,13 +404,13 @@ export function PantryPlanner() {
               Readiness check
             </Link>
           </nav>
-          <p className="mt-4 max-w-2xl text-sm leading-6 text-[var(--muted)]">
+          <p className="mt-4 max-w-3xl text-sm leading-6 text-[var(--muted)]">
             There are really only two big decisions here: what you're going to buy, and where you're going to keep it. Get those right and everything else follows.
           </p>
-          <p className="mt-4 max-w-2xl text-sm leading-6 text-[var(--muted)]">
+          <p className="mt-4 max-w-3xl text-sm leading-6 text-[var(--muted)]">
             Most emergency food advice skips straight past both — it just tells you to "stock up." We don't think that's much use on its own. So below, you'll find plans built around what actually keeps well, feeds a household properly, and fits the space most people really have — not a bunker, just a cupboard, a shelf, maybe a bit under the bed.
           </p>
-          <p className="mt-4 max-w-2xl text-sm leading-6 text-[var(--muted)]">
+          <p className="mt-4 max-w-3xl text-sm leading-6 text-[var(--muted)]">
             Tell us who's in your house and what you can spend. We'll show you what long-life food to buy, why each thing earns its place, and how long it would actually keep your household fed. No bunker required — this all fits in a cupboard.
           </p>
         </header>
@@ -504,20 +504,26 @@ export function PantryPlanner() {
 
               <div>
                 <label className="mb-2 block text-sm font-semibold">Duration</label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-2 items-stretch">
                   {(["weekend", "fortnight", "month", "season"] as DurationTier[]).map((t) => (
                     <button
                       key={t}
                       type="button"
                       onClick={() => setTier(t)}
-                      className={`min-w-0 rounded-lg border px-3 py-2 text-left text-sm transition-colors ${
+                      className={`flex min-w-0 flex-col justify-between rounded-lg border px-3 py-2 text-left text-sm transition-colors items-stretch ${
                         tier === t
                           ? "border-[var(--brand)] bg-[var(--brand)] text-white"
                           : "border-[var(--border)] bg-[var(--card)] text-[var(--muted)] hover:bg-[var(--accent)]"
                       }`}
                     >
                       <span className="block text-xs font-semibold">{TIER_DATA[t].label}</span>
-                      <span className="mt-0.5 block text-[11px] leading-tight opacity-80">{TIER_DATA[t].register}</span>
+                      <span
+                        className={`mt-1 block text-xs leading-snug opacity-80 ${
+                          tier === t ? "" : "line-clamp-3"
+                        }`}
+                      >
+                        {TIER_DATA[t].register}
+                      </span>
                     </button>
                   ))}
                 </div>
@@ -580,7 +586,7 @@ export function PantryPlanner() {
           </section>
 
           <section className="space-y-10">
-            <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
+            <div className="border-t border-[var(--border)] pt-6 print-card">
               <h2 className="heading-serif text-2xl">Plan your just-in-case pantry</h2>
               <p className="mt-2 text-sm text-[var(--muted)]">
                 <span className="mr-2"><TierPictogram tier={tier} reducedFill={activeSwaps.size > 0 ? reducedLitres / Math.max(1, totalLitres) : undefined} /></span>
@@ -610,7 +616,7 @@ export function PantryPlanner() {
                       </button>
                     )}
                   </div>
-                  <p className="mt-1 text-2xl font-bold">{result.dailyCaloriesNeeded.toLocaleString()}</p>
+                  <p className="mt-1 text-xl font-serif">{result.dailyCaloriesNeeded.toLocaleString()}</p>
                   {children > 0 && (
                     <p className="mt-0.5 text-[11px] text-[var(--muted)]">
                       assumes {childCalorieRatio === 0.5 ? "toddler" : childCalorieRatio === 0.8 ? "teen" : "school-age"} child
@@ -651,23 +657,23 @@ export function PantryPlanner() {
                 </div>
                 <div className="rounded-2xl bg-[var(--accent)] p-4">
                   <p className="text-xs text-[var(--muted)]">Calories planned</p>
-                  <p className="mt-1 text-2xl font-bold">{Math.round(activeResult.totalCaloriesPlanned).toLocaleString()}</p>
+                  <p className="mt-1 text-xl font-serif">{Math.round(activeResult.totalCaloriesPlanned).toLocaleString()}</p>
                 </div>
                 {floorMode ? (
                   <div className="rounded-2xl bg-[var(--accent)] p-4">
                     <p className="text-xs text-[var(--muted)]">Minimum spend</p>
-                    <p className="mt-1 text-2xl font-bold">{formatCurrency(tillMinCost)}</p>
+                    <p className="mt-1 text-xl font-serif">{formatCurrency(tillMinCost)}</p>
                   </div>
                 ) : (
                   <div className="rounded-2xl bg-[var(--accent)] p-4">
                     <p className="text-xs text-[var(--muted)]">Budget used</p>
-                    <p className="mt-1 text-2xl font-bold">{formatCurrency(planTotalSpend)}</p>
+                    <p className="mt-1 text-xl font-serif">{formatCurrency(planTotalSpend)}</p>
                   </div>
                 )}
               </div>
               {floorMode ? (
                 <div className="verdict-panel">
-                  <p className="font-medium">
+                  <p className="heading-serif text-lg text-[var(--foreground)]">
                     {cheapestPlan.totalCostGbp < 4
                       ? `Good news — for this household, ${tierLabelLower} costs next to nothing to cover properly. ${formatCurrency(tillMinCost)} and you're covered.`
                       : `The least you could spend and still cope for ${tierLabelLower} is about ${formatCurrency(tillMinCost)} — here's exactly what that buys.`
@@ -679,12 +685,12 @@ export function PantryPlanner() {
                 </div>
               ) : (
                 <div className="verdict-panel">
-                  <p className="font-medium">{verdict.message}</p>
+                  <p className="heading-serif text-lg text-[var(--foreground)]">{verdict.message}</p>
                 </div>
               )}
             </div>
 
-            <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
+            <div className="border-t border-[var(--border)] pt-6 print-card">
               <h3 className="heading-serif text-sm">Space audit</h3>
               <p className="mt-1 text-xs text-[var(--muted)]">What storage space do you have? It's the most honest constraint — most households find the space before they find the money.</p>
               <div className="mt-3 flex flex-wrap gap-2">
@@ -728,7 +734,7 @@ export function PantryPlanner() {
 
                     return (
                       <div className="mt-4 space-y-3">
-                        <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">
+                        <p className="heading-serif text-sm text-[var(--brand-dark)]">
                           Suggested swaps
                         </p>
                         {ranked.map((swap) => {
@@ -788,7 +794,7 @@ export function PantryPlanner() {
               )}
 
               <div className="mt-4 space-y-3">
-                <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">
+                <p className="heading-serif text-sm text-[var(--brand-dark)]">
                   Space-saving gear
                 </p>
                 <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-3 text-sm">
@@ -873,7 +879,7 @@ export function PantryPlanner() {
               </div>
               {selectedSpace && SPACE_LITRES[selectedSpace] < totalLitres && (
                 <div className="mt-4 space-y-3">
-                  <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">
+                  <p className="heading-serif text-sm text-[var(--brand-dark)]">
                     Need more space?
                   </p>
                   <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-3 text-sm">
@@ -918,7 +924,7 @@ export function PantryPlanner() {
               )}
             </div>
 
-            <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
+            <div className="border-t border-[var(--border)] pt-6 print-card">
               <h3 className="heading-serif text-sm">Scenario</h3>
               <p className="mt-1 text-xs text-[var(--muted)]">What are your utilities like?</p>
 
@@ -986,7 +992,7 @@ export function PantryPlanner() {
 
               {(waterState === "limited" || waterState === "none") && (
                 <div className="mt-4 space-y-3">
-                  <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">
+                  <p className="heading-serif text-sm text-[var(--brand-dark)]">
                     Water gear
                   </p>
                   <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-3 text-sm">
@@ -1048,7 +1054,7 @@ export function PantryPlanner() {
 
                 return (
                   <div className="mt-4 space-y-3">
-                    <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">
+                    <p className="heading-serif text-sm text-[var(--brand-dark)]">
                       Ready-to-eat alternatives
                     </p>
                     {relevantSwaps.map((swap) => {
@@ -1110,7 +1116,7 @@ export function PantryPlanner() {
                   {largeEntries.map(([category, lines]) => {
                     const catLitres = sumCategoryLitres(lines);
                     return (
-                      <section key={category} className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
+                      <section key={category} className="border-t border-[var(--border)] pt-6 print-card">
                         <h3 className="category-ticket">{categoryLabels[category] ?? category}</h3>
                         {categoryIntros[category] && (
                           <>
@@ -1198,7 +1204,7 @@ export function PantryPlanner() {
                     );
                   })}
                   {smallEntries.length > 0 && (
-                    <section className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-4 shadow-sm print-card">
+                    <section className="border-t border-[var(--border)] pt-6 print-card">
                       <h3 className="heading-serif text-sm">Smaller categories</h3>
                       <div className="mt-3 space-y-3">
                         {smallEntries.map(([category, lines]) => {
@@ -1299,7 +1305,7 @@ export function PantryPlanner() {
               );
             })()}
 
-            <section className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
+            <section className="border-t border-[var(--border)] pt-6 print-card">
               <h3 className="category-ticket">A small comfort</h3>
               <p className="mt-2 text-sm text-[var(--muted)] max-w-prose">
                 This isn't for calories. A hot drink — or whatever yours is — costs next to nothing and makes a hard day easier. Included in every plan.
@@ -1337,7 +1343,7 @@ export function PantryPlanner() {
             </div>
 
             {scheduleMode && schedule.weeks.length > 0 && (
-              <section className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
+              <section className="border-t border-[var(--border)] pt-6 print-card">
                 <h3 className="category-ticket">Weekly shopping schedule</h3>
                 <p className="mt-2 text-sm text-[var(--muted)] max-w-prose">
                   Buy a little each week and you'll have this fully covered by week {schedule.totalWeeks} — no big shop required.
@@ -1367,7 +1373,7 @@ export function PantryPlanner() {
               </section>
             )}
 
-            <section className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
+            <section className="border-t border-[var(--border)] pt-6 print-card">
               <h3 className="category-ticket">Essentials and flavour</h3>
               <p className="mt-2 text-sm text-[var(--muted)] max-w-prose">Salt, coffee, spices, vinegar. Nearly zero calories, but they're what makes week three taste different from week one. Don't skip these.</p>
               <ul className="mt-3 space-y-2 text-sm text-[var(--muted)]">
@@ -1377,7 +1383,7 @@ export function PantryPlanner() {
               </ul>
             </section>
 
-            <section className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
+            <section className="border-t border-[var(--border)] pt-6 print-card">
               <h3 className="category-ticket">Two things this list can't do</h3>
               <div className="mt-3 space-y-3 text-sm leading-6 text-[var(--muted)]">
                 <p><strong>It can't store water for you.</strong> Dried food is compact because the water isn't in the tin — it's in your tap. If the taps stopped too, you'd need about 3 litres per person per day before any of this list becomes dinner. Food first is fine; just know water is the other half.</p>
@@ -1385,7 +1391,7 @@ export function PantryPlanner() {
               </div>
             </section>
 
-            <section className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
+            <section className="border-t border-[var(--border)] pt-6 print-card">
               <h3 className="category-ticket">You don't have to do this in one shop</h3>
               <div className="mt-3 space-y-3 text-sm leading-6 text-[var(--muted)]">
                 <p>Nobody buys a month of food in an afternoon. Add one category to your normal shop each week and you'll be fully covered inside two months, without ever feeling the cost. Print the list, stick it on the fridge, and cross things off as they come home.</p>
