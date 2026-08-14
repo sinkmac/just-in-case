@@ -502,7 +502,7 @@ export function PantryPlanner() {
                       key={t}
                       type="button"
                       onClick={() => setTier(t)}
-                      className={`rounded-lg border px-3 py-2 text-left text-sm transition-colors ${
+                      className={`min-w-0 rounded-lg border px-3 py-2 text-left text-sm transition-colors ${
                         tier === t
                           ? "border-[var(--brand)] bg-[var(--brand)] text-white"
                           : "border-[var(--border)] bg-[var(--card)] text-[var(--muted)] hover:bg-[var(--accent)]"
@@ -571,7 +571,7 @@ export function PantryPlanner() {
             </div>
           </section>
 
-          <section className="space-y-6">
+          <section className="space-y-10">
             <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm print-card">
               <h2 className="heading-serif text-2xl">Plan your just-in-case pantry</h2>
               <p className="mt-2 text-sm text-[var(--muted)]">
