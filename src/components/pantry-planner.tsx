@@ -249,12 +249,13 @@ export function PantryPlanner() {
 
   const activeResult = floorMode ? cheapestPlan : result;
 
-  // Till figures: the food plan cost plus the flat small-comfort addition.
-  // The solver results stay untouched (the calorie-adequacy verdict and the
-  // budget-used card reflect the food plan only).
-  const tillPlanCost = result.totalBudgetUsedGbp + COMFORT_TEA_COST;
-  const tillLeft = Math.max(0, result.remainingBudgetGbp - COMFORT_TEA_COST);
-  const tillMinCost = cheapestPlan.totalCostGbp + COMFORT_TEA_COST;
+  // Single source of truth for money spent on the page: the food plan's till
+    // total plus the flat small-comfort addition. Every spend figure derives from
+    // these two numbers, so they cannot disagree. The solver's calorie figures are
+    // untouched.
+    const planTotalSpend = result.totalBudgetUsedGbp + COMFORT_TEA_COST;
+    const planRemaining = Math.max(0, budgetGbp - planTotalSpend);
+    const tillMinCost = cheapestPlan.totalCostGbp + COMFORT_TEA_COST;
 
   const activeGrouped = useMemo(() => {
     return activeResult.ranked.reduce<Record<string, typeof activeResult.ranked>>((acc, line) => {
@@ -301,7 +302,7 @@ export function PantryPlanner() {
 
     if (items.length === 0 || totalCost === 0) return { weeks: [] as { label: string; items: typeof items; cost: number; runningTotal: number }[], totalWeeks: 0, totalCost: 0 };
 
-    let numWeeks = Math.max(1, Math.min(Math.round(totalCost / 20), 8));
+    let numWeeks = Math.max(1, Math.min(Math.round((totalCost + COMFORT_TEA_COST) / 20), 8));
     if (tier === "weekend") numWeeks = Math.min(numWeeks, 1);
     if (numWeeks < 1) numWeeks = 1;
 
@@ -370,7 +371,7 @@ export function PantryPlanner() {
       };
     }
 
-    const spare = result.remainingBudgetGbp;
+    const spare = planRemaining;
 
     // Exceeds target comfortably — significant budget leftover
     if (spare > budgetGbp * 0.15) {
@@ -581,7 +582,7 @@ export function PantryPlanner() {
                                 const days = Math.floor(result.totalCaloriesPlanned / Math.max(1, result.dailyCaloriesNeeded));
                                 return (
                                   <p className="mt-4 text-sm font-medium text-[var(--brand-dark)]">
-                                    This covers your household for about {days} day{days !== 1 ? "s" : ""} — in one cupboard, for {formatCurrency(tillPlanCost)}, with {formatCurrency(tillLeft)} left.
+                                    This covers your household for about {days} day{days !== 1 ? "s" : ""} — in one cupboard, for {formatCurrency(planTotalSpend)}, with {formatCurrency(planRemaining)} left.
                                   </p>
                                 );
                               })()}
@@ -652,7 +653,7 @@ export function PantryPlanner() {
                 ) : (
                   <div className="rounded-2xl bg-[var(--accent)] p-4">
                     <p className="text-xs uppercase tracking-[0.15em] text-[var(--muted)]">Budget used</p>
-                    <p className="mt-1 text-2xl font-bold">{formatCurrency(result.totalBudgetUsedGbp)}</p>
+                    <p className="mt-1 text-2xl font-bold">{formatCurrency(planTotalSpend)}</p>
                   </div>
                 )}
               </div>
