@@ -391,9 +391,9 @@ export function PantryPlanner() {
   }, [result, tierWeeks, tierLabel, budgetGbp]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground overflow-x-clip">
       <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8 print-shell">
-        <header className="no-print mb-8 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm">
+        <header className="no-print mb-8">
           <h1 className="mt-2 text-3xl font-bold text-[var(--brand-dark)]">Just In Case</h1>
           <p className="mt-2 text-sm text-[var(--muted)]">Planning for the future you hope never comes. But just might.</p>
           <p className="mt-4 max-w-2xl text-sm leading-6 text-[var(--muted)]">
@@ -407,7 +407,7 @@ export function PantryPlanner() {
           </p>
         </header>
 
-        <div className="no-print mb-6 rounded-2xl border border-[var(--border)] bg-[var(--accent)] p-4 shadow-sm">
+        <div className="no-print mb-6 bg-[var(--accent)] p-4">
           <p className="text-sm font-medium text-[var(--brand-dark)]">
             Not sure where to start?{" "}
             <Link
@@ -589,7 +589,7 @@ export function PantryPlanner() {
                               <div className="mt-4 grid gap-4 sm:grid-cols-3">
                 <div className="rounded-2xl bg-[var(--accent)] p-4">
                   <div className="flex items-center gap-2">
-                    <p className="text-xs uppercase tracking-[0.15em] text-[var(--muted)]">
+                    <p className="text-xs text-[var(--muted)]">
                       Daily calories needed
                     </p>
                     {children > 0 && (
@@ -642,17 +642,17 @@ export function PantryPlanner() {
                   )}
                 </div>
                 <div className="rounded-2xl bg-[var(--accent)] p-4">
-                  <p className="text-xs uppercase tracking-[0.15em] text-[var(--muted)]">Calories planned</p>
+                  <p className="text-xs text-[var(--muted)]">Calories planned</p>
                   <p className="mt-1 text-2xl font-bold">{Math.round(activeResult.totalCaloriesPlanned).toLocaleString()}</p>
                 </div>
                 {floorMode ? (
                   <div className="rounded-2xl bg-[var(--accent)] p-4">
-                    <p className="text-xs uppercase tracking-[0.15em] text-[var(--muted)]">Minimum spend</p>
+                    <p className="text-xs text-[var(--muted)]">Minimum spend</p>
                     <p className="mt-1 text-2xl font-bold">{formatCurrency(tillMinCost)}</p>
                   </div>
                 ) : (
                   <div className="rounded-2xl bg-[var(--accent)] p-4">
-                    <p className="text-xs uppercase tracking-[0.15em] text-[var(--muted)]">Budget used</p>
+                    <p className="text-xs text-[var(--muted)]">Budget used</p>
                     <p className="mt-1 text-2xl font-bold">{formatCurrency(planTotalSpend)}</p>
                   </div>
                 )}

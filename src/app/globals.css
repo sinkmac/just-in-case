@@ -86,6 +86,13 @@ body {
   font-family: 'Public Sans', Arial, Helvetica, sans-serif;
   font-size: 13px;
   color: #5C4630;
+  overflow-wrap: break-word;
+}
+
+/* Brand-tinted range sliders: filled track + thumb take the brand
+   colour, the rail stays light. No functional/layout change. */
+input[type="range"] {
+  accent-color: #8A4B2E;
 }
 
 /* ── Dashed section dividers ── */
