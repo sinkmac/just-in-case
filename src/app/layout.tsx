@@ -27,6 +27,14 @@ export const metadata: Metadata = {
     url: "https://justincase.scot/",
     type: "website",
     siteName: "Just In Case",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Just In Case — a cupboard stocked for a UK emergency pantry",
+      },
+    ],
   },
 };
 
