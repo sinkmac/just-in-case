@@ -385,7 +385,7 @@ export function PantryPlanner() {
     // Meets target — fully covered with modest leftover
     return {
       state: "meets" as const,
-      message: `Your \u00A3${budgetGbp} fully covers ${tierLabel.toLowerCase()} for this household, with about \u00A3${spare} left over. Spend the rest on the Essentials list below — that's what turns stored calories into actual dinners.`,
+      message: `Your \u00A3${budgetGbp} fully covers ${tierLabel.toLowerCase()} for this household, with about \u00A3${spare.toFixed(2)} left over. Spend the rest on the Essentials list below — that's what turns stored calories into actual dinners.`,
       modifiers: [] as string[],
     };
   }, [result, tierWeeks, tierLabel, budgetGbp]);
