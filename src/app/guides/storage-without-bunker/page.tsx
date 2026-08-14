@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import GuideFooter from "@/components/guide-footer";
+import { ArticleJsonLd } from "@/components/article-json-ld";
 
 export const metadata: Metadata = {
   title: "Storage Without a Bunker: Making a Cupboard Do More — Just In Case",
@@ -20,7 +21,14 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <>
+      <ArticleJsonLd
+        headline="Storage Without a Bunker: Making a Cupboard Do More"
+        description="Emergency food storage for UK households who do not have a spare room. How calorie density, volume, and swap logic make a standard kitchen cupboard go further."
+        url="https://justincase.scot/guides/storage-without-bunker"
+        datePublished="2026-07-24"
+      />
+      <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
         <Link
           className="text-sm text-[var(--brand)] underline"
@@ -139,5 +147,6 @@ export default function Page() {
         <GuideFooter currentSlug="storage-without-bunker" />
       </div>
     </main>
+    </>
   );
 }

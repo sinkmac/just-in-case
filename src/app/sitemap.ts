@@ -60,11 +60,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: "https://justincase.scot/why",
-      lastModified: new Date(),
+      lastModified: new Date("2026-08-08"),
     },
     {
       url: "https://justincase.scot/changelog",
-      lastModified: new Date(),
+      lastModified: new Date("2026-08-08"),
     },
   ];
 }

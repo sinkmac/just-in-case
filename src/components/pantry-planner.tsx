@@ -396,6 +396,14 @@ export function PantryPlanner() {
         <header className="no-print mb-8">
           <h1 className="mt-2 text-3xl font-bold text-[var(--brand-dark)]">Just In Case</h1>
           <p className="mt-2 text-sm text-[var(--muted)]">Planning for the future you hope never comes. But just might.</p>
+          <nav className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-[var(--brand)]">
+            <Link href="/guides" className="underline decoration-1 underline-offset-2 hover:text-[var(--brand-dark)] transition-colors">
+              Guide library
+            </Link>
+            <Link href="/ready" className="underline decoration-1 underline-offset-2 hover:text-[var(--brand-dark)] transition-colors">
+              Readiness check
+            </Link>
+          </nav>
           <p className="mt-4 max-w-2xl text-sm leading-6 text-[var(--muted)]">
             There are really only two big decisions here: what you're going to buy, and where you're going to keep it. Get those right and everything else follows.
           </p>

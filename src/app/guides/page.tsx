@@ -28,7 +28,7 @@ const WHAT_TO_STORE: Guide[] = [
     slug: "emergency-food-needs",
     title: "How much food does a household actually need",
     blurb:
-      "The calorie maths, the child multipliers, and why &ldquo;stock up&rdquo; without a number isn&rsquo;t advice.",
+      "The calorie maths, the child multipliers, and why “stock up” without a number isn’t advice.",
   },
   {
     slug: "storage-without-bunker",
@@ -55,7 +55,7 @@ const USING_AND_GETTING_THROUGH: Guide[] = [
     slug: "car-kit",
     title: "Car kit",
     blurb:
-      "What to keep in the car, why it&rsquo;s a different list from the house, and what costs almost nothing.",
+      "What to keep in the car, why it’s a different list from the house, and what costs almost nothing.",
   },
   {
     slug: "if-things-get-really-bad",
@@ -73,7 +73,7 @@ const USING_AND_GETTING_THROUGH: Guide[] = [
     slug: "what-we-leave-out",
     title: "What we deliberately leave out",
     blurb:
-      "The things this site doesn&rsquo;t cover, and where to find them if you need them.",
+      "The things this site doesn’t cover, and where to find them if you need them.",
   },
 ];
 
@@ -84,10 +84,7 @@ function GuideCard({ guide }: { guide: Guide }) {
       className="group block rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
     >
       <h3 className="heading-serif text-lg leading-snug">{guide.title}</h3>
-      <p
-        className="mt-2 text-sm leading-6 text-[var(--secondary)]"
-        dangerouslySetInnerHTML={{ __html: guide.blurb }}
-      />
+      <p className="mt-2 text-sm leading-6 text-[var(--secondary)]">{guide.blurb}</p>
     </Link>
   );
 }

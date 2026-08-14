@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import GuideFooter from "@/components/guide-footer";
+import { ArticleJsonLd } from "@/components/article-json-ld";
 import { getVerification, formatCheckDate } from "@/lib/guide-verification";
 
 export const metadata: Metadata = {
@@ -21,7 +22,14 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <>
+      <ArticleJsonLd
+        headline="When It's Over: Food Safety After a Disruption"
+        description="What to do the morning after a disruption ends: check the freezer, restock in order, rotate the cupboard, and write down what you learned before you forget."
+        url="https://justincase.scot/guides/when-its-over"
+        datePublished="2026-07-30"
+      />
+      <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
         <Link
           className="text-sm text-[var(--brand)] underline"
@@ -317,5 +325,6 @@ export default function Page() {
         <GuideFooter currentSlug="when-its-over" />
       </div>
     </main>
+    </>
   );
 }

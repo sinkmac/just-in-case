@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import GuideFooter from "@/components/guide-footer";
+import { ArticleJsonLd } from "@/components/article-json-ld";
 
 export const metadata: Metadata = {
   title: "What Actually Changes When the Power's Out — Just In Case",
@@ -20,7 +21,14 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <>
+      <ArticleJsonLd
+        headline="What Actually Changes When the Power's Out"
+        description="A practical guide to eating during a UK power outage: no-cook versus needs-heat food, how water supply and power interact, and what to plan for before the lights go out."
+        url="https://justincase.scot/guides/when-powers-out"
+        datePublished="2026-07-24"
+      />
+      <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
         <Link
           className="text-sm text-[var(--brand)] underline"
@@ -146,5 +154,6 @@ export default function Page() {
         <GuideFooter currentSlug="when-powers-out" />
       </div>
     </main>
+    </>
   );
 }

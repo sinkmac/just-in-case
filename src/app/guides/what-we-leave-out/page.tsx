@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import GuideFooter from "@/components/guide-footer";
+import { ArticleJsonLd } from "@/components/article-json-ld";
 
 export const metadata: Metadata = {
   title: "What We Deliberately Leave Out — Just In Case",
@@ -20,7 +21,14 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <>
+      <ArticleJsonLd
+        headline="What We Deliberately Leave Out"
+        description="Just In Case is not medical advice, not disaster response planning, and not extreme prepping. A clear statement of what this site does and does not cover."
+        url="https://justincase.scot/guides/what-we-leave-out"
+        datePublished="2026-07-24"
+      />
+      <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
         <Link
           className="text-sm text-[var(--brand)] underline"
@@ -184,5 +192,6 @@ export default function Page() {
         <GuideFooter currentSlug="what-we-leave-out" />
       </div>
     </main>
+    </>
   );
 }

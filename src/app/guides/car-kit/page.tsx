@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import GuideFooter from "@/components/guide-footer";
+import { ArticleJsonLd } from "@/components/article-json-ld";
 
 export const metadata: Metadata = {
   title: "A Basic Car Kit — Just In Case",
@@ -20,7 +21,14 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <>
+      <ArticleJsonLd
+        headline="A Basic Car Kit"
+        description="A short, honest list for keeping ordinary things in the boot — most of which you already have if you've read the gear guide."
+        url="https://justincase.scot/guides/car-kit"
+        datePublished="2026-07-24"
+      />
+      <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
         <Link className="text-sm text-[var(--brand)] underline" href="/">
           ← Back to Just In Case
@@ -77,5 +85,6 @@ export default function Page() {
         <GuideFooter currentSlug="car-kit" />
       </div>
     </main>
+    </>
   );
 }

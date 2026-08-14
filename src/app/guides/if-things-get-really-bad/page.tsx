@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import GuideFooter from "@/components/guide-footer";
+import { ArticleJsonLd } from "@/components/article-json-ld";
 
 export const metadata: Metadata = {
   title: "If Things Get Really Bad — Just In Case",
@@ -20,7 +21,14 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <>
+      <ArticleJsonLd
+        headline="If Things Get Really Bad"
+        description="When a cupboard isn't the whole answer — where to turn, who to trust, and what to do before you ever need to."
+        url="https://justincase.scot/guides/if-things-get-really-bad"
+        datePublished="2026-07-30"
+      />
+      <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
         <Link
           className="text-sm text-[var(--brand)] underline"
@@ -191,5 +199,6 @@ export default function Page() {
 
       <GuideFooter currentSlug="if-things-get-really-bad" />
     </main>
+    </>
   );
 }
