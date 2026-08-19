@@ -1,7 +1,12 @@
 {
   "_comment": "Quiet changelog. Entries newest first. lastChecked = month of the most recent re-verification pass (prices/guidance); bump it on each check. kinds: item | price | recheck | gear | copy | guide",
-  "lastChecked": "2026-07",
+  "lastChecked": "2026-08",
   "entries": [
+    {
+      "date": "2026-08-19",
+      "kind": "price",
+      "text": "Stock cubes/bouillon corrected to \u00A30.35 per 60g (Aldi own-brand, scaled). Tinned salmon and raisins marked as estimates \u2014 no Aldi/Lidl equivalent to verify against."
+    },
     {
       "date": "2026-08-05",
       "kind": "copy",

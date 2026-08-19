@@ -1407,7 +1407,7 @@ export function PantryPlanner() {
         <section className="no-print mt-8 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm">
           <h3 className="heading-serif text-sm">About these numbers</h3>
           <p className="mt-2 text-xs leading-5 text-[var(--muted)]">
-            Calorie figures come from standard UK nutrition data; prices are typical supermarket and Amazon prices, checked periodically rather than live. Prices and guidance were last checked in July 2026 —{" "}
+            Calorie figures come from standard UK nutrition data; prices are typical supermarket and Amazon prices, checked periodically rather than live. Prices and guidance were last checked in August 2026 —{" "}
             <a href="/changelog" className="underline hover:text-[var(--brand)]">
               see what changed
             </a>

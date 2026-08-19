@@ -31,6 +31,7 @@ export type FoodItem = {
   prep: "no-cook" | "needs-heat";
   noCookReady?: boolean;
   notes?: string;
+  priceNote?: string;
 };
 
 export type RankedItem = {
