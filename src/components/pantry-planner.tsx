@@ -142,6 +142,21 @@ function formatCurrency(value: number) {
 const COMFORT_TEA_NAME = "Tea bags, 80-pack";
 const COMFORT_TEA_COST = 1.45;
 
+// Per-item price transparency: items with a `priceNote` are estimates that
+// couldn't be verified against the cheapest-shop tier. Show a dagger next to
+// the name and one shared footnote at the foot of the table/section.
+const UNVERIFIED_FOOTNOTE =
+  "†Price not verified against our usual cheapest shops — treated as an estimate";
+
+function NotePriceMark({ item }: { item: FoodItem | null }) {
+  if (!item) return null;
+  return item.priceNote ? (
+    <sup className="ml-0.5 text-[10px] text-[var(--muted)]" aria-label="estimated price">
+      †
+    </sup>
+  ) : null;
+}
+
 function buildAmazonHref(item: FoodItem) {
   if (item.amazon_asin && item.amazon_asin !== "XXXXXXXXXX") {
     return `https://www.amazon.co.uk/dp/${item.amazon_asin}?tag=biteforecast2-21`;
@@ -296,7 +311,7 @@ export function PantryPlanner() {
 
   const schedule = useMemo(() => {
     const items = activeResult.ranked
-      .map((r) => ({ name: r.item.name, qty: r.quantity, cost: r.estimatedCostGbp }))
+      .map((r) => ({ name: r.item.name, qty: r.quantity, cost: r.estimatedCostGbp, flagged: Boolean(r.item.priceNote) }))
       .sort((a, b) => a.cost - b.cost);
     const totalCost = items.reduce((s, i) => s + i.cost, 0);
 
@@ -1164,6 +1179,7 @@ export function PantryPlanner() {
                                 <tr key={line.item.id} className="border-b border-dashed border-[var(--border)] last:border-b-0">
                                   <td className="py-3 pr-4 font-medium">
                                     {line.item.name}
+                                    <NotePriceMark item={line.item} />
                                     {tier !== "weekend" && line.item.noCookReady && (
                                       <span className="ml-2 inline-block rounded-full px-2 py-0.5 text-[11px] font-medium bg-[#EDF2E8] text-[#2F4A24]">
                                         Eat straight from the tin
@@ -1199,6 +1215,9 @@ export function PantryPlanner() {
                             </tbody>
                           </table>
                         </div>
+                        {lines.some((ln) => ln.item.priceNote) && (
+                          <p className="mt-1 text-xs italic text-[var(--muted)]">{UNVERIFIED_FOOTNOTE}</p>
+                        )}
                         <p className="shelf-line">Fits in {litresToShelfTerms(catLitres)}.</p>
                       </section>
                     );
@@ -1257,6 +1276,7 @@ export function PantryPlanner() {
                                                                   <tr key={line.item.id} className="border-b border-dashed border-[var(--border)] last:border-b-0">
                                                                     <td className="py-1 pr-3 font-medium">
                                                                           {line.item.name}
+                                                                          <NotePriceMark item={line.item} />
                                                                           {tier !== "weekend" && line.item.noCookReady && (
                                                                             <span className="ml-1 inline-block rounded-full px-1.5 py-0.5 text-[10px] font-medium bg-[#EDF2E8] text-[#2F4A24]">
                                                                               Eat straight from the tin
@@ -1289,6 +1309,9 @@ export function PantryPlanner() {
                                   ))}
                                 </tbody>
                               </table>
+                              {lines.some((ln) => ln.item.priceNote) && (
+                                <p className="mt-1 text-[11px] italic text-[var(--muted)]">{UNVERIFIED_FOOTNOTE}</p>
+                              )}
                               <p className="shelf-line !text-[11px]">Fits in {litresToShelfTerms(catLitres)}.</p>
                             </div>
                           );
@@ -1355,7 +1378,11 @@ export function PantryPlanner() {
                       <ul className="mt-1 space-y-1 text-sm text-[var(--muted)]">
                         {week.items.map((item, idx) => (
                           <li key={idx}>
-                            {item.name} ×{Math.round(item.qty)} — {new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 2 }).format(item.cost)}
+                            {item.name}
+                            {item.flagged && (
+                              <sup className="ml-0.5 text-[10px] text-[var(--muted)]" aria-label="estimated price">†</sup>
+                            )}{" "}
+                            ×{Math.round(item.qty)} — {new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 2 }).format(item.cost)}
                           </li>
                         ))}
                       </ul>
@@ -1370,6 +1397,9 @@ export function PantryPlanner() {
                     Total: {new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 2 }).format(schedule.totalCost + COMFORT_TEA_COST)}
                   </p>
                 </div>
+                {schedule.weeks.some((w) => w.items.some((i) => i.flagged)) && (
+                  <p className="mt-2 text-xs italic text-[var(--muted)]">{UNVERIFIED_FOOTNOTE}</p>
+                )}
               </section>
             )}
 
@@ -1378,9 +1408,12 @@ export function PantryPlanner() {
               <p className="mt-2 text-sm text-[var(--muted)] max-w-prose">Salt, coffee, spices, vinegar. Nearly zero calories, but they're what makes week three taste different from week one. Don't skip these.</p>
               <ul className="mt-3 space-y-2 text-sm text-[var(--muted)]">
                 {result.essentialsAndFlavour.map((item) => (
-                  <li key={item.id}>• {item.name}</li>
+                  <li key={item.id}>• {item.name}<NotePriceMark item={item} /></li>
                 ))}
               </ul>
+              {result.essentialsAndFlavour.some((item) => item.priceNote) && (
+                <p className="mt-2 text-xs italic text-[var(--muted)]">{UNVERIFIED_FOOTNOTE}</p>
+              )}
             </section>
 
             <section className="border-t border-[var(--border)] pt-6 print-card">
