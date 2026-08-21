@@ -241,10 +241,11 @@ export function PantryPlanner() {
           weeks: TIER_DATA[tier].weeks,
           dietaryFlags,
           childCalorieRatio,
+          powerOut: powerState === "out",
         },
         foods as FoodItem[],
       ),
-    [adults, children, budgetGbp, tier, dietaryFlags, childCalorieRatio],
+    [adults, children, budgetGbp, tier, dietaryFlags, childCalorieRatio, powerState],
   );
 
   const cheapestPlan = useMemo(
@@ -256,10 +257,11 @@ export function PantryPlanner() {
           weeks: TIER_DATA[tier].weeks,
           dietaryFlags,
           childCalorieRatio,
+          powerOut: powerState === "out",
         },
         foods as FoodItem[],
       ),
-    [adults, children, tier, dietaryFlags, childCalorieRatio],
+    [adults, children, tier, dietaryFlags, childCalorieRatio, powerState],
   );
 
   const activeResult = floorMode ? cheapestPlan : result;

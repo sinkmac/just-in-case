@@ -11,6 +11,9 @@ export type HouseholdInput = {
   weeks: number;
   dietaryFlags?: DietaryFlags;
   childCalorieRatio?: number;
+  /** Scenario Mode: when the power's out, prefer no-cook protein so a plan
+   *  stays edible without heat. Absent/false => pure cost-per-calorie ranking. */
+  powerOut?: boolean;
 };
 
 export type FoodItem = {
@@ -96,18 +99,32 @@ const CATEGORY_MAX_BUDGET_SHARE: Record<string, number> = {
   morale: 0.05,
 };
 
+// Scenario Mode power-out: how much to favour no-cook protein in the ranking.
+// A multiplier on score (which already encodes calories-per-pound and
+// storage). Applied ONLY when powerOut is true; absent/false => 1.0 => the
+// ranking is byte-identical to the pure cost-per-calorie baseline.
+const NO_COOK_PROTEIN_POWER_OUT_BOOST = 1.6;
+
+function isNoCookProtein(item: FoodItem): boolean {
+  return item.category === "protein" && item.prep === "no-cook";
+}
+
 function caloriesPerUnit(item: FoodItem): number | null {
   if (item.cal_per_100g == null) return null;
   return (item.cal_per_100g / 100) * item.typical_unit_g;
 }
 
-function scoreItem(item: FoodItem): number | null {
+function scoreItem(item: FoodItem, powerOut = false): number | null {
   const cals = caloriesPerUnit(item);
   if (cals == null || item.typical_unit_price_gbp <= 0 || item.storage_litres_per_unit <= 0) {
     return null;
   }
   const caloriesPerPound = cals / item.typical_unit_price_gbp;
-  return caloriesPerPound * (1 / item.storage_litres_per_unit);
+  let score = caloriesPerPound * (1 / item.storage_litres_per_unit);
+  if (powerOut && isNoCookProtein(item)) {
+    score *= NO_COOK_PROTEIN_POWER_OUT_BOOST;
+  }
+  return score;
 }
 
 function passesDietaryFlags(item: FoodItem, flags: DietaryFlags): boolean {
@@ -117,8 +134,8 @@ function passesDietaryFlags(item: FoodItem, flags: DietaryFlags): boolean {
   return true;
 }
 
-function rankWithinCategory(items: FoodItem[]): FoodItem[] {
-  return [...items].sort((a, b) => (scoreItem(b) ?? -1) - (scoreItem(a) ?? -1));
+function rankWithinCategory(items: FoodItem[], powerOut = false): FoodItem[] {
+  return [...items].sort((a, b) => (scoreItem(b, powerOut) ?? -1) - (scoreItem(a, powerOut) ?? -1));
 }
 
 function getCategoryBudget(lines: Map<string, RankedItem>, category: string): number {
@@ -146,7 +163,7 @@ function canAddUnitWithinCaps(lines: Map<string, RankedItem>, item: FoodItem, bu
   return true;
 }
 
-function addUnit(lines: Map<string, RankedItem>, item: FoodItem) {
+function addUnit(lines: Map<string, RankedItem>, item: FoodItem, powerOut = false) {
   const current = lines.get(item.id);
   const unitCalories = caloriesPerUnit(item) ?? 0;
   const unitCost = item.typical_unit_price_gbp;
@@ -155,7 +172,7 @@ function addUnit(lines: Map<string, RankedItem>, item: FoodItem) {
     item,
     quantity: 0,
     caloriesPerUnit: caloriesPerUnit(item),
-    score: scoreItem(item),
+    score: scoreItem(item, powerOut),
     estimatedCostGbp: 0,
     totalCalories: 0,
     totalStorageLitres: 0,
@@ -174,6 +191,7 @@ export function buildPlan(input: HouseholdInput, foods: FoodItem[]): PlannerResu
   const weeks = Math.max(1, input.weeks);
   const budgetGbp = Math.max(0, input.budgetGbp);
   const dietaryFlags = input.dietaryFlags ?? {};
+  const powerOut = input.powerOut === true;
 
   const childRatio = input.childCalorieRatio ?? 0.6;
   const dailyCaloriesNeeded = Math.round((adults + children * childRatio) * 2000);
@@ -189,7 +207,8 @@ export function buildPlan(input: HouseholdInput, foods: FoodItem[]): PlannerResu
   while (requiredQueue.length) {
     const category = requiredQueue[0];
     const candidates = rankWithinCategory(
-      eligible.filter((item) => item.category === category && scoreItem(item) != null),
+      eligible.filter((item) => item.category === category && scoreItem(item, powerOut) != null),
+      powerOut,
     );
     // Prefer items that don't exceed the 15% baseline cap in the first pass.
     // If every item in the category exceeds the cap, fall back to the best scorer.
@@ -212,7 +231,7 @@ export function buildPlan(input: HouseholdInput, foods: FoodItem[]): PlannerResu
       remainingBudget >= pick.typical_unit_price_gbp &&
       canAddUnitWithinCaps(rankedLines, pick, budgetGbp)
     ) {
-      addUnit(rankedLines, pick);
+      addUnit(rankedLines, pick, powerOut);
       remainingBudget -= pick.typical_unit_price_gbp;
       allocated += 1;
     }
@@ -225,7 +244,8 @@ export function buildPlan(input: HouseholdInput, foods: FoodItem[]): PlannerResu
   }
 
   const scoreRanked = rankWithinCategory(
-    eligible.filter((item) => !['flavour'].includes(item.category) && scoreItem(item) != null),
+    eligible.filter((item) => !['flavour'].includes(item.category) && scoreItem(item, powerOut) != null),
+    powerOut,
   );
 
   let caloriesPlanned = Array.from(rankedLines.values()).reduce((sum, line) => sum + line.totalCalories, 0);
@@ -284,7 +304,7 @@ export function buildPlan(input: HouseholdInput, foods: FoodItem[]): PlannerResu
       }
       break;
     }
-    addUnit(rankedLines, next);
+    addUnit(rankedLines, next, powerOut);
     remainingBudget -= next.typical_unit_price_gbp;
     caloriesPlanned += caloriesPerUnit(next) ?? 0;
     if (caloriesPlanned >= totalCaloriesNeeded) break;
@@ -334,6 +354,7 @@ export function buildCheapestPlan(
   const children = Math.max(0, input.children);
   const weeks = Math.max(1, input.weeks);
   const dietaryFlags = input.dietaryFlags ?? {};
+  const powerOut = input.powerOut === true;
 
   const childRatio = input.childCalorieRatio ?? 0.6;
   const dailyCaloriesNeeded = Math.round((adults + children * childRatio) * 2000);
@@ -376,8 +397,14 @@ export function buildCheapestPlan(
     .sort((a, b) => {
       const calsA = caloriesPerUnit(a)!;
       const calsB = caloriesPerUnit(b)!;
-      // Sort by cheapest cost per calorie (price / calories)
-      return (a.typical_unit_price_gbp / calsA) - (b.typical_unit_price_gbp / calsB);
+      // Sort by cheapest cost per calorie (price / calories). When the power's
+      // out, no-cook protein gets a boost (effective cost-per-calorie scaled
+      // down), so it can compete with needs-heat calories.
+      const costPerCalA = a.typical_unit_price_gbp / calsA;
+      const costPerCalB = b.typical_unit_price_gbp / calsB;
+      const effA = powerOut && isNoCookProtein(a) ? costPerCalA / NO_COOK_PROTEIN_POWER_OUT_BOOST : costPerCalA;
+      const effB = powerOut && isNoCookProtein(b) ? costPerCalB / NO_COOK_PROTEIN_POWER_OUT_BOOST : costPerCalB;
+      return effA - effB;
     });
 
   while (caloriesPlanned < totalCaloriesNeeded) {
