@@ -26,42 +26,44 @@ const ESSENTIALS = [
 function EssentialsIcon({ id }: { id: string }) {
   const icons: Record<string, React.ReactNode> = {
     water: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8A4B2E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2c-3.5 0-6 3.3-6 7.5 0 2.5 2 5 5 6.5 3-1.5 5-4 5-6.5 0-4.2-2.5-7.5-6-7.5Z" />
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#A63D1C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
+        <path d="M12 3c3 4 6 7.5 6 11a6 6 0 0 1-12 0c0-3.5 3-7 6-11z" />
       </svg>
     ),
     food: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8A4B2E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="8" y="4" width="8" height="14" rx="1" />
-        <line x1="8" y1="8" x2="16" y2="8" />
-        <line x1="8" y1="12" x2="16" y2="12" />
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#A63D1C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
+        <ellipse cx="12" cy="6" rx="7" ry="2.5" />
+        <path d="M5 6v12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5V6" />
+        <path d="M5 10.5c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5" />
       </svg>
     ),
     light: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8A4B2E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="10" y="4" width="4" height="10" rx="0.5" />
-        <path d="M12 14v6" />
-        <path d="M10 14h4" />
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#A63D1C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
+        <path d="M9 21h6" />
+        <path d="M10 17h4" />
+        <path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.3 1 2.1h5c0-.8.4-1.6 1-2.1A6 6 0 0 0 12 3z" />
       </svg>
     ),
     warmth: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8A4B2E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="4" y="6" width="16" height="12" rx="1" />
-        <path d="M4 10h16" />
-        <path d="M4 14h16" />
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#A63D1C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
+        <path d="M4 7h16v11H4z" />
+        <path d="M4 11h16" />
+        <path d="M8 7V5h8v2" />
       </svg>
     ),
     news: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8A4B2E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="5" y="8" width="14" height="6" rx="1" />
-        <circle cx="12" cy="16" r="1" fill="#8A4B2E" />
-        <path d="M12 18v2" />
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#A63D1C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
+        <rect x="3" y="9" width="18" height="11" rx="2" />
+        <circle cx="9" cy="14.5" r="2.5" />
+        <path d="M15 13h3" />
+        <path d="M15 16h3" />
+        <path d="M7 9l10-5" />
       </svg>
     ),
     other: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8A4B2E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="10" y="4" width="4" height="16" />
-        <rect x="4" y="10" width="16" height="4" />
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#A63D1C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
+        <path d="M12 5v14" />
+        <path d="M5 12h14" />
       </svg>
     ),
   };
@@ -71,7 +73,7 @@ function EssentialsIcon({ id }: { id: string }) {
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1120px] px-4 py-8 sm:px-6 lg:px-8">
         {/* Header */}
         <header className="mb-10">
           <h2 className="mt-2 text-3xl font-semibold text-[var(--brand-dark)] font-serif tracking-tight">
@@ -113,10 +115,12 @@ export default function HomePage() {
                 <div key={item.id} className="flex items-start gap-3">
                   <EssentialsIcon id={item.id} />
                   <div>
-                    <p className="text-sm font-semibold text-[var(--brand-dark)] font-serif">
+                    <p className="text-[17px] font-semibold text-[var(--brand-dark)] font-serif">
                       {item.title}
                     </p>
-                    <p className="mt-0.5 text-sm text-[var(--muted)]">{item.body}</p>
+                    <p className="mt-0.5 text-[17px] text-[var(--brand-dark)]">
+                      {item.body}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -125,14 +129,14 @@ export default function HomePage() {
             {/* Main button */}
             <Link href="/planner?tier=weekend">
               <button
-                className="w-full sm:w-auto min-h-[44px] bg-[var(--brand)] text-white px-8 py-3 rounded-full font-medium text-sm hover:bg-[var(--brand-dark)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:ring-offset-2 focus:ring-offset-[var(--background)]"
+                className="w-full sm:w-auto h-[60px] bg-[var(--brand)] text-white px-8 rounded-full font-medium text-[21px] hover:bg-[var(--brand-dark)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:ring-offset-2 focus:ring-offset-[var(--background)]"
               >
                 Show me what I need &rarr;
               </button>
             </Link>
 
             {/* Supporting line */}
-            <p className="text-sm text-[var(--muted)] leading-6">
+            <p className="text-[19px] text-[var(--brand-dark)] leading-7">
               Start with what you have, and build up a little at a time. Storms, power cuts and cyberattacks can stop the services we all rely on, which is why the government advises every household to be ready for three days.{" "}
               <Link
                 href="https://beready.campaign.gov.uk/be-ready-for-emergencies/"
@@ -155,13 +159,13 @@ export default function HomePage() {
           <CupboardIllustration className="max-w-xs" />
         </div>
 
-        {/* Band */}
-        <section className="mt-14 border border-[var(--border)] bg-[var(--card)] p-6 sm:p-8 rounded-lg">
-          <p className="text-sm font-semibold text-[var(--brand-dark)] uppercase tracking-wider">
+        {/* Band: Get the right amounts */}
+        <section className="mt-14">
+          <h2 className="mb-4 text-[19px] font-semibold text-[var(--brand-dark)] font-serif">
             Get the right amounts for your household
-          </p>
-          <p className="mt-1 text-sm text-[var(--muted)]">About five minutes.</p>
-          <ol className="mt-4 space-y-2 text-sm text-[var(--secondary)] leading-6 list-decimal list-inside">
+          </h2>
+          <p className="mb-6 text-[19px] text-[var(--brand-dark)]">About five minutes.</p>
+          <ol className="space-y-2 text-[19px] text-[var(--brand-dark)] leading-7 list-decimal list-inside font-serif">
             <li>Tell us who&rsquo;s at home.</li>
             <li>Tick what you already have.</li>
             <li>Get your shopping list.</li>
@@ -173,7 +177,7 @@ export default function HomePage() {
           <p className="font-serif text-lg sm:text-xl text-[var(--brand-dark)] font-semibold">
             Why three days?
           </p>
-          <p className="mt-2 text-sm text-[var(--muted)] leading-6">
+          <p className="mt-2 text-[19px] text-[var(--brand-dark)] leading-7">
             A power cut, the water going off, a road snowed in. If most households can manage for three days on their own, help can reach the people who need it most.
           </p>
         </section>
@@ -194,10 +198,10 @@ export default function HomePage() {
           <p className="text-sm font-semibold text-[var(--brand-dark)]">
             Planning for the future you hope never comes. But just might.
           </p>
-          <p className="mt-2 text-xs text-[var(--muted)] leading-5">
+          <p className="mt-2 text-xs text-[var(--brand-dark)] leading-5">
             Advice based on the UK Government&rsquo;s Be Ready campaign, 22 October 2026. Nothing you enter is stored.
           </p>
-          <p className="mt-4 text-xs text-[var(--muted)]">
+          <p className="mt-4 text-xs text-[var(--brand-dark)]">
             <a
               href="/changelog"
               className="underline underline-offset-2 hover:text-[var(--brand)] transition-colors"
