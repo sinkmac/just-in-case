@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://justincase.scot/planner" },
 };
 
+// The planner reads ?tier= from the URL to pre-select a duration.
+// Force dynamic rendering so searchParams is resolved per-request (not
+// baked in at build time via SSG).
+export const dynamic = "force-dynamic";
+
 type PageProps = {
   searchParams: { [key: string]: string | string[] | undefined };
 };

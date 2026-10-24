@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import foods from "../../data/foods.json";
 import { buildPlan, buildCheapestPlan, type FoodItem, type CheapestPlanResult } from "@/lib/planner";
 
@@ -39,6 +40,8 @@ const TIER_DATA: Record<DurationTier, { label: string; weeks: number; register: 
     pictogram: "🏗️",
   },
 };
+
+export const VALID_TIERS: readonly DurationTier[] = Object.keys(TIER_DATA) as readonly DurationTier[];
 
 const categoryLabels: Record<string, string> = {
   staple_carb: "Staple carbs",
@@ -216,6 +219,16 @@ export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
   const [children, setChildren] = useState(1);
   const [budgetGbp, setBudgetGbp] = useState(120);
   const [tier, setTier] = useState<DurationTier>(initialTier ?? "month");
+
+  // Sync tier from URL param on mount so ?tier=weekend is honoured even when
+  // the page is reached via client-side navigation without a full reload.
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const urlTier = searchParams.get("tier");
+    if (urlTier && VALID_TIERS.includes(urlTier as DurationTier) && urlTier !== tier) {
+      setTier(urlTier as DurationTier);
+    }
+  }, [searchParams, tier]);
   const [showDietary, setShowDietary] = useState(false);
   const [dietaryFlags, setDietaryFlags] = useState<DietaryFlags>({
     vegetarian: false,
