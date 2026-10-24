@@ -180,13 +180,13 @@ export default function HomePage() {
             The government advises keeping three days of supplies. It's reasonable to ask: why now? Is something about to happen?
           </p>
           <p className="mt-2 text-[19px] text-[var(--brand-dark)] leading-7">
-            The <Link
-              href="https://beready.campaign.gov.uk/be-ready-for-emergencies/"
-              className="text-[var(--brand)] underline underline-offset-2 hover:text-[var(--brand-dark)] transition-colors"
-            >
-              published advice
-            </Link>
-            is about being prepared for disruption. It doesn't announce a specific impending emergency. Storms, power cuts and cyberattacks can interrupt water, shopping, payments and communications. Having a few essentials at home gives you some breathing room, and helps emergency services concentrate on people who need them most.
+          The <Link
+            href="https://beready.campaign.gov.uk/be-ready-for-emergencies/"
+            className="text-[var(--brand)] underline underline-offset-2 hover:text-[var(--brand-dark)] transition-colors"
+          >
+            published advice
+          </Link>
+          is about being prepared for disruption. It doesn't announce a specific impending emergency. Storms, power cuts and cyberattacks can interrupt water, shopping, payments and communications. You don’t need to know what causes a disruption to be ready for it. Having a few essentials at home gives you some breathing room, and helps emergency services concentrate on people who need them most.
           </p>
           <p className="mt-2 text-[19px] text-[var(--brand-dark)] leading-7">
             We built Just In Case to make that advice useful. What does your household need? How much have you already got? And what's still missing?
@@ -226,6 +226,9 @@ export default function HomePage() {
           </p>
           <p className="mt-2 text-xs text-[var(--brand-dark)] leading-5">
             Advice based on the UK Government&rsquo;s Be Ready campaign, 22 October 2026. Nothing you enter is stored.
+          </p>
+          <p className="mt-4 text-xs text-[var(--brand-dark)]">
+            Some wording on this site was drafted with AI and reviewed by us.
           </p>
           <p className="mt-4 text-xs text-[var(--brand-dark)]">
             <a
