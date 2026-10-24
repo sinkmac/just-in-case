@@ -1,11 +1,16 @@
 {
   "_comment": "Quiet changelog. Entries newest first. lastChecked = month of the most recent re-verification pass (prices/guidance); bump it on each check. kinds: item | price | recheck | gear | copy | guide",
-  "lastChecked": "2026-08",
+  "lastChecked": "2026-10",
   "entries": [
+    {
+      "date": "2026-10-24",
+      "kind": "copy",
+      "text": "New front page and three-day planner, built around the government's Be Ready advice. Added a note on how we use AI. Fixed broken links and some display problems."
+    },
     {
       "date": "2026-08-19",
       "kind": "price",
-      "text": "Stock cubes/bouillon corrected to \u00A30.35 per 60g (Aldi own-brand, scaled). Tinned salmon and raisins marked as estimates \u2014 no Aldi/Lidl equivalent to verify against."
+      "text": "Stock cubes/bouillon corrected to £0.35 per 60g (Aldi own-brand, scaled). Tinned salmon and raisins marked as estimates — no Aldi/Lidl equivalent to verify against."
     },
     {
       "date": "2026-08-05",
@@ -20,7 +25,7 @@
     {
       "date": "2026-07-24",
       "kind": "price",
-      "text": "Tinned mackerel corrected to \u00A30.85 per 125g tin, matching typical own-brand pricing."
+      "text": "Tinned mackerel corrected to £0.85 per 125g tin, matching typical own-brand pricing."
     },
     {
       "date": "2026-07-24",

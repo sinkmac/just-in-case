@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
-import { Fraunces, Public_Sans } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Fraunces } from "next/font/google";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -8,22 +8,19 @@ const fraunces = Fraunces({
   weight: ["400", "500", "600"],
 });
 
-const publicSans = Public_Sans({
-  subsets: ["latin"],
-  variable: "--font-public-sans",
-  weight: ["400", "500"],
-});
+// Public Sans is self-hosted from public/fonts/public-sans (see globals.css).
+// Loading it through next/font/google with weight 600 broke Netlify's build.
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://justincase.scot"),
-  title: "Just In Case — Emergency Food Calculator for UK Households",
+  title: "Just In Case",
   description:
-    "Calculate how much long-life food your UK household can buy within budget, with shelf-stable categories, calories, storage estimates, and Amazon-linked shopping routes.",
+    "See what your household needs for three days without shops, power or water, then get a shopping list of what's missing.",
   alternates: { canonical: "https://justincase.scot/" },
   openGraph: {
-    title: "Just In Case — Emergency Food Calculator for UK Households",
+    title: "Just In Case",
     description:
-      "A free UK just-in-case pantry calculator for long-life food, budget reality, storage space, and printable shopping lists.",
+      "See what your household needs for three days without shops, power or water, then get a shopping list of what's missing.",
     url: "https://justincase.scot/",
     type: "website",
     siteName: "Just In Case",
@@ -32,10 +29,14 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Just In Case — a cupboard stocked for a UK emergency pantry",
+        alt: "Be ready for three days. Just In Case",
       },
     ],
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#F7F1E3",
 };
 
 export default function RootLayout({
@@ -46,8 +47,17 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${publicSans.variable} h-full antialiased`}
+      className={`${fraunces.variable} h-full antialiased`}
     >
+      <head>
+        <link
+          rel="preload"
+          href="/fonts/public-sans/public-sans-latin-wght-normal.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin=""
+        />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

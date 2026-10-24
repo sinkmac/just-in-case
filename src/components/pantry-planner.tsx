@@ -251,6 +251,22 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
   const [floorMode, setFloorMode] = useState(false);
   const [scheduleMode, setScheduleMode] = useState(false);
 
+  // Links to /planner?tier=…#build-up-schedule (e.g. from the guides) open
+  // the schedule straight away rather than leaving it behind its button.
+  useEffect(() => {
+    const openFromHash = () => {
+      if (window.location.hash !== "#build-up-schedule") return;
+      setScheduleMode(true);
+      document.getElementById("build-up-schedule")?.scrollIntoView();
+    };
+    const frame = requestAnimationFrame(openFromHash);
+    window.addEventListener("hashchange", openFromHash);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("hashchange", openFromHash);
+    };
+  }, []);
+
   const result = useMemo(
     () =>
       buildPlan(
@@ -1372,7 +1388,7 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
               </p>
             </section>
 
-            <div className="no-print flex justify-center gap-3 pt-2">
+            <div id="build-up-schedule" className="no-print flex justify-center gap-3 pt-2 scroll-mt-4">
               <button
                 type="button"
                 onClick={() => setScheduleMode((c) => !c)}

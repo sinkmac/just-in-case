@@ -26,33 +26,33 @@ const ESSENTIALS = [
 function EssentialsIcon({ id }: { id: string }) {
   const icons: Record<string, React.ReactNode> = {
     water: (
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#A63D1C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
         <path d="M12 3c3 4 6 7.5 6 11a6 6 0 0 1-12 0c0-3.5 3-7 6-11z" />
       </svg>
     ),
     food: (
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#A63D1C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
         <ellipse cx="12" cy="6" rx="7" ry="2.5" />
         <path d="M5 6v12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5V6" />
         <path d="M5 10.5c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5" />
       </svg>
     ),
     light: (
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#A63D1C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
         <path d="M9 21h6" />
         <path d="M10 17h4" />
         <path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.3 1 2.1h5c0-.8.4-1.6 1-2.1A6 6 0 0 0 12 3z" />
       </svg>
     ),
     warmth: (
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#A63D1C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
         <path d="M4 7h16v11H4z" />
         <path d="M4 11h16" />
         <path d="M8 7V5h8v2" />
       </svg>
     ),
     news: (
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#A63D1C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
         <rect x="3" y="9" width="18" height="11" rx="2" />
         <circle cx="9" cy="14.5" r="2.5" />
         <path d="M15 13h3" />
@@ -61,7 +61,7 @@ function EssentialsIcon({ id }: { id: string }) {
       </svg>
     ),
     other: (
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#A63D1C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
         <path d="M12 5v14" />
         <path d="M5 12h14" />
       </svg>
@@ -76,9 +76,9 @@ export default function HomePage() {
       <div className="mx-auto max-w-[1120px] px-4 py-8 sm:px-6 lg:px-8">
         {/* Header */}
         <header className="mb-10">
-          <h2 className="mt-2 text-3xl font-semibold text-[var(--brand-dark)] font-serif tracking-tight">
+          <p className="mt-2 text-3xl font-semibold text-[var(--brand-dark)] font-serif tracking-tight">
             Just In Case
-          </h2>
+          </p>
           <nav className="mt-3 flex flex-wrap gap-4 text-sm text-[var(--brand)]">
             <Link
               href="/planner"
@@ -127,12 +127,13 @@ export default function HomePage() {
             </section>
 
             {/* Main button */}
-            <Link href="/planner?tier=weekend">
-              <button
-                className="w-full sm:w-auto h-[60px] bg-[var(--brand)] text-white px-8 rounded-full font-medium text-[21px] hover:bg-[var(--brand-dark)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:ring-offset-2 focus:ring-offset-[var(--background)]"
-              >
-                Show me what I need &rarr;
-              </button>
+            {/* mb-3 leaves a little space before the supporting line (less than
+                the column's usual gap, so the line still reads with the button). */}
+            <Link
+              href="/planner?tier=weekend"
+              className="mb-3 flex sm:inline-flex w-full sm:w-auto h-[60px] items-center justify-center bg-[var(--brand)] text-white px-8 rounded-full font-medium text-[21px] hover:bg-[var(--brand-dark)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:ring-offset-2 focus:ring-offset-[var(--background)]"
+            >
+              Show me what I need &rarr;
             </Link>
 
             {/* Supporting line */}
