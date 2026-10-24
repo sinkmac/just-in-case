@@ -137,14 +137,13 @@ export default function HomePage() {
 
             {/* Supporting line */}
             <p className="text-[19px] text-[var(--brand-dark)] leading-7">
-              Start with what you have, and build up a little at a time. Storms, power cuts and cyberattacks can stop the services we all rely on, which is why the government advises every household to be ready for three days.{" "}
+              Start with what you have, and build up a little at a time.{" "}
               <Link
                 href="https://beready.campaign.gov.uk/be-ready-for-emergencies/"
                 className="text-[var(--brand)] underline underline-offset-2 hover:text-[var(--brand-dark)] transition-colors"
               >
                 Read the official advice
               </Link>
-              .
             </p>
           </div>
 
@@ -172,13 +171,34 @@ export default function HomePage() {
           </ol>
         </section>
 
-        {/* Why three days */}
+        {/* Why Just In Case? */}
         <section className="mt-12">
           <p className="font-serif text-lg sm:text-xl text-[var(--brand-dark)] font-semibold">
-            Why three days?
+            Why Just In Case?
           </p>
           <p className="mt-2 text-[19px] text-[var(--brand-dark)] leading-7">
-            A power cut, the water going off, a road snowed in. If most households can manage for three days on their own, help can reach the people who need it most.
+            The government advises keeping three days of supplies. It's reasonable to ask: why now? Is something about to happen?
+          </p>
+          <p className="mt-2 text-[19px] text-[var(--brand-dark)] leading-7">
+            The published advice is about being prepared for disruption. It doesn't announce a specific impending emergency. Storms, power cuts and cyberattacks can interrupt water, shopping, payments and communications. Having a few essentials at home gives you some breathing room, and helps emergency services concentrate on people who need them most.
+          </p>
+          <p className="mt-2 text-[19px] text-[var(--brand-dark)] leading-7">
+            We built Just In Case to make that advice useful. What does your household need? How much have you already got? And what's still missing?
+          </p>
+          <p className="mt-2 text-[19px] text-[var(--brand-dark)] leading-7">
+            Start with three days and add things as you can. A longer store is your choice.
+          </p>
+          <p className="mt-2 text-[21px] text-[var(--brand-dark)] leading-7 font-serif">
+            A little preparation now can make a difficult few days easier. Just in case.
+          </p>
+          <p className="mt-2 text-[19px] text-[var(--brand-dark)] leading-7">
+            Link:{" "}
+            <Link
+              href="/about"
+              className="text-[var(--brand)] underline underline-offset-2 hover:text-[var(--brand-dark)] transition-colors"
+            >
+              About us and our approach
+            </Link>
           </p>
         </section>
 
