@@ -110,12 +110,12 @@ export default function Page() {
             planning page (search &ldquo;[council name] emergency plan&rdquo;) will
             tell you what&rsquo;s specific to your area. For UK-wide guidance,{" "}
             <a
-              href="https://www.gov.uk/prepare"
+              href="https://beready.campaign.gov.uk/be-ready-for-emergencies/"
               target="_blank"
               rel="noreferrer"
               className="text-[var(--brand)] underline"
             >
-              gov.uk/prepare
+              Be Ready
             </a>{" "}
             covers the same ground for England, Wales, and Northern Ireland.
           </p>

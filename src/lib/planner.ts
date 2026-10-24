@@ -346,13 +346,23 @@ export type CheapestPlanResult = {
   droppedCategories: string[];
 };
 
+// Three-day planner only. Both default to off, so every existing caller gets
+// byte-identical results.
+export type CheapestPlanOptions = {
+  /** Skip Phase 1's per-category minimum units; fill purely on calories. */
+  skipCategoryMinimums?: boolean;
+  /** Honour plans shorter than a week (e.g. 3/7) instead of rounding up to 1. */
+  allowPartialWeek?: boolean;
+};
+
 export function buildCheapestPlan(
   input: Omit<HouseholdInput, 'budgetGbp'>,
   foods: FoodItem[],
+  options: CheapestPlanOptions = {},
 ): CheapestPlanResult {
   const adults = Math.max(0, input.adults);
   const children = Math.max(0, input.children);
-  const weeks = Math.max(1, input.weeks);
+  const weeks = options.allowPartialWeek ? Math.max(0, input.weeks) : Math.max(1, input.weeks);
   const dietaryFlags = input.dietaryFlags ?? {};
   const powerOut = input.powerOut === true;
 
@@ -366,7 +376,7 @@ export function buildCheapestPlan(
   let totalCost = 0;
 
   // Phase 1: For each required category, pick the cheapest item and allocate minimum units
-  for (const category of REQUIRED_CATEGORIES) {
+  for (const category of options.skipCategoryMinimums ? [] : REQUIRED_CATEGORIES) {
     const candidates = eligible
       .filter((item) => item.category === category && caloriesPerUnit(item) != null && item.typical_unit_price_gbp > 0)
       .sort((a, b) => a.typical_unit_price_gbp - b.typical_unit_price_gbp);
