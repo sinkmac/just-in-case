@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import foods from "../../data/foods.json";
 import { printOnly } from "@/lib/print";
+import { scrollBehavior } from "@/lib/motion";
 import type { DietaryFlags, FoodItem } from "@/lib/planner";
 import {
   DEFAULT_HOUSEHOLD,
@@ -215,7 +216,7 @@ export function ThreeDayPlanner({
 
   const openLonger = () => {
     setLongerOpen(true);
-    requestAnimationFrame(() => document.getElementById("longer-stores")?.scrollIntoView({ behavior: "smooth" }));
+    requestAnimationFrame(() => document.getElementById("longer-stores")?.scrollIntoView({ behavior: scrollBehavior() }));
   };
 
   const linkClass = "inline-flex min-h-11 items-center text-[var(--brand)] underline underline-offset-2 hover:text-[var(--brand-dark)] transition-colors";

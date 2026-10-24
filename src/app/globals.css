@@ -17,7 +17,7 @@
   --strong-border: #A88F63;
   --brand: #8A4B2E;
   --brand-dark: #5C4630;
-  --accent: #FFFDF6;
+  --accent: #F2E9D6;
   --success: #2F4A24;
   --warning-bg: #FFF6E9;
   --warning-border: #E0C79A;
@@ -169,5 +169,22 @@ input[type="range"] {
 
   html[data-print="longer"] .print-three-day {
     display: none !important;
+  }
+}
+
+/* ── Reduced motion: no smooth scrolling or animation ── */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

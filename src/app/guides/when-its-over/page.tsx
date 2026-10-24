@@ -254,7 +254,7 @@ export default function Page() {
 
           <p>
             Write the answers on the back of your{" "}
-            <Link href="/" className="text-[var(--brand)] underline">
+            <Link href="/planner?tier=month#build-up-schedule" className="text-[var(--brand)] underline">
               build-up schedule
             </Link>
             , or on anything you will find again, and pin it inside the cupboard door. We
@@ -281,7 +281,7 @@ export default function Page() {
           </p>
           <p>
             Start this week. If you already have a{" "}
-            <Link href="/" className="text-[var(--brand)] underline">
+            <Link href="/planner?tier=month#build-up-schedule" className="text-[var(--brand)] underline">
               build-up schedule
             </Link>
             , rotate from that. If you do not &mdash; and if this was your first
@@ -291,7 +291,7 @@ export default function Page() {
           </p>
           <p>
             If you want it laid out week by week from there, the{" "}
-            <Link href="/" className="text-[var(--brand)] underline">
+            <Link href="/planner?tier=month#build-up-schedule" className="text-[var(--brand)] underline">
               build-up schedule
             </Link>{" "}
             does exactly this, and you can print it.

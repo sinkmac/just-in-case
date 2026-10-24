@@ -3,6 +3,7 @@
 
 
 import { useState, useMemo, useEffect, useRef } from 'react';
+import { scrollBehavior } from '@/lib/motion';
 
 /* ── Types ── */
 
@@ -395,7 +396,7 @@ export default function Page() {
   useEffect(() => {
     if (allAnswered && resultsRef.current) {
       setTimeout(() => {
-        resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        resultsRef.current?.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
       }, 100);
     }
   }, [allAnswered]);
