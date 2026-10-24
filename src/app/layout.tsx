@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Public_Sans } from "next/font/google";
+import { Fraunces } from "next/font/google";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -8,11 +8,8 @@ const fraunces = Fraunces({
   weight: ["400", "500", "600"],
 });
 
-const publicSans = Public_Sans({
-  subsets: ["latin"],
-  variable: "--font-public-sans",
-  weight: ["400", "500", "600"],
-});
+// Public Sans is self-hosted from public/fonts/public-sans (see globals.css).
+// Loading it through next/font/google with weight 600 broke Netlify's build.
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://justincase.scot"),
@@ -50,8 +47,17 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${publicSans.variable} h-full antialiased`}
+      className={`${fraunces.variable} h-full antialiased`}
     >
+      <head>
+        <link
+          rel="preload"
+          href="/fonts/public-sans/public-sans-latin-wght-normal.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin=""
+        />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
