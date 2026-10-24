@@ -1475,6 +1475,9 @@ export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
             <a href="/affiliate-disclosure">Affiliate disclosure</a>
           </nav>
           <p className="mt-4 text-xs text-[var(--muted)]">Some links are affiliate links. We earn a small commission at no cost to you.</p>
+          <p className="mt-4 text-xs text-[var(--brand-dark)]">
+            Some wording on this site was drafted with AI and reviewed by us.
+          </p>
         </footer>
       </div>
     </div>
