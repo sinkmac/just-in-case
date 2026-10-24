@@ -11,7 +11,7 @@ type DietaryFlags = {
   noDairy: boolean;
 };
 
-type DurationTier = "weekend" | "fortnight" | "month" | "season";
+export type DurationTier = "weekend" | "fortnight" | "month" | "season";
 
 const TIER_DATA: Record<DurationTier, { label: string; weeks: number; register: string; pictogram: string }> = {
   weekend: {
@@ -211,11 +211,11 @@ function TierPictogram({ tier, reducedFill }: { tier: DurationTier; reducedFill?
   );
 }
 
-export function PantryPlanner() {
+export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(1);
   const [budgetGbp, setBudgetGbp] = useState(120);
-  const [tier, setTier] = useState<DurationTier>("month");
+  const [tier, setTier] = useState<DurationTier>(initialTier ?? "month");
   const [showDietary, setShowDietary] = useState(false);
   const [dietaryFlags, setDietaryFlags] = useState<DietaryFlags>({
     vegetarian: false,
