@@ -36,8 +36,7 @@ export default function AboutPage() {
           Who runs it.
         </h2>
         <p className="mt-3 text-base leading-7 text-[var(--muted)]">
-          Just In Case is made by [your name / AI Scotland Productions] in
-          [kirriemuir, Scotland]. Get in touch at [email].
+          Just In Case is an independent site, made in Scotland.
         </p>
 
         <h2 className="mt-10 text-xl font-bold text-[var(--brand-dark)]">
