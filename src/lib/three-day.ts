@@ -193,7 +193,8 @@ export function foodUnit(item: FoodItem): Unit {
   return { one: "pack", many: "packs" };
 }
 
-// Variety rules for the three-day basket: at most 3 of any one food, and at
+// Variety rules for the three-day basket: at most 3 of any one food (more
+// only if needed to reach three days), and at
 // least one tinned fish or meat, one tinned vegetable or fruit, and one dried
 // fruit (where the diet allows).
 const BASKET_MAX_PER_FOOD = 3;
@@ -210,19 +211,27 @@ export type Basket = {
 
 /** The solver's cheapest-possible basket, power-out, for exactly three days. */
 export function exampleBasket(h: Household, foods: FoodItem[], dietaryFlags: DietaryFlags): Basket {
-  const plan = buildCheapestPlan(
-    { adults: h.adults, children: h.children, weeks: THREE_DAYS / 7, dietaryFlags, powerOut: true },
-    noCookPool(foods),
-    {
-      skipCategoryMinimums: true,
-      allowPartialWeek: true,
-      maxUnitsPerItem: BASKET_MAX_PER_FOOD,
-      mustInclude: BASKET_MUST_INCLUDE,
-    },
-  );
+  const plan = (maxUnitsPerItem: number) =>
+    buildCheapestPlan(
+      { adults: h.adults, children: h.children, weeks: THREE_DAYS / 7, dietaryFlags, powerOut: true },
+      noCookPool(foods),
+      {
+        skipCategoryMinimums: true,
+        allowPartialWeek: true,
+        maxUnitsPerItem,
+        mustInclude: BASKET_MUST_INCLUDE,
+      },
+    );
+  let result = plan(BASKET_MAX_PER_FOOD);
+  // If 3 per food can't reach three days (larger households, or a diet
+  // that narrows the choice), raise the limit one step at a time, only as
+  // far as it takes.
+  for (let cap = BASKET_MAX_PER_FOOD + 1; result.totalCaloriesPlanned < result.totalCaloriesNeeded && cap <= 99; cap++) {
+    result = plan(cap);
+  }
   return {
-    dailyCaloriesNeeded: plan.dailyCaloriesNeeded,
-    lines: plan.ranked.map((r) => ({ item: r.item, quantity: r.quantity })),
+    dailyCaloriesNeeded: result.dailyCaloriesNeeded,
+    lines: result.ranked.map((r) => ({ item: r.item, quantity: r.quantity })),
   };
 }
 
