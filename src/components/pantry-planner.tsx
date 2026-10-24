@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import foods from "../../data/foods.json";
 import { buildPlan, buildCheapestPlan, type FoodItem, type CheapestPlanResult } from "@/lib/planner";
+import { printOnly } from "@/lib/print";
 
 type DietaryFlags = {
   vegetarian: boolean;
@@ -30,7 +31,7 @@ const TIER_DATA: Record<DurationTier, { label: string; weeks: number; register: 
   month: {
     label: "A hard month",
     weeks: 4,
-    register: "A serious disruption. This is where most households should aim — and it still fits in one cupboard.",
+    register: "A serious disruption.",
     pictogram: "▣ 📦",
   },
   season: {
@@ -214,21 +215,27 @@ function TierPictogram({ tier, reducedFill }: { tier: DurationTier; reducedFill?
   );
 }
 
-export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
+// `embedded`: shown under the three-day planner as "Longer stores (optional)".
+// Hides this page's own header, footer and the weekend tier (the three-day
+// planner covers it). Every calculation is unchanged.
+export function PantryPlanner({ initialTier, embedded = false }: { initialTier?: DurationTier; embedded?: boolean }) {
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(1);
   const [budgetGbp, setBudgetGbp] = useState(120);
-  const [tier, setTier] = useState<DurationTier>(initialTier ?? "month");
+  const defaultTier: DurationTier = embedded ? "fortnight" : "month";
+  const startTier = initialTier && !(embedded && initialTier === "weekend") ? initialTier : defaultTier;
+  const [tier, setTier] = useState<DurationTier>(startTier);
 
   // Sync tier from URL param on mount so ?tier=weekend is honoured even when
   // the page is reached via client-side navigation without a full reload.
   const searchParams = useSearchParams();
   useEffect(() => {
     const urlTier = searchParams.get("tier");
+    if (embedded && urlTier === "weekend") return;
     if (urlTier && VALID_TIERS.includes(urlTier as DurationTier) && urlTier !== tier) {
       setTier(urlTier as DurationTier);
     }
-  }, [searchParams, tier]);
+  }, [searchParams, tier, embedded]);
   const [showDietary, setShowDietary] = useState(false);
   const [dietaryFlags, setDietaryFlags] = useState<DietaryFlags>({
     vegetarian: false,
@@ -421,8 +428,9 @@ export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
   }, [result, tierWeeks, tierLabel, budgetGbp]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-clip">
+    <div className={`${embedded ? "" : "min-h-screen "}bg-background text-foreground overflow-x-clip`}>
       <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8 print-shell">
+        {!embedded && (<>
         <header className="no-print mb-8">
           <h1 className="mt-2 text-3xl font-bold text-[var(--brand-dark)]">Just In Case</h1>
           <p className="mt-2 text-sm text-[var(--muted)]">Planning for the future you hope never comes. But just might.</p>
@@ -457,8 +465,9 @@ export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
             {" "}— seventeen quick questions, about three minutes, and an honest picture of where your household stands right now.
           </p>
         </div>
+        </>)}
 
-        <main className="grid gap-6 lg:grid-cols-[340px_1fr] items-start">
+        <main className="grid grid-cols-1 gap-6 lg:grid-cols-[340px_1fr] items-start">
           <section className="no-print rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm lg:sticky lg:top-6">
             <div className="space-y-6">
               <div>
@@ -535,7 +544,7 @@ export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
               <div>
                 <label className="mb-2 block text-sm font-semibold">Duration</label>
                 <div className="grid grid-cols-2 gap-2 items-stretch">
-                  {(["weekend", "fortnight", "month", "season"] as DurationTier[]).map((t) => (
+                  {(["weekend", "fortnight", "month", "season"] as DurationTier[]).filter((t) => !(embedded && t === "weekend")).map((t) => (
                     <button
                       key={t}
                       type="button"
@@ -606,7 +615,7 @@ export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
               <div className="pt-2 border-t border-dashed border-[var(--border)]">
               <button
                 type="button"
-                onClick={() => window.print()}
+                onClick={() => printOnly("longer")}
                 className="w-full rounded-full bg-[var(--brand)] px-5 py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-[var(--brand-dark)]"
               >
                 🖨 Print this list
@@ -840,7 +849,7 @@ export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
                       className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
                     >
                       See on Amazon
-                    </a>
+                    </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                   </div>
                   <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
                     Don't vacuum-seal loose rice or pasta directly in shrink bags — sharp grain edges can pierce the film over time. The safer method is a rigid container with a vacuum valve lid.
@@ -860,7 +869,7 @@ export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
                       className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
                     >
                       See on Amazon
-                    </a>
+                    </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                   </div>
                   <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
                     A compact, lightweight way to retain body heat if normal heating fails. Costs a few pounds and takes up almost no space.
@@ -880,7 +889,7 @@ export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
                       className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
                     >
                       See on Amazon
-                    </a>
+                    </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                   </div>
                   <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
                     A fire blanket is the more universal starting point — cheaper than an extinguisher, needs no training, and covers the most common domestic fire type (pan fires).
@@ -900,7 +909,7 @@ export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
                       className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
                     >
                       See on Amazon
-                    </a>
+                    </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                   </div>
                   <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
                     A step up from the fire blanket — covers wood, paper, flammable liquids, and electrical fires. One extinguisher per floor is the standard recommendation.
@@ -925,7 +934,7 @@ export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
                         className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
                       >
                         See on Amazon
-                      </a>
+                      </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                     </div>
                     <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
                       A plain multi-tier shelf unit is the cheapest way to get from "a shelf" to "a shelving unit" — no need for anything fancier. Basic wire or metal shelving runs about £15–£30, is floor-standing, and holds several times what a single cupboard shelf can.
@@ -944,7 +953,7 @@ export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
                         className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
                       >
                         See on Amazon
-                      </a>
+                      </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                     </div>
                     <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
                       If you don't have room for a shelf, under-bed boxes use space you already have and take up nothing extra. Stackable, cheap, and they keep tins and packets out of sight but still organised.
@@ -1038,7 +1047,7 @@ export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
                         className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
                       >
                         See on Amazon
-                      </a>
+                      </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                     </div>
                     <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
                       Filters remove bacteria and protozoa but not all viruses. Chlorine dioxide tablets handle a broader range but take longer to act. If you're treating from an unknown source, tablets are the safer bet.
@@ -1058,7 +1067,7 @@ export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
                         className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
                       >
                         See on Amazon
-                      </a>
+                      </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                     </div>
                     <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
                       A water butt collects rainwater for use when mains water is disrupted. Some UK councils and charities give water butts away free to households in fuel or water poverty — worth checking local schemes before buying, if you're eligible.
@@ -1166,7 +1175,7 @@ export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
                                   className="underline hover:text-[var(--brand-dark)]"
                                 >
                                   see options on Amazon
-                                </a>
+                                </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                               </p>
                             )}
                           </>
@@ -1223,7 +1232,7 @@ export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
                                       className="text-xs text-[var(--muted)] underline hover:text-[var(--brand)] no-print"
                                     >
                                       Buy on Amazon
-                                    </a>
+                                    </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                                   </td>
                                 </tr>
                               ))}
@@ -1266,7 +1275,7 @@ export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
                                         className="underline hover:text-[var(--brand-dark)]"
                                       >
                                         see options on Amazon
-                                      </a>
+                                      </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                                     </p>
                                   )}
                                 </>
@@ -1318,7 +1327,7 @@ export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
                                           className="text-[var(--muted)] underline hover:text-[var(--brand)] no-print"
                                         >
                                           Buy
-                                        </a>
+                                        </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                                       </td>
                                     </tr>
                                   ))}
@@ -1373,7 +1382,7 @@ export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
               </button>
               <button
                 type="button"
-                onClick={() => window.print()}
+                onClick={() => printOnly("longer")}
                 className="rounded-full bg-[var(--brand)] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[var(--brand-dark)]"
               >
                 🖨 Print this list
@@ -1463,6 +1472,7 @@ export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
           </p>
         </section>
 
+        {!embedded && (
         <footer className="no-print mt-8 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm">
           <p className="text-sm font-semibold text-[var(--brand-dark)]">Just In Case — justincase.scot</p>
           <nav className="mt-4 flex flex-wrap gap-3 text-sm text-[var(--muted)]">
@@ -1479,6 +1489,7 @@ export function PantryPlanner({ initialTier }: { initialTier?: DurationTier }) {
             Some wording on this site was drafted with AI and reviewed by us.
           </p>
         </footer>
+        )}
       </div>
     </div>
   );

@@ -156,3 +156,18 @@ input[type="range"] {
     break-inside: avoid;
   }
 }
+/* ── Planner page: print one list at a time ── */
+
+.keep-together {
+  break-inside: avoid;
+}
+
+@media print {
+  html:not([data-print="longer"]) .print-longer {
+    display: none !important;
+  }
+
+  html[data-print="longer"] .print-three-day {
+    display: none !important;
+  }
+}
