@@ -127,11 +127,11 @@ export default function HomePage() {
             </section>
 
             {/* Main button */}
-            {/* mb-0 keeps the supporting line tight under the button, exactly as
-                when the button sat inside an inline link. */}
+            {/* mb-3 leaves a little space before the supporting line (less than
+                the column's usual gap, so the line still reads with the button). */}
             <Link
               href="/planner?tier=weekend"
-              className="mb-0 flex sm:inline-flex w-full sm:w-auto h-[60px] items-center justify-center bg-[var(--brand)] text-white px-8 rounded-full font-medium text-[21px] hover:bg-[var(--brand-dark)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:ring-offset-2 focus:ring-offset-[var(--background)]"
+              className="mb-3 flex sm:inline-flex w-full sm:w-auto h-[60px] items-center justify-center bg-[var(--brand)] text-white px-8 rounded-full font-medium text-[21px] hover:bg-[var(--brand-dark)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:ring-offset-2 focus:ring-offset-[var(--background)]"
             >
               Show me what I need &rarr;
             </Link>
