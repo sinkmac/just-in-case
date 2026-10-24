@@ -316,6 +316,10 @@ export function ThreeDayPlanner({
             </div>
           </section>
 
+          <p className="mt-4 lg:hidden">
+            <a href="#shopping-list" className={linkClass}>Go to my shopping list</a>
+          </p>
+
           <div className="mt-8 space-y-6">
             {groups.before.map(renderGroup)}
 

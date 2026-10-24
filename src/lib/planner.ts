@@ -353,6 +353,12 @@ export type CheapestPlanOptions = {
   skipCategoryMinimums?: boolean;
   /** Honour plans shorter than a week (e.g. 3/7) instead of rounding up to 1. */
   allowPartialWeek?: boolean;
+  /** Never plan more than this many units of any one item. */
+  maxUnitsPerItem?: number;
+  /** Groups of item ids: one unit of the cheapest-per-calorie eligible item
+   *  from each group goes in before the calorie fill. A group with no
+   *  eligible item (e.g. fish when vegetarian) is skipped. */
+  mustInclude?: string[][];
 };
 
 export function buildCheapestPlan(
@@ -395,6 +401,16 @@ export function buildCheapestPlan(
     }
   }
 
+  // Phase 1b (opt-in): one of each must-include group, cheapest per calorie.
+  for (const group of options.mustInclude ?? []) {
+    const pick = eligible
+      .filter((item) => group.includes(item.id) && (caloriesPerUnit(item) ?? 0) > 0 && item.typical_unit_price_gbp > 0)
+      .sort((a, b) => a.typical_unit_price_gbp / caloriesPerUnit(a)! - b.typical_unit_price_gbp / caloriesPerUnit(b)!)[0];
+    if (!pick || group.some((id) => rankedLines.has(id))) continue;
+    addUnit(rankedLines, pick);
+    totalCost += pick.typical_unit_price_gbp;
+  }
+
   // Phase 2: If total calories < needed, fill with cheapest calories-per-pound
   let caloriesPlanned = Array.from(rankedLines.values()).reduce((sum, line) => sum + line.totalCalories, 0);
 
@@ -422,6 +438,7 @@ export function buildCheapestPlan(
       const existing = rankedLines.get(item.id);
       const existingCals = existing?.totalCalories ?? 0;
       const unitCals = caloriesPerUnit(item) ?? 0;
+      if (options.maxUnitsPerItem != null && (existing?.quantity ?? 0) >= options.maxUnitsPerItem) return false;
       return existingCals + unitCals <= totalCaloriesNeeded * 0.25;
     });
 

@@ -152,7 +152,7 @@ export function fixedGroups(h: Household, blankets: number): { before: Group[]; 
 
 export const TASKS: { id: string; text: string }[] = [
   { id: "charge", text: "Charge your power bank" },
-  { id: "cash", text: "Keep some cash at home, in coins and notes" },
+  { id: "cash", text: "Keep some cash at home, in coins and notes, as well as your cards" },
   {
     id: "documents",
     text: "Print copies of ID, insurance details and instructions for any medical equipment; keep them in a waterproof bag",
@@ -193,6 +193,16 @@ export function foodUnit(item: FoodItem): Unit {
   return { one: "pack", many: "packs" };
 }
 
+// Variety rules for the three-day basket: at most 3 of any one food, and at
+// least one tinned fish or meat, one tinned vegetable or fruit, and one dried
+// fruit (where the diet allows).
+const BASKET_MAX_PER_FOOD = 3;
+const BASKET_MUST_INCLUDE = [
+  ["tinned-tuna", "tinned-sardines", "tinned-mackerel", "tinned-salmon"],
+  ["tinned-tomatoes", "tinned-sweetcorn", "tinned-peas", "tinned-fruit"],
+  ["dried-apricots", "raisins", "dried-mango"],
+];
+
 export type Basket = {
   dailyCaloriesNeeded: number;
   lines: { item: FoodItem; quantity: number }[];
@@ -203,7 +213,12 @@ export function exampleBasket(h: Household, foods: FoodItem[], dietaryFlags: Die
   const plan = buildCheapestPlan(
     { adults: h.adults, children: h.children, weeks: THREE_DAYS / 7, dietaryFlags, powerOut: true },
     noCookPool(foods),
-    { skipCategoryMinimums: true, allowPartialWeek: true },
+    {
+      skipCategoryMinimums: true,
+      allowPartialWeek: true,
+      maxUnitsPerItem: BASKET_MAX_PER_FOOD,
+      mustInclude: BASKET_MUST_INCLUDE,
+    },
   );
   return {
     dailyCaloriesNeeded: plan.dailyCaloriesNeeded,

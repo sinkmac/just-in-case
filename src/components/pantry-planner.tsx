@@ -467,7 +467,7 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
         </div>
         </>)}
 
-        <main className="grid gap-6 lg:grid-cols-[340px_1fr] items-start">
+        <main className="grid grid-cols-1 gap-6 lg:grid-cols-[340px_1fr] items-start">
           <section className="no-print rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm lg:sticky lg:top-6">
             <div className="space-y-6">
               <div>
@@ -849,7 +849,7 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
                       className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
                     >
                       See on Amazon
-                    </a>
+                    </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                   </div>
                   <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
                     Don't vacuum-seal loose rice or pasta directly in shrink bags — sharp grain edges can pierce the film over time. The safer method is a rigid container with a vacuum valve lid.
@@ -869,7 +869,7 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
                       className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
                     >
                       See on Amazon
-                    </a>
+                    </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                   </div>
                   <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
                     A compact, lightweight way to retain body heat if normal heating fails. Costs a few pounds and takes up almost no space.
@@ -889,7 +889,7 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
                       className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
                     >
                       See on Amazon
-                    </a>
+                    </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                   </div>
                   <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
                     A fire blanket is the more universal starting point — cheaper than an extinguisher, needs no training, and covers the most common domestic fire type (pan fires).
@@ -909,7 +909,7 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
                       className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
                     >
                       See on Amazon
-                    </a>
+                    </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                   </div>
                   <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
                     A step up from the fire blanket — covers wood, paper, flammable liquids, and electrical fires. One extinguisher per floor is the standard recommendation.
@@ -934,7 +934,7 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
                         className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
                       >
                         See on Amazon
-                      </a>
+                      </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                     </div>
                     <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
                       A plain multi-tier shelf unit is the cheapest way to get from "a shelf" to "a shelving unit" — no need for anything fancier. Basic wire or metal shelving runs about £15–£30, is floor-standing, and holds several times what a single cupboard shelf can.
@@ -953,7 +953,7 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
                         className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
                       >
                         See on Amazon
-                      </a>
+                      </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                     </div>
                     <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
                       If you don't have room for a shelf, under-bed boxes use space you already have and take up nothing extra. Stackable, cheap, and they keep tins and packets out of sight but still organised.
@@ -1047,7 +1047,7 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
                         className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
                       >
                         See on Amazon
-                      </a>
+                      </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                     </div>
                     <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
                       Filters remove bacteria and protozoa but not all viruses. Chlorine dioxide tablets handle a broader range but take longer to act. If you're treating from an unknown source, tablets are the safer bet.
@@ -1067,7 +1067,7 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
                         className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--muted)] hover:bg-[var(--accent)] transition-colors"
                       >
                         See on Amazon
-                      </a>
+                      </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                     </div>
                     <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
                       A water butt collects rainwater for use when mains water is disrupted. Some UK councils and charities give water butts away free to households in fuel or water poverty — worth checking local schemes before buying, if you're eligible.
@@ -1175,7 +1175,7 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
                                   className="underline hover:text-[var(--brand-dark)]"
                                 >
                                   see options on Amazon
-                                </a>
+                                </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                               </p>
                             )}
                           </>
@@ -1232,7 +1232,7 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
                                       className="text-xs text-[var(--muted)] underline hover:text-[var(--brand)] no-print"
                                     >
                                       Buy on Amazon
-                                    </a>
+                                    </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                                   </td>
                                 </tr>
                               ))}
@@ -1275,7 +1275,7 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
                                         className="underline hover:text-[var(--brand-dark)]"
                                       >
                                         see options on Amazon
-                                      </a>
+                                      </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                                     </p>
                                   )}
                                 </>
@@ -1327,7 +1327,7 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
                                           className="text-[var(--muted)] underline hover:text-[var(--brand)] no-print"
                                         >
                                           Buy
-                                        </a>
+                                        </a> <span className="text-[10px] text-[var(--muted)]">(affiliate)</span>
                                       </td>
                                     </tr>
                                   ))}
