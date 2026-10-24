@@ -101,6 +101,11 @@ export default function HomePage() {
           </nav>
         </header>
 
+        {/* Dated line */}
+        <p className="mb-2 text-sm text-[var(--muted)]">
+          Updated for the government&apos;s Be Ready campaign, 22 October 2026.
+        </p>
+
         {/* Headline */}
         <h1 className="mb-8 text-[34px] sm:text-[46px] lg:text-[52px] font-semibold text-[var(--brand-dark)] font-serif leading-tight">
           Be ready for three days.
@@ -186,13 +191,13 @@ export default function HomePage() {
           >
             published advice
           </Link>
-          is about being prepared for disruption. It doesn't announce a specific impending emergency. Storms, power cuts and cyberattacks can interrupt water, shopping, payments and communications. You don’t need to know what causes a disruption to be ready for it. Having a few essentials at home gives you some breathing room, and helps emergency services concentrate on people who need them most.
+          is about being prepared for disruption. It doesn't announce a specific impending emergency. Storms, power cuts and cyberattacks can interrupt water, shopping, payments and communications. You don’t need to know what causes a disruption to be ready for it. The government points to last winter&apos;s storms, this summer&apos;s wildfires and risks to power and online services. Having a few essentials at home gives you some breathing room, and helps emergency services concentrate on people who need them most.
           </p>
           <p className="mt-2 text-[19px] text-[var(--brand-dark)] leading-7">
             We built Just In Case to make that advice useful. What does your household need? How much have you already got? And what's still missing?
           </p>
           <p className="mt-2 text-[19px] text-[var(--brand-dark)] leading-7">
-            Start with three days and add things as you can. A longer store is your choice.
+            Start with three days and add things as you can. A longer store is your choice. It&apos;s easier to build up slowly now than to shop in a hurry when everyone else is.
           </p>
           <p className="mt-2 text-[21px] text-[var(--brand-dark)] leading-7 font-serif">
             A little preparation now can make a difficult few days easier. Just in case.
