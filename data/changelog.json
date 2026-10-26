@@ -3,6 +3,11 @@
   "lastChecked": "2026-10",
   "entries": [
     {
+      "date": "2026-10-26",
+      "kind": "item",
+      "text": "Corrected the calories in eight tinned foods. We had been counting the whole weight on the tin, including the water you pour away, so a tin of chickpeas was counted at more than double what you actually eat. Plans now count drained weight. Added a tin opener to the list, and a note on opened tins when there's no fridge."
+    },
+    {
       "date": "2026-10-24",
       "kind": "copy",
       "text": "New front page and three-day planner, built around the government's Be Ready advice. Added a note on how we use AI. Fixed broken links and some display problems."

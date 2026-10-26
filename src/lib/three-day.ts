@@ -1,4 +1,4 @@
-import { buildCheapestPlan, type DietaryFlags, type FoodItem } from "./planner";
+import { buildCheapestPlan, edibleGrams, type DietaryFlags, type FoodItem } from "./planner";
 
 // The three-day planner. Pure logic only: what each line needs for a
 // household, what's still to get, and the plain-text shopping list. Nothing
@@ -67,14 +67,27 @@ export function fixedGroups(h: Household, blankets: number): { before: Group[]; 
           },
           {
             id: "water-extra",
-            name: "More for washing and cooking (optional)",
-            note: "More for washing and cooking, if you have room.",
+            name: "More for washing and cooking",
+            note: "The 3 litres is for drinking only. You'll need more for washing and cooking, so store as much as you have room for.",
             optional: true,
           },
         ],
       },
     ],
     after: [
+      {
+        id: "kitchen",
+        heading: "To open and eat it",
+        lines: [
+          {
+            id: "tin-opener",
+            name: "Tin opener",
+            note: "A manual one, in case the power is off. Check it works.",
+            unit: { one: "tin opener", many: "tin openers" },
+            amount: 1,
+          },
+        ],
+      },
       {
         id: "warmth",
         heading: "Warmth",
@@ -180,7 +193,7 @@ export function noCookPool(foods: FoodItem[]): FoodItem[] {
 }
 
 export function caloriesPerPack(item: FoodItem): number {
-  return item.cal_per_100g == null ? 0 : (item.cal_per_100g / 100) * item.typical_unit_g;
+  return item.cal_per_100g == null ? 0 : (item.cal_per_100g / 100) * edibleGrams(item);
 }
 
 export function packSize(item: FoodItem): string {
@@ -235,11 +248,18 @@ export function exampleBasket(h: Household, foods: FoodItem[], dietaryFlags: Die
   };
 }
 
-/** Days of energy, rounded down to whole days, or one decimal under a day. */
-export function basketDays(lines: { item: FoodItem; quantity: number }[], dailyCaloriesNeeded: number): string {
+/** What the basket actually covers. Rounding down to whole days used to turn
+ *  2.93 days into "2", which overstated the shortfall; rounding up would have
+ *  presented a short basket as a finished three days. So three days or more
+ *  reads as three, and anything short keeps a decimal and is named as short. */
+export function basketCoverage(
+  lines: { item: FoodItem; quantity: number }[],
+  dailyCaloriesNeeded: number,
+): { days: number; label: string; short: boolean } {
   const cals = lines.reduce((sum, l) => sum + caloriesPerPack(l.item) * l.quantity, 0);
   const days = cals / Math.max(1, dailyCaloriesNeeded);
-  return days >= 1 ? String(Math.floor(days)) : days.toFixed(1);
+  if (days >= THREE_DAYS) return { days, label: String(THREE_DAYS), short: false };
+  return { days, label: (Math.floor(days * 10) / 10).toFixed(1), short: true };
 }
 
 // ── What's left ──────────────────────────────────────────────────────────────
