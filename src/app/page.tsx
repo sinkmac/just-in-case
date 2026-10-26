@@ -16,7 +16,7 @@ export const viewport: Viewport = {
 
 const ESSENTIALS = [
   { id: "water", title: "Water", body: "3 litres each a day to drink" },
-  { id: "food", title: "Food", body: "That needs no cooking" },
+  { id: "food", title: "Food", body: "Food that keeps without refrigeration and needs no cooking" },
   { id: "light", title: "Light", body: "A torch and spare batteries" },
   { id: "warmth", title: "Warmth", body: "Blankets and warm layers" },
   { id: "news", title: "News", body: "A battery or wind-up radio" },
@@ -129,12 +129,17 @@ export default function HomePage() {
             {/* Main button */}
             {/* mb-3 leaves a little space before the supporting line (less than
                 the column's usual gap, so the line still reads with the button). */}
-            <Link
-              href="/planner?tier=weekend"
-              className="mb-3 flex sm:inline-flex w-full sm:w-auto h-[60px] items-center justify-center bg-[var(--brand)] text-white px-8 rounded-full font-medium text-[21px] hover:bg-[var(--brand-dark)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:ring-offset-2 focus:ring-offset-[var(--background)]"
-            >
-              Show me what I need &rarr;
-            </Link>
+            <div className="mb-3 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5">
+              <Link
+                href="/planner?tier=weekend"
+                className="flex sm:inline-flex w-full sm:w-auto h-[60px] items-center justify-center bg-[var(--brand)] text-white px-8 rounded-full font-medium text-[21px] hover:bg-[var(--brand-dark)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:ring-offset-2 focus:ring-offset-[var(--background)]"
+              >
+                Show me what I need &rarr;
+              </Link>
+              <span className="text-[17px] text-[var(--brand-dark)]">
+                Takes about five minutes.
+              </span>
+            </div>
 
             {/* Supporting line */}
             <p className="text-[19px] text-[var(--brand-dark)] leading-7">
@@ -164,7 +169,6 @@ export default function HomePage() {
           <h2 className="mb-4 text-[19px] font-semibold text-[var(--brand-dark)] font-serif">
             Get the right amounts for your household
           </h2>
-          <p className="mb-6 text-[19px] text-[var(--brand-dark)]">About five minutes.</p>
           <ol className="space-y-2 text-[19px] text-[var(--brand-dark)] leading-7 list-decimal list-inside font-serif">
             <li>Tell us who&rsquo;s at home.</li>
             <li>Tick what you already have.</li>
@@ -178,16 +182,17 @@ export default function HomePage() {
             Why Just In Case?
           </p>
           <p className="mt-2 text-[19px] text-[var(--brand-dark)] leading-7">
-            The government advises keeping three days of supplies. It's reasonable to ask: why now? Is something about to happen?
+            The UK government advises households to prepare for three days of disruption. This is general{" "}
+            <Link
+              href="https://beready.campaign.gov.uk/be-ready-for-emergencies/"
+              className="text-[var(--brand)] underline underline-offset-2 hover:text-[var(--brand-dark)] transition-colors"
+            >
+              preparedness advice
+            </Link>
+            , rather than an announcement of a specific impending emergency.
           </p>
           <p className="mt-2 text-[19px] text-[var(--brand-dark)] leading-7">
-          The <Link
-            href="https://beready.campaign.gov.uk/be-ready-for-emergencies/"
-            className="text-[var(--brand)] underline underline-offset-2 hover:text-[var(--brand-dark)] transition-colors"
-          >
-            published advice
-          </Link>
-          is about being prepared for disruption. It doesn't announce a specific impending emergency. Storms, power cuts and cyberattacks can interrupt water, shopping, payments and communications. You don’t need to know what causes a disruption to be ready for it. Having a few essentials at home gives you some breathing room, and helps emergency services concentrate on people who need them most.
+            Storms, power cuts and cyberattacks can interrupt water, shopping, payments and communications. You don’t need to know what causes a disruption to be ready for it. Having a few essentials at home gives you some breathing room, and helps emergency services concentrate on people who need them most.
           </p>
           <p className="mt-2 text-[19px] text-[var(--brand-dark)] leading-7">
             We built Just In Case to make that advice useful. What does your household need? How much have you already got? And what's still missing?
@@ -199,12 +204,11 @@ export default function HomePage() {
             A little preparation now can make a difficult few days easier. Just in case.
           </p>
           <p className="mt-2 text-[19px] text-[var(--brand-dark)] leading-7">
-            Link:{" "}
             <Link
               href="/about"
               className="text-[var(--brand)] underline underline-offset-2 hover:text-[var(--brand-dark)] transition-colors"
             >
-              About us and our approach
+              About us and our approach &rarr;
             </Link>
           </p>
         </section>
