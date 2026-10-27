@@ -162,6 +162,28 @@ function passesDietaryFlags(item: FoodItem, flags: DietaryFlags): boolean {
   return true;
 }
 
+/** Within one category, put the item the plan has fewest of first, so the
+ *  category is shared out instead of all going to the single best scorer.
+ *  Items keep their slots in the pool, so the order between categories (and
+ *  so what a tight budget buys first) is unchanged.
+ *
+ *  Vegetables need this: they carry few calories, so a calorie floor met by
+ *  one item meant 46 tubes of tomato puree, or 34 tins of sweetcorn. */
+function takeTurnsWithin(category: string, pool: FoodItem[], lines: Map<string, RankedItem>): FoodItem[] {
+  const slots = pool.map((item, i) => (item.category === category ? i : -1)).filter((i) => i >= 0);
+  if (slots.length < 2) return pool;
+  const inTurn = slots
+    .map((i) => pool[i])
+    .map((item, rank) => ({ item, rank, have: lines.get(item.id)?.quantity ?? 0 }))
+    .sort((a, b) => a.have - b.have || a.rank - b.rank)
+    .map((x) => x.item);
+  const out = [...pool];
+  slots.forEach((slot, k) => {
+    out[slot] = inTurn[k];
+  });
+  return out;
+}
+
 function rankWithinCategory(items: FoodItem[], powerOut = false): FoodItem[] {
   return [...items].sort((a, b) => (scoreItem(b, powerOut) ?? -1) - (scoreItem(a, powerOut) ?? -1));
 }
@@ -295,9 +317,12 @@ export function buildPlan(input: HouseholdInput, foods: FoodItem[]): PlannerResu
       })
       .map(([category]) => category);
 
-    const candidatePool = (preferredCategories.length
-      ? scoreRanked.filter((item) => preferredCategories.includes(item.category))
-      : scoreRanked
+    const candidatePool = takeTurnsWithin(
+      'vegetable',
+      preferredCategories.length
+        ? scoreRanked.filter((item) => preferredCategories.includes(item.category))
+        : scoreRanked,
+      rankedLines,
     );
 
     const next = candidatePool.find((item) => {

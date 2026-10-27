@@ -5,6 +5,11 @@
     {
       "date": "2026-10-27",
       "kind": "item",
+      "text": "Fixed the longer plans buying dozens of tubes of tomato puree. Puree now counts as a flavouring, and the vegetables in a longer plan are shared between sweetcorn, peas and tomatoes instead of all going to one."
+    },
+    {
+      "date": "2026-10-27",
+      "kind": "item",
       "text": "Added two gluten-free starchy foods you can eat cold: gluten-free oat crackers and gluten-free rice cakes, both labelled gluten free. Every three-day basket now includes a starchy food. The gluten-free ones only appear when the gluten-free filter is ticked, so other households still get ordinary oatcakes."
     },
     {
