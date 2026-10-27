@@ -14,62 +14,6 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-const ESSENTIALS = [
-  { id: "water", title: "Water", body: "3 litres each a day to drink" },
-  { id: "food", title: "Food", body: "Food that keeps without refrigeration and needs no cooking" },
-  { id: "light", title: "Light", body: "A torch and spare batteries" },
-  { id: "warmth", title: "Warmth", body: "Blankets and warm layers" },
-  { id: "news", title: "News", body: "A battery or wind-up radio" },
-  { id: "other", title: "Other essentials", body: "Cash, first aid, medicines" },
-] as const;
-
-function EssentialsIcon({ id }: { id: string }) {
-  const icons: Record<string, React.ReactNode> = {
-    water: (
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
-        <path d="M12 3c3 4 6 7.5 6 11a6 6 0 0 1-12 0c0-3.5 3-7 6-11z" />
-      </svg>
-    ),
-    food: (
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
-        <ellipse cx="12" cy="6" rx="7" ry="2.5" />
-        <path d="M5 6v12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5V6" />
-        <path d="M5 10.5c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5" />
-      </svg>
-    ),
-    light: (
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
-        <path d="M9 21h6" />
-        <path d="M10 17h4" />
-        <path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.3 1 2.1h5c0-.8.4-1.6 1-2.1A6 6 0 0 0 12 3z" />
-      </svg>
-    ),
-    warmth: (
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
-        <path d="M4 7h16v11H4z" />
-        <path d="M4 11h16" />
-        <path d="M8 7V5h8v2" />
-      </svg>
-    ),
-    news: (
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
-        <rect x="3" y="9" width="18" height="11" rx="2" />
-        <circle cx="9" cy="14.5" r="2.5" />
-        <path d="M15 13h3" />
-        <path d="M15 16h3" />
-        <path d="M7 9l10-5" />
-      </svg>
-    ),
-    other: (
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
-        <path d="M12 5v14" />
-        <path d="M5 12h14" />
-      </svg>
-    ),
-  };
-  return <span className="shrink-0 mt-0.5">{icons[id]}</span>;
-}
-
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -106,35 +50,34 @@ export default function HomePage() {
           Be ready for three days.
         </h1>
 
-        {/* Hero: essentials grid, button, supporting line, illustration */}
+        {/* Hero: starting point, button, official advice, illustration */}
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div className="space-y-6">
-            {/* Essentials grid */}
-            <section className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-              {ESSENTIALS.map((item) => (
-                <div key={item.id} className="flex items-start gap-3">
-                  <EssentialsIcon id={item.id} />
-                  <div>
-                    <p className="text-[17px] font-semibold text-[var(--brand-dark)] font-serif">
-                      {item.title}
-                    </p>
-                    <p className="mt-0.5 text-[17px] text-[var(--brand-dark)]">
-                      {item.body}
-                    </p>
-                  </div>
-                </div>
-              ))}
+            {/* Starting point: what three days involves */}
+            <section className="space-y-4">
+              <h2 className="text-[24px] sm:text-[28px] font-semibold text-[var(--brand-dark)] font-serif leading-snug">
+                Three days starts with things you already use.
+              </h2>
+              <p className="text-[19px] text-[var(--brand-dark)] leading-8">
+                Familiar food you can eat without cooking, drinking water, a torch and a way to keep
+                your phone charged. Add your household&rsquo;s essentials, such as medicines, baby
+                supplies or pet food.
+              </p>
+              <p className="text-[19px] text-[var(--brand-dark)] leading-8">
+                You may already have much of it. Check your cupboards first, then build up a little at
+                a time.
+              </p>
             </section>
 
             {/* Main button */}
             {/* mb-3 leaves a little space before the supporting line (less than
                 the column's usual gap, so the line still reads with the button). */}
-            <div className="mb-3 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5">
+            <div className="mb-3 flex flex-col gap-3">
               <Link
                 href="/planner?tier=weekend"
-                className="flex sm:inline-flex w-full sm:w-auto h-[60px] items-center justify-center bg-[var(--brand)] text-white px-8 rounded-full font-medium text-[21px] hover:bg-[var(--brand-dark)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:ring-offset-2 focus:ring-offset-[var(--background)]"
+                className="flex sm:inline-flex w-full sm:w-auto self-start min-h-[60px] py-3 items-center justify-center text-center leading-snug bg-[var(--brand)] text-white px-8 rounded-full font-medium text-[20px] sm:text-[21px] sm:whitespace-nowrap hover:bg-[var(--brand-dark)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:ring-offset-2 focus:ring-offset-[var(--background)]"
               >
-                Show me what I need &rarr;
+                See what your household needs &rarr;
               </Link>
               <span className="text-[17px] text-[var(--brand-dark)]">
                 Takes about five minutes.
@@ -143,7 +86,6 @@ export default function HomePage() {
 
             {/* Supporting line */}
             <p className="text-[19px] text-[var(--brand-dark)] leading-7">
-              Start with what you have, and build up a little at a time.{" "}
               <Link
                 href="https://beready.campaign.gov.uk/be-ready-for-emergencies/"
                 className="text-[var(--brand)] underline underline-offset-2 hover:text-[var(--brand-dark)] transition-colors"
@@ -174,6 +116,23 @@ export default function HomePage() {
             <li>Tick what you already have.</li>
             <li>Get your shopping list.</li>
           </ol>
+        </section>
+
+        {/* And if it lasts longer? */}
+        <section className="mt-12 border-t border-dashed border-[var(--border)] pt-8">
+          <h2 className="text-[22px] sm:text-[24px] font-semibold text-[var(--brand-dark)] font-serif">
+            And if it lasts longer?
+          </h2>
+          <p className="mt-2 text-[19px] text-[var(--brand-dark)] leading-7">
+            Once you&rsquo;ve covered three days,{" "}
+            <Link
+              href="/planner?tier=fortnight"
+              className="text-[var(--brand)] underline underline-offset-2 hover:text-[var(--brand-dark)] transition-colors"
+            >
+              explore what a longer plan would involve
+            </Link>
+            .
+          </p>
         </section>
 
         {/* Why Just In Case? */}
@@ -212,17 +171,6 @@ export default function HomePage() {
             </Link>
           </p>
         </section>
-
-        {/* Side link */}
-        <p className="mt-12 text-sm text-[var(--muted)]">
-          Already covered?{" "}
-          <Link
-            href="/planner"
-            className="text-[var(--brand)] underline underline-offset-2 hover:text-[var(--brand-dark)] transition-colors"
-          >
-            Plan a longer store
-          </Link>
-        </p>
 
         {/* Footer */}
         <footer className="mt-16 border-t border-[var(--border)] pt-8">
