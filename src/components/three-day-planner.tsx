@@ -5,14 +5,19 @@ import Link from "next/link";
 import foods from "../../data/foods.json";
 import { printOnly } from "@/lib/print";
 import { scrollBehavior } from "@/lib/motion";
-import type { DietaryFlags, FoodItem } from "@/lib/planner";
+import {
+  ADULT_DAILY_CALORIES,
+  CHILD_DAILY_CALORIES,
+  type DietaryFlags,
+  type FoodItem,
+} from "@/lib/planner";
 import {
   DEFAULT_HOUSEHOLD,
   TASKS,
   TASKS_HEADING,
   SHOPPING_LIST_NOTE,
   amountLeftText,
-  basketDays,
+  basketCoverage,
   exampleBasket,
   fixedGroups,
   foodUnit,
@@ -129,6 +134,8 @@ export function ThreeDayPlanner({
     }
     return lines;
   }, [basket, basketOverrides]);
+
+  const coverage = basketCoverage(basketLines, basket.dailyCaloriesNeeded);
 
   const foodGroup: Group = {
     id: "food",
@@ -343,7 +350,24 @@ export function ThreeDayPlanner({
               </div>
               <ul className="mt-1">{foodGroup.lines.map(renderLine)}</ul>
               <p className="mt-3 font-serif text-[19px] font-semibold">
-                This basket gives about {basketDays(basketLines, basket.dailyCaloriesNeeded)} days of energy for your household.
+                {!coverage.short
+                  ? `This basket gives about ${coverage.label} days of energy for your household.`
+                  : coverage.nearlyThere
+                    ? "This basket gives just under three days of energy — a little short."
+                    : `This basket gives about ${coverage.label} days of energy — short of three days.`}
+              </p>
+              <p className="mt-1 text-[var(--secondary)]">
+                {`We’ve used planning estimates of ${ADULT_DAILY_CALORIES.toLocaleString()} kcal per adult ` +
+                  `and ${CHILD_DAILY_CALORIES.toLocaleString()} per child each day: ` +
+                  `${basket.dailyCaloriesNeeded.toLocaleString()} kcal for your household. Actual needs vary. ` +
+                  `The child allowance does not account for age and may underestimate older ` +
+                  `children’s and teenagers’ needs.`}
+              </p>
+              <p className="mt-2 text-[var(--secondary)]">
+                Many tinned foods need refrigeration once opened. Follow the storage instructions on the
+                label. If you cannot keep leftovers safely chilled, choose tins your household can
+                finish at one meal. Transfer any leftovers you refrigerate into a suitable covered
+                container.
               </p>
             </section>
 
@@ -428,7 +452,7 @@ export function ThreeDayPlanner({
         <section className="no-print mt-10">
           <h2 className="font-serif text-[21px] font-semibold">How we worked this out</h2>
           <p className="mt-2">
-            Water: 3 litres per person per day for drinking, as the government advises. Food: three days of energy for your household, chosen from foods that keep and need no cooking. This counts energy (calories) only, so check it suits everyone&apos;s needs. Prices change, so check before you go.
+            Water: 3 litres per person per day for drinking, as the government advises, plus more for washing and cooking. Food: three days of energy for your household, chosen from foods that keep and need no cooking. Calculations use the edible quantity and the nutrition information on the reference product&rsquo;s label, including drained weight where appropriate. Every food the three-day planner counts calories for has been checked against a named product label. Brands and pack sizes vary, so check what you buy. This counts energy (calories) only, so check it suits everyone&apos;s needs. Prices change, so check before you go.
           </p>
           <p className="mt-3">
             <a href={OFFICIAL_ADVICE} className={linkClass}>Read the official advice</a>

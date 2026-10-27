@@ -20,7 +20,15 @@ export type FoodItem = {
   id: string;
   name: string;
   cal_per_100g: number | null;
+  /** What you buy: the pack or tin weight, used for shopping quantities. */
   typical_unit_g: number;
+  /** What you eat: drained weight for a tin poured off, else the pack weight.
+   *  Calories are counted on this, never on typical_unit_g. */
+  edible_unit_g?: number;
+  /** Which weight cal_per_100g is stated against on the label. */
+  nutrition_basis?: "drained" | "as-sold";
+  /** Set only where the figures were read off a named product label. */
+  cal_verified?: { source: string; checked: string } | null;
   typical_unit_price_gbp: number;
   shelf_life_months: number;
   storage_litres_per_unit: number;
@@ -103,15 +111,30 @@ const CATEGORY_MAX_BUDGET_SHARE: Record<string, number> = {
 // A multiplier on score (which already encodes calories-per-pound and
 // storage). Applied ONLY when powerOut is true; absent/false => 1.0 => the
 // ranking is byte-identical to the pure cost-per-calorie baseline.
+// The energy the plan is worked out from, and shown on the page so a reader can
+// judge it. 2,000 kcal is the standard daily reference used on food labels; the
+// child figure is a fraction of it. These are averages, not individual targets:
+// UK reference values for adults run higher for men than women, and a child's
+// need rises steeply with age.
+export const ADULT_DAILY_CALORIES = 2000;
+export const CHILD_CALORIE_RATIO = 0.6;
+export const CHILD_DAILY_CALORIES = ADULT_DAILY_CALORIES * CHILD_CALORIE_RATIO;
+
 const NO_COOK_PROTEIN_POWER_OUT_BOOST = 1.6;
 
 function isNoCookProtein(item: FoodItem): boolean {
   return item.category === "protein" && item.prep === "no-cook";
 }
 
+/** Grams actually eaten from one pack. A 400g tin of chickpeas drains to 240g,
+ *  so counting calories on the tin weight overstates them by more than double. */
+export function edibleGrams(item: FoodItem): number {
+  return item.edible_unit_g ?? item.typical_unit_g;
+}
+
 function caloriesPerUnit(item: FoodItem): number | null {
   if (item.cal_per_100g == null) return null;
-  return (item.cal_per_100g / 100) * item.typical_unit_g;
+  return (item.cal_per_100g / 100) * edibleGrams(item);
 }
 
 function scoreItem(item: FoodItem, powerOut = false): number | null {
@@ -193,8 +216,8 @@ export function buildPlan(input: HouseholdInput, foods: FoodItem[]): PlannerResu
   const dietaryFlags = input.dietaryFlags ?? {};
   const powerOut = input.powerOut === true;
 
-  const childRatio = input.childCalorieRatio ?? 0.6;
-  const dailyCaloriesNeeded = Math.round((adults + children * childRatio) * 2000);
+  const childRatio = input.childCalorieRatio ?? CHILD_CALORIE_RATIO;
+  const dailyCaloriesNeeded = Math.round((adults + children * childRatio) * ADULT_DAILY_CALORIES);
   const totalCaloriesNeeded = dailyCaloriesNeeded * (weeks * 7);
   const BASELINE_MAX_CALORIES_PER_ITEM = totalCaloriesNeeded * 0.15;
 
@@ -372,8 +395,8 @@ export function buildCheapestPlan(
   const dietaryFlags = input.dietaryFlags ?? {};
   const powerOut = input.powerOut === true;
 
-  const childRatio = input.childCalorieRatio ?? 0.6;
-  const dailyCaloriesNeeded = Math.round((adults + children * childRatio) * 2000);
+  const childRatio = input.childCalorieRatio ?? CHILD_CALORIE_RATIO;
+  const dailyCaloriesNeeded = Math.round((adults + children * childRatio) * ADULT_DAILY_CALORIES);
   const totalCaloriesNeeded = dailyCaloriesNeeded * (weeks * 7);
 
   const eligible = foods.filter((item) => passesDietaryFlags(item, dietaryFlags));
@@ -433,12 +456,23 @@ export function buildCheapestPlan(
       return effA - effB;
     });
 
+  // Morale food (honey, chocolate) is a comfort, not a staple. The budget
+  // solver already caps it at a tenth of the calories; without the same cap
+  // here, correcting the tinned-food calories pushed the gluten-free basket
+  // to three jars of honey.
+  const maxMoraleCaloriesFill = totalCaloriesNeeded * 0.1;
+
   while (caloriesPlanned < totalCaloriesNeeded) {
+    const moraleCalories = Array.from(rankedLines.values())
+      .filter((line) => line.category === "morale")
+      .reduce((sum, line) => sum + line.totalCalories, 0);
+
     const next = fillPool.find((item) => {
       const existing = rankedLines.get(item.id);
       const existingCals = existing?.totalCalories ?? 0;
       const unitCals = caloriesPerUnit(item) ?? 0;
       if (options.maxUnitsPerItem != null && (existing?.quantity ?? 0) >= options.maxUnitsPerItem) return false;
+      if (item.category === "morale" && moraleCalories + unitCals > maxMoraleCaloriesFill) return false;
       return existingCals + unitCals <= totalCaloriesNeeded * 0.25;
     });
 

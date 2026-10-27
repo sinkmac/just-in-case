@@ -485,6 +485,9 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
 
         <main className="grid grid-cols-1 gap-6 lg:grid-cols-[340px_1fr] items-start">
           <section className="no-print rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm lg:sticky lg:top-6">
+            <p className="mb-5 text-sm text-[var(--muted)]">
+              Some nutrition figures are still awaiting verification.
+            </p>
             <div className="space-y-6">
               <div>
                 <label className="mb-2 block text-sm font-semibold">Adults</label>
