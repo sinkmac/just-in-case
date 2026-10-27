@@ -630,6 +630,52 @@ for (const id of ['gf-rice-cakes', 'gf-oat-crackers']) {
   check(f.only_for_diet === 'glutenFree', `${id}: offered only when gluten-free is ticked`);
 }
 
+// ── Suite 14: Longer plans share vegetables; no tomato-puree mountains ──────
+//
+// The longer-store plans need 5% of energy from vegetables. Vegetables carry
+// few calories, so that floor went entirely to the most concentrated one:
+// 46 tubes of tomato puree in a month, and with puree removed, 34 tins of
+// sweetcorn. Puree is now a flavouring, and vegetables take turns.
+
+suite('14. Longer Plans — vegetables shared out, puree treated as a flavouring');
+
+{
+  const puree = foods.find((f) => f.id === 'tomato-puree');
+  check(puree?.category === 'flavour', 'tomato puree is a flavouring, not a vegetable portion');
+
+  let worstShare = 0;
+  let worstLabel = '';
+  let pureeSeen = 0;
+  let plans = 0;
+  for (const adults of [1, 2, 4]) {
+    for (const children of [0, 1, 3]) {
+      for (const weeks of [2, 4, 12]) {
+        for (const budgetGbp of [60, 120, 250]) {
+          for (const flags of [{}, { vegetarian: true }, { glutenFree: true }] as DietaryFlags[]) {
+            const p = buildPlan({ adults, children, weeks, budgetGbp, dietaryFlags: flags }, foods);
+            plans++;
+            pureeSeen += p.ranked.filter((l) => l.item.id === 'tomato-puree').length;
+            const veg = p.ranked.filter((l) => l.category === 'vegetable');
+            const tins = veg.reduce((n, l) => n + l.quantity, 0);
+            if (veg.length > 1 && tins >= 6) {
+              const top = Math.max(...veg.map((l) => l.quantity)) / tins;
+              if (top > worstShare) {
+                worstShare = top;
+                worstLabel = `A${adults}C${children} ${weeks}w £${budgetGbp}`;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  check(pureeSeen === 0, `no tomato puree bought as food across ${plans} longer plans`);
+  check(
+    worstShare <= 0.5,
+    `no one vegetable is more than half the vegetable tins (worst ${(worstShare * 100).toFixed(0)}%, ${worstLabel})`,
+  );
+}
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 
 console.log(`\n══════════════════════════════════════════════════════════`);
