@@ -123,11 +123,15 @@
   {
     "id": "crackers-oatcakes",
     "name": "Crackers / oatcakes",
-    "cal_per_100g": 450,
+    "cal_per_100g": 446,
     "typical_unit_g": 300,
     "edible_unit_g": 300,
     "nutrition_basis": "as-sold",
-    "cal_verified": null,
+    "cal_verified": {
+      "source": "https://www.sainsburys.co.uk/groceries/product/sainsburys-rough-oatcakes-250g",
+      "checked": "2026-10-27",
+      "pack_size_matches_source": false
+    },
     "typical_unit_price_gbp": 1.8,
     "shelf_life_months": 9,
     "storage_litres_per_unit": 0.9,
@@ -169,7 +173,8 @@
     "nutrition_basis": "drained",
     "cal_verified": {
       "source": "https://www.sainsburys.co.uk/groceries/product/sainsburys-chickpeas-in-water-400g-240g",
-      "checked": "2026-10-26"
+      "checked": "2026-10-27",
+      "pack_size_matches_source": true
     },
     "typical_unit_price_gbp": 0.65,
     "shelf_life_months": 36,
@@ -192,9 +197,11 @@
     "nutrition_basis": "drained",
     "cal_verified": {
       "source": "https://www.sainsburys.co.uk/groceries/product/john-west-tuna-chunks-in-spring-water-4x125g-102g-drained",
-      "checked": "2026-10-26"
+      "checked": "2026-10-27",
+      "pack_size_matches_source": true
     },
     "typical_unit_price_gbp": 1.2,
+    "priceNote": "Pack size corrected to 125g; price not yet rechecked for this size.",
     "shelf_life_months": 36,
     "storage_litres_per_unit": 0.18,
     "vegetarian": false,
@@ -215,7 +222,8 @@
     "nutrition_basis": "drained",
     "cal_verified": {
       "source": "https://www.sainsburys.co.uk/groceries/product/sainsburys-sardines-in-brine-120g-90g",
-      "checked": "2026-10-26"
+      "checked": "2026-10-27",
+      "pack_size_matches_source": true
     },
     "typical_unit_price_gbp": 0.95,
     "shelf_life_months": 36,
@@ -232,11 +240,15 @@
   {
     "id": "peanut-butter",
     "name": "Peanut butter",
-    "cal_per_100g": 590,
+    "cal_per_100g": 624,
     "typical_unit_g": 340,
     "edible_unit_g": 340,
     "nutrition_basis": "as-sold",
-    "cal_verified": null,
+    "cal_verified": {
+      "source": "https://sainsburys.co.uk/groceries/product/sainsburys-peanut-butter-smooth-340g",
+      "checked": "2026-10-27",
+      "pack_size_matches_source": true
+    },
     "typical_unit_price_gbp": 1.75,
     "shelf_life_months": 12,
     "storage_litres_per_unit": 0.45,
@@ -278,7 +290,8 @@
     "nutrition_basis": "as-sold",
     "cal_verified": {
       "source": "https://www.sainsburys.co.uk/groceries/product/sainsburys-baked-beans-in-tomato-sauce-400g",
-      "checked": "2026-10-26"
+      "checked": "2026-10-27",
+      "pack_size_matches_source": true
     },
     "typical_unit_price_gbp": 0.45,
     "shelf_life_months": 36,
@@ -295,11 +308,15 @@
   {
     "id": "almonds",
     "name": "Almonds",
-    "cal_per_100g": 580,
+    "cal_per_100g": 604,
     "typical_unit_g": 200,
     "edible_unit_g": 200,
     "nutrition_basis": "as-sold",
-    "cal_verified": null,
+    "cal_verified": {
+      "source": "https://sainsburys.co.uk/groceries/product/sainsburys-whole-almonds-300g",
+      "checked": "2026-10-27",
+      "pack_size_matches_source": false
+    },
     "typical_unit_price_gbp": 2.75,
     "shelf_life_months": 12,
     "storage_litres_per_unit": 0.35,
@@ -315,11 +332,15 @@
   {
     "id": "walnuts",
     "name": "Walnuts",
-    "cal_per_100g": 650,
+    "cal_per_100g": 697,
     "typical_unit_g": 200,
     "edible_unit_g": 200,
     "nutrition_basis": "as-sold",
-    "cal_verified": null,
+    "cal_verified": {
+      "source": "https://sainsburys.co.uk/groceries/product/sainsburys-walnuts-pieces-200g",
+      "checked": "2026-10-27",
+      "pack_size_matches_source": true
+    },
     "typical_unit_price_gbp": 2.95,
     "shelf_life_months": 6,
     "storage_litres_per_unit": 0.35,
@@ -439,7 +460,11 @@
     "typical_unit_g": 400,
     "edible_unit_g": 400,
     "nutrition_basis": "as-sold",
-    "cal_verified": null,
+    "cal_verified": {
+      "source": "https://sainsburys.co.uk/groceries/product/sainsburys-chopped-tomatoes-can-400g",
+      "checked": "2026-10-27",
+      "pack_size_matches_source": true
+    },
     "typical_unit_price_gbp": 0.55,
     "shelf_life_months": 36,
     "storage_litres_per_unit": 0.45,
@@ -461,7 +486,8 @@
     "nutrition_basis": "drained",
     "cal_verified": {
       "source": "https://sainsburys.co.uk/groceries/product/green-giant-original-sweet-corn-340g-285g",
-      "checked": "2026-10-26"
+      "checked": "2026-10-27",
+      "pack_size_matches_source": true
     },
     "typical_unit_price_gbp": 0.7,
     "shelf_life_months": 36,
@@ -504,7 +530,8 @@
     "nutrition_basis": "drained",
     "cal_verified": {
       "source": "https://www.sainsburys.co.uk/groceries/product/sainsburys-garden-peas-in-water-300g-185g",
-      "checked": "2026-10-26"
+      "checked": "2026-10-27",
+      "pack_size_matches_source": true
     },
     "typical_unit_price_gbp": 0.55,
     "shelf_life_months": 36,
@@ -527,7 +554,8 @@
     "nutrition_basis": "as-sold",
     "cal_verified": {
       "source": "https://sainsburys.co.uk/groceries/product/sainsburys-peach-slices-in-fruit-juice-411g",
-      "checked": "2026-10-26"
+      "checked": "2026-10-27",
+      "pack_size_matches_source": true
     },
     "typical_unit_price_gbp": 0.95,
     "shelf_life_months": 36,
@@ -544,11 +572,15 @@
   {
     "id": "dried-mango",
     "name": "Dried mango",
-    "cal_per_100g": 300,
+    "cal_per_100g": 334,
     "typical_unit_g": 150,
     "edible_unit_g": 150,
     "nutrition_basis": "as-sold",
-    "cal_verified": null,
+    "cal_verified": {
+      "source": "https://sainsburys.co.uk/groceries/product/sainsburys-dried-mango-100g",
+      "checked": "2026-10-27",
+      "pack_size_matches_source": false
+    },
     "typical_unit_price_gbp": 2.5,
     "shelf_life_months": 12,
     "storage_litres_per_unit": 0.3,
@@ -584,11 +616,15 @@
   {
     "id": "dark-chocolate",
     "name": "Dark chocolate",
-    "cal_per_100g": 550,
+    "cal_per_100g": 532,
     "typical_unit_g": 100,
     "edible_unit_g": 100,
     "nutrition_basis": "as-sold",
-    "cal_verified": null,
+    "cal_verified": {
+      "source": "https://sainsburys.co.uk/groceries/product/stamford-street-co-dark-chocolate-100g",
+      "checked": "2026-10-27",
+      "pack_size_matches_source": true
+    },
     "typical_unit_price_gbp": 1.5,
     "shelf_life_months": 12,
     "storage_litres_per_unit": 0.12,
@@ -624,11 +660,15 @@
   {
     "id": "honey",
     "name": "Honey",
-    "cal_per_100g": 300,
+    "cal_per_100g": 329,
     "typical_unit_g": 340,
     "edible_unit_g": 340,
     "nutrition_basis": "as-sold",
-    "cal_verified": null,
+    "cal_verified": {
+      "source": "https://sainsburys.co.uk/groceries/product/sainsburys-runny-honey-340g",
+      "checked": "2026-10-27",
+      "pack_size_matches_source": true
+    },
     "typical_unit_price_gbp": 2.2,
     "shelf_life_months": 120,
     "storage_litres_per_unit": 0.35,
@@ -730,7 +770,8 @@
     "nutrition_basis": "drained",
     "cal_verified": {
       "source": "https://sainsburys.co.uk/groceries/product/sainsburys-82g-brine-mackerel-fillets",
-      "checked": "2026-10-26"
+      "checked": "2026-10-27",
+      "pack_size_matches_source": true
     },
     "typical_unit_price_gbp": 0.85,
     "shelf_life_months": 36,
@@ -748,12 +789,17 @@
   {
     "id": "tinned-salmon",
     "name": "Tinned salmon",
-    "cal_per_100g": 180,
+    "cal_per_100g": 152,
     "typical_unit_g": 105,
     "edible_unit_g": 105,
     "nutrition_basis": "as-sold",
-    "cal_verified": null,
+    "cal_verified": {
+      "source": "https://www.mcgrocer.com/products/sainsburys-wild-pacific-red-salmon-105g",
+      "checked": "2026-10-27",
+      "pack_size_matches_source": true
+    },
     "typical_unit_price_gbp": 1.65,
+    "priceNote": "Label states no drained weight, so calories count the whole tin.",
     "shelf_life_months": 36,
     "storage_litres_per_unit": 0.14,
     "vegetarian": false,
@@ -764,7 +810,6 @@
     "category": "protein",
     "region": "uk",
     "prep": "no-cook",
-    "priceNote": "No Aldi/Lidl equivalent stocked; price is an estimate, not verified against reference tier",
     "noCookReady": true
   },
   {
@@ -790,11 +835,15 @@
   {
     "id": "dried-apricots",
     "name": "Dried apricots",
-    "cal_per_100g": 240,
+    "cal_per_100g": 228,
     "typical_unit_g": 200,
     "edible_unit_g": 200,
     "nutrition_basis": "as-sold",
-    "cal_verified": null,
+    "cal_verified": {
+      "source": "https://www.mcgrocer.com/products/sainsburys-dried-apricots-500g",
+      "checked": "2026-10-27",
+      "pack_size_matches_source": false
+    },
     "typical_unit_price_gbp": 1.75,
     "shelf_life_months": 12,
     "storage_litres_per_unit": 0.3,
@@ -810,12 +859,17 @@
   {
     "id": "raisins",
     "name": "Raisins",
-    "cal_per_100g": 300,
+    "cal_per_100g": 297,
     "typical_unit_g": 200,
     "edible_unit_g": 200,
     "nutrition_basis": "as-sold",
-    "cal_verified": null,
+    "cal_verified": {
+      "source": "https://sainsburys.co.uk/groceries/product/sainsburys-raisins-seedless-500g",
+      "checked": "2026-10-27",
+      "pack_size_matches_source": false
+    },
     "typical_unit_price_gbp": 1.25,
+    "priceNote": "No Aldi/Lidl equivalent stocked; price is an estimate, not verified against reference tier",
     "shelf_life_months": 12,
     "storage_litres_per_unit": 0.3,
     "vegetarian": true,
@@ -825,7 +879,6 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "micronutrient",
     "region": "uk",
-    "prep": "no-cook",
-    "priceNote": "No Aldi/Lidl equivalent stocked; price is an estimate, not verified against reference tier"
+    "prep": "no-cook"
   }
 ]

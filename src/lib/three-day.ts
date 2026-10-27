@@ -255,11 +255,20 @@ export function exampleBasket(h: Household, foods: FoodItem[], dietaryFlags: Die
 export function basketCoverage(
   lines: { item: FoodItem; quantity: number }[],
   dailyCaloriesNeeded: number,
-): { days: number; label: string; short: boolean } {
+): { days: number; label: string; short: boolean; nearlyThere: boolean } {
   const cals = lines.reduce((sum, l) => sum + caloriesPerPack(l.item) * l.quantity, 0);
   const days = cals / Math.max(1, dailyCaloriesNeeded);
-  if (days >= THREE_DAYS) return { days, label: String(THREE_DAYS), short: false };
-  return { days, label: (Math.floor(days * 10) / 10).toFixed(1), short: true };
+  // A hair over three days can land a shade under it in floating point, and a
+  // basket that is genuinely there shouldn't read as short.
+  if (days + 1e-9 >= THREE_DAYS) {
+    return { days, label: String(THREE_DAYS), short: false, nearlyThere: false };
+  }
+  // Between 2.9 and 3 a one-decimal figure reads as good as three days, so
+  // these are named in words instead of given a number.
+  if (days >= THREE_DAYS - 0.1) {
+    return { days, label: "just under three", short: true, nearlyThere: true };
+  }
+  return { days, label: (Math.floor(days * 10) / 10).toFixed(1), short: true, nearlyThere: false };
 }
 
 // ── What's left ──────────────────────────────────────────────────────────────

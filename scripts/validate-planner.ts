@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { buildPlan, type FoodItem, type PlannerResult } from '../src/lib/planner';
+import { buildPlan, edibleGrams, type FoodItem, type PlannerResult } from '../src/lib/planner';
+import { basketCoverage, caloriesPerPack, exampleBasket } from '../src/lib/three-day';
 
 const foods = JSON.parse(
   readFileSync(join(process.cwd(), 'data', 'foods.json'), 'utf8'),
@@ -343,6 +344,181 @@ suite('8. Relaxation Gate — relaxation loop logic is structurally sound');
     check(
       result.droppedCategories.length === 0,
       `${id}: no dropped categories`,
+    );
+  }
+}
+
+// ── Suite 9: Food data integrity — the drained-weight defect ─────────────────
+//
+// On 2026-10-26 calories were counted on the pack weight, so a 400g tin of
+// chickpeas draining to 240g was counted at 640 kcal instead of 293. These
+// tests fail if that returns, and were written after the defect shipped: the
+// 458 tests before them all passed while it was live.
+
+suite('9. Food Data — calories count what you eat, not the pack');
+
+for (const f of foods) {
+  const edible = edibleGrams(f);
+  check(
+    edible <= f.typical_unit_g,
+    `${f.id}: edible weight ${edible}g is not more than pack ${f.typical_unit_g}g`,
+  );
+  check(edible > 0, `${f.id}: edible weight is positive`);
+}
+
+// Every drained food must declare an edible weight below its pack weight,
+// or it is silently counting the liquid again.
+for (const f of foods.filter((x) => x.nutrition_basis === 'drained')) {
+  check(
+    (f.edible_unit_g ?? f.typical_unit_g) < f.typical_unit_g,
+    `${f.id}: stated as drained, so edible weight is below pack weight`,
+  );
+}
+
+// As-sold foods are eaten whole, so the two weights should agree.
+for (const f of foods.filter((x) => x.nutrition_basis === 'as-sold')) {
+  check(
+    (f.edible_unit_g ?? f.typical_unit_g) === f.typical_unit_g,
+    `${f.id}: stated as-sold, so edible weight equals pack weight`,
+  );
+}
+
+// The specific regressions, with the figures read off the labels.
+const EXPECTED: Record<string, { cal: number; pack: number; edible: number; perPack: number }> = {
+  'tinned-chickpeas': { cal: 122, pack: 400, edible: 240, perPack: 293 },
+  'tinned-peas': { cal: 65, pack: 300, edible: 185, perPack: 120 },
+  'tinned-mackerel': { cal: 200, pack: 125, edible: 82, perPack: 164 },
+  'tinned-sardines': { cal: 181, pack: 120, edible: 90, perPack: 163 },
+  'tinned-sweetcorn': { cal: 77, pack: 340, edible: 285, perPack: 219 },
+  'tinned-beans': { cal: 77, pack: 400, edible: 400, perPack: 308 },
+};
+for (const [id, e] of Object.entries(EXPECTED)) {
+  const f = foods.find((x) => x.id === id);
+  if (!f) {
+    fail(`${id}: present in the food data`);
+    continue;
+  }
+  check(f.cal_per_100g === e.cal, `${id}: ${e.cal} kcal/100g as per label`);
+  check(f.typical_unit_g === e.pack, `${id}: pack ${e.pack}g`);
+  check((f.edible_unit_g ?? f.typical_unit_g) === e.edible, `${id}: edible ${e.edible}g`);
+  check(
+    Math.round(caloriesPerPack(f)) === e.perPack,
+    `${id}: ${e.perPack} kcal a pack (was overstated before the fix)`,
+  );
+}
+
+// Anything a basket can actually recommend must carry a label-checked figure.
+{
+  const reachable = new Set<string>();
+  for (let a = 1; a <= 6; a++) {
+    for (let c = 0; c <= 4; c++) {
+      for (const df of [
+        undefined,
+        { vegetarian: true },
+        { glutenFree: true },
+        { noDairy: true },
+        { vegetarian: true, glutenFree: true },
+      ]) {
+        for (const l of exampleBasket({ adults: a, children: c }, foods, df ?? {}).lines) {
+          if (l.quantity > 0) reachable.add(l.item.id);
+        }
+      }
+    }
+  }
+  for (const id of [...reachable].sort()) {
+    const f = foods.find((x) => x.id === id)!;
+    check(
+      !!f.cal_verified,
+      `${id}: appears in a three-day basket, so its calories are label-checked`,
+    );
+  }
+}
+
+// ── Suite 10: Day count — a short basket is never shown as three days ────────
+
+suite('10. Day Count — rounding never hides a shortfall');
+
+{
+  // A food of 100 kcal per 100g is 1 kcal per gram, so `days * need` grams is
+  // exactly `days` days of energy. That keeps these cases easy to read.
+  const perGram = (grams: number): FoodItem => ({
+    ...foods[0],
+    id: `synthetic-${grams}`,
+    cal_per_100g: 100,
+    typical_unit_g: grams,
+    edible_unit_g: grams,
+  });
+  const NEED = 1000;
+  const coverageAt = (days: number) =>
+    basketCoverage([{ item: perGram(days * NEED), quantity: 1 }], NEED);
+
+  const cases: [number, string, boolean][] = [
+    [3.5, '3', false],
+    [3.0, '3', false],
+    [2.995, 'just under three', true],
+    [2.93, 'just under three', true],
+    [2.9, 'just under three', true],
+    [2.5, '2.5', true],
+    [1.29, '1.2', true],
+    [0.4, '0.4', true],
+  ];
+  for (const [days, expected, short] of cases) {
+    const got = coverageAt(days);
+    check(got.label === expected, `${days} days reads as "${expected}" (got "${got.label}")`);
+    check(got.short === short, `${days} days short=${short}`);
+    if (short) {
+      check(got.label !== '3', `${days} days never prints a bare "3" while short`);
+    }
+  }
+  check(!coverageAt(3).short, 'exactly three days is not reported as short');
+  check(
+    coverageAt(2.9999).short && coverageAt(2.9999).label === 'just under three',
+    'a shade under three days is named in words, not rounded to "3"',
+  );
+}
+
+// ── Suite 11: Comfort food is capped in both solver paths ────────────────────
+
+suite('11. Morale Cap — comfort food cannot crowd out real food');
+
+for (const [name, flags] of [
+  ['plain', {}],
+  ['gluten-free', { glutenFree: true }],
+  ['veg+GF', { vegetarian: true, glutenFree: true }],
+] as const) {
+  for (const h of [{ adults: 1, children: 0 }, { adults: 2, children: 1 }, { adults: 4, children: 3 }]) {
+    const b = exampleBasket(h, foods, flags as never);
+    const total = b.lines.reduce((s, l) => s + caloriesPerPack(l.item) * l.quantity, 0);
+    const morale = b.lines
+      .filter((l) => l.item.category === 'morale')
+      .reduce((s, l) => s + caloriesPerPack(l.item) * l.quantity, 0);
+    const share = total > 0 ? morale / total : 0;
+    check(
+      share <= 0.12,
+      `three-day ${name} A${h.adults}C${h.children}: morale ${pct(morale, total)} of calories (cap ~10%)`,
+    );
+    // Comfort food must never be the biggest thing in the basket. An absolute
+    // jar count would be wrong here: three jars is proportionate for seven
+    // people, and the share cap above is the real invariant.
+    const biggest = Math.max(
+      ...b.lines.map((l) => caloriesPerPack(l.item) * l.quantity),
+    );
+    check(
+      morale < biggest || morale === 0,
+      `three-day ${name} A${h.adults}C${h.children}: morale is not the largest calorie source`,
+    );
+  }
+}
+
+for (const h of [{ adults: 1, children: 0 }, { adults: 2, children: 1 }]) {
+  for (const weeks of [2, 4, 12]) {
+    const p = buildPlan({ ...h, weeks, budgetGbp: 250 }, foods);
+    const morale = p.ranked
+      .filter((l) => l.category === 'morale')
+      .reduce((s, l) => s + l.totalCalories, 0);
+    check(
+      morale <= p.totalCaloriesNeeded * 0.12,
+      `longer-store A${h.adults}C${h.children} ${weeks}w: morale within cap`,
     );
   }
 }

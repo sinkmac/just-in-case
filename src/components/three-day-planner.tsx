@@ -350,9 +350,11 @@ export function ThreeDayPlanner({
               </div>
               <ul className="mt-1">{foodGroup.lines.map(renderLine)}</ul>
               <p className="mt-3 font-serif text-[19px] font-semibold">
-                {coverage.short
-                  ? `This basket gives about ${coverage.label} days of energy — short of three days.`
-                  : `This basket gives about ${coverage.label} days of energy for your household.`}
+                {!coverage.short
+                  ? `This basket gives about ${coverage.label} days of energy for your household.`
+                  : coverage.nearlyThere
+                    ? "This basket gives just under three days of energy — a little short."
+                    : `This basket gives about ${coverage.label} days of energy — short of three days.`}
               </p>
               <p className="mt-1 text-[var(--secondary)]">
                 Worked out at {ADULT_DAILY_CALORIES.toLocaleString()} kcal a day for each adult and{" "}
@@ -448,7 +450,7 @@ export function ThreeDayPlanner({
         <section className="no-print mt-10">
           <h2 className="font-serif text-[21px] font-semibold">How we worked this out</h2>
           <p className="mt-2">
-            Water: 3 litres per person per day for drinking, as the government advises, plus more for washing and cooking. Food: three days of energy for your household, chosen from foods that keep and need no cooking. Calories are counted on what you actually eat, so a tin you drain counts its drained weight, not the weight on the tin. This counts energy (calories) only, so check it suits everyone&apos;s needs. Prices change, so check before you go.
+            Water: 3 litres per person per day for drinking, as the government advises, plus more for washing and cooking. Food: three days of energy for your household, chosen from foods that keep and need no cooking. Calories are counted on what you actually eat, so a tin you drain counts its drained weight, not the weight on the tin. Every food in the three-day basket has its calories checked against a named product label; some figures in the longer stores below have not been checked that way yet. This counts energy (calories) only, so check it suits everyone&apos;s needs. Prices change, so check before you go.
           </p>
           <p className="mt-3">
             <a href={OFFICIAL_ADVICE} className={linkClass}>Read the official advice</a>
