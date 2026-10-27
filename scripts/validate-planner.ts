@@ -1,7 +1,16 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { buildPlan, edibleGrams, type FoodItem, type PlannerResult } from '../src/lib/planner';
-import { basketCoverage, caloriesPerPack, exampleBasket, noCookPool } from '../src/lib/three-day';
+import {
+  basketCoverage,
+  caloriesPerPack,
+  DEFAULT_HOUSEHOLD,
+  exampleBasket,
+  fixedGroups,
+  listName,
+  noCookPool,
+  shoppingListText,
+} from '../src/lib/three-day';
 
 const foods = JSON.parse(
   readFileSync(join(process.cwd(), 'data', 'foods.json'), 'utf8'),
@@ -527,6 +536,31 @@ for (const h of [{ adults: 1, children: 0 }, { adults: 2, children: 1 }]) {
       morale <= p.totalCaloriesNeeded * 0.12,
       `longer-store A${h.adults}C${h.children} ${weeks}w: morale within cap`,
     );
+  }
+}
+
+// ── Suite 12: Shopping list labels ───────────────────────────────────────────
+//
+// Extra water was relabelled on the page but the shopping list, and so the
+// shared, saved and printed list, still said "(optional)". All of them are
+// built from listName, so this checks the text people actually take away.
+
+suite('12. Shopping List — extra water is not labelled optional');
+
+{
+  const g = fixedGroups(DEFAULT_HOUSEHOLD, 3);
+  const lines = [...g.before, ...g.after].flatMap((x) => x.lines);
+  const water = lines.find((l) => l.id === 'water-extra')!;
+  check(!!water, 'extra water line exists');
+  check(!listName(water).includes('optional'), `on-screen and printed list: "${listName(water)}"`);
+  const text = shoppingListText(lines.map((line) => ({ line, left: 1 })), []);
+  const waterRow = text.split('\n').find((r) => r.includes('washing and cooking')) ?? '';
+  check(!!waterRow && !waterRow.includes('optional'), `shared/saved list: "${waterRow}"`);
+  check(water.optional === true, 'extra water still does not block finishing the list');
+  // Things that really are optional must still say so.
+  for (const id of ['pet-food', 'pet-water', 'tea']) {
+    const l = lines.find((x) => x.id === id)!;
+    check(listName(l).includes('(optional)'), `${id} still labelled optional: "${listName(l)}"`);
   }
 }
 

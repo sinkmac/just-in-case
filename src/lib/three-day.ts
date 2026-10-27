@@ -18,7 +18,11 @@ export type Line = {
   name: string;
   /** Shown under the name. */
   note?: string;
+  /** Doesn't have to be ticked for the list to count as done. */
   optional?: boolean;
+  /** Optional for finishing the list, but not to be labelled "(optional)":
+   *  the advice itself says it is needed, only the amount is up to you. */
+  unlabelled?: boolean;
   /** Absent => a "Got it" tick line. */
   unit?: Unit;
   /** The amount this household needs, in `unit`. */
@@ -70,6 +74,7 @@ export function fixedGroups(h: Household, blankets: number): { before: Group[]; 
             name: "More for washing and cooking",
             note: "The 3 litres per person per day is for drinking only. Allow additional water for washing and any food preparation. Build supplies gradually, within your budget and available safe storage space.",
             optional: true,
+            unlabelled: true,
           },
         ],
       },
@@ -287,7 +292,9 @@ export function remaining(line: Line, entries: Entries): number {
 
 /** Name as shown on the shopping list: optional lines say so. */
 export function listName(line: Line): string {
-  return line.optional && !line.name.includes("(optional)") ? `${line.name} (optional)` : line.name;
+  return line.optional && !line.unlabelled && !line.name.includes("(optional)")
+    ? `${line.name} (optional)`
+    : line.name;
 }
 
 export function amountLeftText(line: Line, left: number): string | null {

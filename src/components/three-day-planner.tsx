@@ -357,11 +357,11 @@ export function ThreeDayPlanner({
                     : `This basket gives about ${coverage.label} days of energy — short of three days.`}
               </p>
               <p className="mt-1 text-[var(--secondary)]">
-                We&rsquo;ve used planning estimates of {ADULT_DAILY_CALORIES.toLocaleString()} kcal per
-                adult and {CHILD_DAILY_CALORIES.toLocaleString()} per child each day:{" "}
-                {basket.dailyCaloriesNeeded.toLocaleString()} kcal for your household. Actual needs vary.
-                The child allowance does not account for age and may underestimate older
-                children&rsquo;s and teenagers&rsquo; needs.
+                {`We’ve used planning estimates of ${ADULT_DAILY_CALORIES.toLocaleString()} kcal per adult ` +
+                  `and ${CHILD_DAILY_CALORIES.toLocaleString()} per child each day: ` +
+                  `${basket.dailyCaloriesNeeded.toLocaleString()} kcal for your household. Actual needs vary. ` +
+                  `The child allowance does not account for age and may underestimate older ` +
+                  `children’s and teenagers’ needs.`}
               </p>
               <p className="mt-2 text-[var(--secondary)]">
                 Many tinned foods need refrigeration once opened. Follow the storage instructions on the
