@@ -387,6 +387,11 @@ export type CheapestPlanOptions = {
    *  from each group goes in before the calorie fill. A group with no
    *  eligible item (e.g. fish when vegetarian) is skipped. */
   mustInclude?: string[][];
+  /** EXPERIMENT: cap the share of needed calories that a group of items
+   *  (e.g. nuts) may supply in the calorie fill. */
+  groupCap?: { ids: string[]; share: number };
+  /** EXPERIMENT: a second cap, same shape. */
+  groupCap2?: { ids: string[]; share: number };
 };
 
 export function buildCheapestPlan(
@@ -478,6 +483,18 @@ export function buildCheapestPlan(
       const unitCals = caloriesPerUnit(item) ?? 0;
       if (options.maxUnitsPerItem != null && (existing?.quantity ?? 0) >= options.maxUnitsPerItem) return false;
       if (item.category === "morale" && moraleCalories + unitCals > maxMoraleCaloriesFill) return false;
+      if (options.groupCap && options.groupCap.ids.includes(item.id)) {
+        const groupCals = Array.from(rankedLines.values())
+          .filter((line) => options.groupCap!.ids.includes(line.item.id))
+          .reduce((sum, line) => sum + line.totalCalories, 0);
+        if (groupCals + unitCals > totalCaloriesNeeded * options.groupCap.share) return false;
+      }
+      if (options.groupCap2 && options.groupCap2.ids.includes(item.id)) {
+        const groupCals = Array.from(rankedLines.values())
+          .filter((line) => options.groupCap2!.ids.includes(line.item.id))
+          .reduce((sum, line) => sum + line.totalCalories, 0);
+        if (groupCals + unitCals > totalCaloriesNeeded * options.groupCap2.share) return false;
+      }
       return existingCals + unitCals <= totalCaloriesNeeded * 0.25;
     });
 

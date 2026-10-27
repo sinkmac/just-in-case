@@ -1,4 +1,4 @@
-import { buildCheapestPlan, edibleGrams, type DietaryFlags, type FoodItem } from "./planner";
+import { buildCheapestPlan, edibleGrams, type CheapestPlanOptions, type DietaryFlags, type FoodItem } from "./planner";
 
 // The three-day planner. Pure logic only: what each line needs for a
 // household, what's still to get, and the plain-text shopping list. Nothing
@@ -231,7 +231,12 @@ export type Basket = {
 };
 
 /** The solver's cheapest-possible basket, power-out, for exactly three days. */
-export function exampleBasket(h: Household, foods: FoodItem[], dietaryFlags: DietaryFlags): Basket {
+export function exampleBasket(
+  h: Household,
+  foods: FoodItem[],
+  dietaryFlags: DietaryFlags,
+  extra: Partial<CheapestPlanOptions> = {},
+): Basket & { capReached: number } {
   const plan = (maxUnitsPerItem: number) =>
     buildCheapestPlan(
       { adults: h.adults, children: h.children, weeks: THREE_DAYS / 7, dietaryFlags, powerOut: true },
@@ -241,16 +246,20 @@ export function exampleBasket(h: Household, foods: FoodItem[], dietaryFlags: Die
         allowPartialWeek: true,
         maxUnitsPerItem,
         mustInclude: BASKET_MUST_INCLUDE,
+        ...extra,
       },
     );
-  let result = plan(BASKET_MAX_PER_FOOD);
+  let cap = BASKET_MAX_PER_FOOD;
+  let result = plan(cap);
   // If 3 per food can't reach three days (larger households, or a diet
   // that narrows the choice), raise the limit one step at a time, only as
   // far as it takes.
-  for (let cap = BASKET_MAX_PER_FOOD + 1; result.totalCaloriesPlanned < result.totalCaloriesNeeded && cap <= 99; cap++) {
+  while (result.totalCaloriesPlanned < result.totalCaloriesNeeded && cap < 99) {
+    cap++;
     result = plan(cap);
   }
   return {
+    capReached: cap,
     dailyCaloriesNeeded: result.dailyCaloriesNeeded,
     lines: result.ranked.map((r) => ({ item: r.item, quantity: r.quantity })),
   };
