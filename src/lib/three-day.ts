@@ -212,11 +212,14 @@ export function foodUnit(item: FoodItem): Unit {
 }
 
 // Variety rules for the three-day basket: at most 3 of any one food (more
-// only if needed to reach three days), and at
-// least one tinned fish or meat, one tinned vegetable or fruit, and one dried
-// fruit (where the diet allows).
+// only if needed to reach three days), and at least one starchy food, one
+// tinned fish or meat, one tinned vegetable or fruit, and one dried fruit
+// (where the diet allows).
 const BASKET_MAX_PER_FOOD = 3;
 const BASKET_MUST_INCLUDE = [
+  // A starchy food, so there is something to eat the rest with. The
+  // gluten-free ones only come in when the filter is on.
+  ["crackers-oatcakes", "gf-oat-crackers", "gf-rice-cakes"],
   ["tinned-tuna", "tinned-sardines", "tinned-mackerel", "tinned-salmon"],
   ["tinned-tomatoes", "tinned-sweetcorn", "tinned-peas", "tinned-fruit"],
   ["dried-apricots", "raisins", "dried-mango"],

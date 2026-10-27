@@ -43,6 +43,8 @@ export type FoodItem = {
   noCookReady?: boolean;
   notes?: string;
   priceNote?: string;
+  /** A specialist product, offered only when this dietary filter is on. */
+  only_for_diet?: keyof DietaryFlags;
 };
 
 export type RankedItem = {
@@ -154,6 +156,9 @@ function passesDietaryFlags(item: FoodItem, flags: DietaryFlags): boolean {
   if (flags.vegetarian && !item.vegetarian) return false;
   if (flags.glutenFree && !item.gluten_free) return false;
   if (flags.noDairy && !item.dairy_free) return false;
+  // Specialist products (labelled gluten-free crackers, say) cost more than
+  // the ordinary version. Offer them only to households that need them.
+  if (item.only_for_diet && !flags[item.only_for_diet]) return false;
   return true;
 }
 

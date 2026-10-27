@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { buildPlan, edibleGrams, type FoodItem, type PlannerResult } from '../src/lib/planner';
+import { buildPlan, edibleGrams, type DietaryFlags, type FoodItem, type PlannerResult } from '../src/lib/planner';
 import {
   basketCoverage,
   caloriesPerPack,
@@ -562,6 +562,72 @@ suite('12. Shopping List — extra water is not labelled optional');
     const l = lines.find((x) => x.id === id)!;
     check(listName(l).includes('(optional)'), `${id} still labelled optional: "${listName(l)}"`);
   }
+}
+
+// ── Suite 13: A starchy food in every three-day basket ──────────────────────
+//
+// Before 2026-10-27 the only no-cook starchy food was ordinary oatcakes, so a
+// gluten-free basket had none and filled up with honey and raisins instead.
+
+suite('13. Staples — every three-day basket has a starchy food, gluten-free included');
+
+{
+  const DIETS: [string, DietaryFlags][] = [
+    ['plain', {}],
+    ['veg', { vegetarian: true }],
+    ['GF', { glutenFree: true }],
+    ['noDairy', { noDairy: true }],
+    ['veg+GF', { vegetarian: true, glutenFree: true }],
+    ['GF+noDairy', { glutenFree: true, noDairy: true }],
+    ['all three', { vegetarian: true, glutenFree: true, noDairy: true }],
+  ];
+  let checked = 0;
+  let missing: string[] = [];
+  let leaked: string[] = [];
+  for (let a = 1; a <= 10; a++) {
+    for (let c = 0; c <= 10; c++) {
+      for (const [name, flags] of DIETS) {
+        const lines = exampleBasket({ adults: a, children: c }, foods, flags).lines;
+        checked++;
+        if (!lines.some((l) => l.quantity > 0 && l.item.category === 'staple_carb')) {
+          missing.push(`A${a}C${c} ${name}`);
+        }
+        for (const l of lines) {
+          const only = l.item.only_for_diet;
+          if (only && !flags[only]) leaked.push(`A${a}C${c} ${name}: ${l.item.id}`);
+          if (flags.glutenFree && !l.item.gluten_free) leaked.push(`A${a}C${c} ${name}: ${l.item.id} not gluten-free`);
+        }
+      }
+    }
+  }
+  check(missing.length === 0, `all ${checked} baskets include a starchy food${missing.length ? ' — missing: ' + missing.slice(0, 5).join(', ') : ''}`);
+  check(leaked.length === 0, `no basket gets a food its diet rules out, or a specialist food it doesn't need${leaked.length ? ' — ' + leaked.slice(0, 5).join(', ') : ''}`);
+  missing = []; leaked = [];
+}
+
+// Specialist products stay out of the longer-store plans too, unless needed.
+{
+  let leaked = 0;
+  for (const flags of [{}, { vegetarian: true }, { noDairy: true }] as DietaryFlags[]) {
+    for (const weeks of [2, 4, 12]) {
+      for (const budgetGbp of [60, 120, 250]) {
+        const p = buildPlan({ adults: 2, children: 1, weeks, budgetGbp, dietaryFlags: flags }, foods);
+        leaked += p.ranked.filter((l) => l.item.only_for_diet && !flags[l.item.only_for_diet]).length;
+      }
+    }
+  }
+  check(leaked === 0, 'longer-store plans without the gluten-free filter never buy gluten-free specialist products');
+}
+
+// The gluten-free staples are real, labelled, gluten-free products.
+for (const id of ['gf-rice-cakes', 'gf-oat-crackers']) {
+  const f = foods.find((x) => x.id === id);
+  check(!!f, `${id}: present`);
+  if (!f) continue;
+  check(f.gluten_free === true, `${id}: marked gluten-free`);
+  check(f.prep === 'no-cook' && f.category === 'staple_carb', `${id}: no-cook staple`);
+  check(!!f.cal_verified, `${id}: calories read off a named label`);
+  check(f.only_for_diet === 'glutenFree', `${id}: offered only when gluten-free is ticked`);
 }
 
 // ── Summary ───────────────────────────────────────────────────────────────────
