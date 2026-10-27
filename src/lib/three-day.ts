@@ -68,7 +68,7 @@ export function fixedGroups(h: Household, blankets: number): { before: Group[]; 
           {
             id: "water-extra",
             name: "More for washing and cooking",
-            note: "The 3 litres is for drinking only. You'll need more for washing and cooking, so store as much as you have room for.",
+            note: "The 3 litres per person per day is for drinking only. Allow additional water for washing and any food preparation. Build supplies gradually, within your budget and available safe storage space.",
             optional: true,
           },
         ],

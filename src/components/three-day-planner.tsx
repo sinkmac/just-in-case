@@ -357,15 +357,17 @@ export function ThreeDayPlanner({
                     : `This basket gives about ${coverage.label} days of energy — short of three days.`}
               </p>
               <p className="mt-1 text-[var(--secondary)]">
-                Worked out at {ADULT_DAILY_CALORIES.toLocaleString()} kcal a day for each adult and{" "}
-                {CHILD_DAILY_CALORIES.toLocaleString()} for each child, so{" "}
-                {basket.dailyCaloriesNeeded.toLocaleString()} kcal a day for your household. Those are
-                average figures, not a target for any one person, and children need more as they grow.
+                We&rsquo;ve used planning estimates of {ADULT_DAILY_CALORIES.toLocaleString()} kcal per
+                adult and {CHILD_DAILY_CALORIES.toLocaleString()} per child each day:{" "}
+                {basket.dailyCaloriesNeeded.toLocaleString()} kcal for your household. Actual needs vary.
+                The child allowance does not account for age and may underestimate older
+                children&rsquo;s and teenagers&rsquo; needs.
               </p>
               <p className="mt-2 text-[var(--secondary)]">
-                Once a tin is open, anything you don&rsquo;t eat needs a fridge, and in a power cut you
-                may not have one. Open what you can finish at one meal, and don&rsquo;t keep leftovers
-                in the opened tin.
+                Many tinned foods need refrigeration once opened. Follow the storage instructions on the
+                label. If you cannot keep leftovers safely chilled, choose tins your household can
+                finish at one meal. Transfer any leftovers you refrigerate into a suitable covered
+                container.
               </p>
             </section>
 
@@ -450,7 +452,7 @@ export function ThreeDayPlanner({
         <section className="no-print mt-10">
           <h2 className="font-serif text-[21px] font-semibold">How we worked this out</h2>
           <p className="mt-2">
-            Water: 3 litres per person per day for drinking, as the government advises, plus more for washing and cooking. Food: three days of energy for your household, chosen from foods that keep and need no cooking. Calories are counted on what you actually eat, so a tin you drain counts its drained weight, not the weight on the tin. Every food in the three-day basket has its calories checked against a named product label; some figures in the longer stores below have not been checked that way yet. This counts energy (calories) only, so check it suits everyone&apos;s needs. Prices change, so check before you go.
+            Water: 3 litres per person per day for drinking, as the government advises, plus more for washing and cooking. Food: three days of energy for your household, chosen from foods that keep and need no cooking. Calculations use the edible quantity and the nutrition information on the reference product&rsquo;s label, including drained weight where appropriate. Every food the three-day planner counts calories for has been checked against a named product label. Brands and pack sizes vary, so check what you buy. This counts energy (calories) only, so check it suits everyone&apos;s needs. Prices change, so check before you go.
           </p>
           <p className="mt-3">
             <a href={OFFICIAL_ADVICE} className={linkClass}>Read the official advice</a>

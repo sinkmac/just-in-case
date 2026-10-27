@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { buildPlan, edibleGrams, type FoodItem, type PlannerResult } from '../src/lib/planner';
-import { basketCoverage, caloriesPerPack, exampleBasket } from '../src/lib/three-day';
+import { basketCoverage, caloriesPerPack, exampleBasket, noCookPool } from '../src/lib/three-day';
 
 const foods = JSON.parse(
   readFileSync(join(process.cwd(), 'data', 'foods.json'), 'utf8'),
@@ -432,6 +432,13 @@ for (const [id, e] of Object.entries(EXPECTED)) {
       `${id}: appears in a three-day basket, so its calories are label-checked`,
     );
   }
+}
+
+// The page says every food the three-day planner counts calories for is
+// label-checked. That covers the whole no-cook pool a person can draw on,
+// not only what the solver happens to pick today.
+for (const f of noCookPool(foods).filter((x) => x.cal_per_100g != null)) {
+  check(!!f.cal_verified, `${f.id}: counted by the three-day planner, so label-checked`);
 }
 
 // ── Suite 10: Day count — a short basket is never shown as three days ────────
