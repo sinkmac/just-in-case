@@ -73,12 +73,12 @@ export default function Page() {
               UK Humanitarian Guidance
             </Link> notes that child calorie requirements vary significantly by age. A
             toddler needs around 1,000 calories per day; a teenager going through a growth
-            spurt can exceed 2,500. For a household planning tool, using a flat child
-            multiplier of 0.6 adult-equivalent (roughly 1,200 calories per day) is a
-            deliberate middle-ground choice. It is cautious enough that a family of four
-            with two young children will not be caught short, and honest enough that the
-            teenager who eats everything in sight is not a surprise you discover on day
-            three.
+            spurt can exceed 2,500. So the planner asks how many children are in each
+            age group and counts them separately: about 1,000 calories a day for a child
+            under 4, 1,600 for a child aged 4 to 10, and the same as an adult (2,000) for
+            anyone aged 11 to 17. A family with young children is not told to buy far
+            more than they need, and the teenager who eats everything in sight is not a
+            surprise you discover on day three.
           </p>
 
           <div className="section-divider my-8" />
@@ -95,12 +95,13 @@ export default function Page() {
             and a nursing infant underestimates needs and leaves a gap on the shelf.
           </p>
           <p>
-            The 0.6 multiplier is not perfect — no single number can cover every child
-            from age one to sixteen — but it sits in the sensible middle. In practice it
-            means a two-adult, two-child household has a daily target of about 6,400
-            calories rather than the 8,000 an adult-only model would suggest. Over a
-            four-week supply that is the difference between roughly 180,000 and 224,000
-            calories, and that gap changes what fits in a standard kitchen cupboard.
+            Age groups are not perfect — a 17-year-old boy can need more than any adult
+            in the house — but they are far closer than one number for every child. In
+            practice a two-adult household with a 6-year-old and a 9-year-old has a daily
+            target of about 7,200 calories rather than the 8,000 an adult-only model would
+            suggest. Over a four-week supply that is the difference between roughly
+            202,000 and 224,000 calories, and that gap changes what fits in a standard
+            kitchen cupboard.
           </p>
 
           <div className="section-divider my-8" />

@@ -4,7 +4,18 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import foods from "../../data/foods.json";
-import { buildPlan, buildCheapestPlan, type FoodItem, type CheapestPlanResult } from "@/lib/planner";
+import {
+  buildPlan,
+  buildCheapestPlan,
+  BABY_MILK_NOTE,
+  CHILD_AGE_BANDS,
+  CHILD_CALORIES_SOURCE_URL,
+  childCount,
+  NO_CHILDREN,
+  type ChildAges,
+  type FoodItem,
+  type CheapestPlanResult,
+} from "@/lib/planner";
 import { printOnly } from "@/lib/print";
 
 type DietaryFlags = {
@@ -220,7 +231,8 @@ function TierPictogram({ tier, reducedFill }: { tier: DurationTier; reducedFill?
 // planner covers it). Every calculation is unchanged.
 export function PantryPlanner({ initialTier, embedded = false }: { initialTier?: DurationTier; embedded?: boolean }) {
   const [adults, setAdults] = useState(2);
-  const [children, setChildren] = useState(1);
+  const [childAges, setChildAges] = useState<ChildAges>({ ...NO_CHILDREN, from4to10: 1 });
+  const children = childCount(childAges);
   const [budgetGbp, setBudgetGbp] = useState(120);
   const defaultTier: DurationTier = embedded ? "fortnight" : "month";
   const startTier = initialTier && !(embedded && initialTier === "weekend") ? initialTier : defaultTier;
@@ -242,8 +254,6 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
     glutenFree: false,
     noDairy: false,
   });
-  const [childCalorieRatio, setChildCalorieRatio] = useState(0.6);
-  const [showAgeBands, setShowAgeBands] = useState(false);
   const [selectedSpace, setSelectedSpace] = useState<SpaceOption | null>(null);
   const [activeSwaps, setActiveSwaps] = useState<Set<string>>(new Set());
   const [powerState, setPowerState] = useState<"working" | "out">("working");
@@ -276,12 +286,12 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
           budgetGbp,
           weeks: TIER_DATA[tier].weeks,
           dietaryFlags,
-          childCalorieRatio,
+          childAges,
           powerOut: powerState === "out",
         },
         foods as FoodItem[],
       ),
-    [adults, children, budgetGbp, tier, dietaryFlags, childCalorieRatio, powerState],
+    [adults, children, budgetGbp, tier, dietaryFlags, childAges, powerState],
   );
 
   const cheapestPlan = useMemo(
@@ -292,12 +302,12 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
           children,
           weeks: TIER_DATA[tier].weeks,
           dietaryFlags,
-          childCalorieRatio,
+          childAges,
           powerOut: powerState === "out",
         },
         foods as FoodItem[],
       ),
-    [adults, children, tier, dietaryFlags, childCalorieRatio, powerState],
+    [adults, children, tier, dietaryFlags, childAges, powerState],
   );
 
   const activeResult = floorMode ? cheapestPlan : result;
@@ -502,18 +512,39 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
                 <p className="mt-1 text-sm text-[var(--muted)]">{adults} adult{adults > 1 ? "s" : ""}</p>
               </div>
 
-              <div>
-                <label className="mb-2 block text-sm font-semibold">Children</label>
-                <input
-                  type="range"
-                  min={0}
-                  max={6}
-                  value={children}
-                  onChange={(event) => setChildren(Number(event.target.value))}
-                  className="w-full"
-                />
-                <p className="mt-1 text-sm text-[var(--muted)]">{children} child{children !== 1 ? "ren" : ""}</p>
-              </div>
+              <fieldset>
+                <legend className="mb-2 block text-sm font-semibold">Children, by age</legend>
+                <div className="space-y-2">
+                  {CHILD_AGE_BANDS.map((band) => (
+                    <div key={band.key}>
+                      <input
+                        type="range"
+                        min={0}
+                        max={6}
+                        value={childAges[band.key]}
+                        onChange={(event) => setChildAges((a) => ({ ...a, [band.key]: Number(event.target.value) }))}
+                        aria-label={`Children ${band.phrase}`}
+                        className="w-full"
+                      />
+                      <p className="text-sm text-[var(--muted)]">
+                        {childAges[band.key]} {band.phrase}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+                {children > 0 && (
+                  <p className="mt-2 text-xs text-[var(--muted)]">
+                    Calories by age are based on{" "}
+                    <a href={CHILD_CALORIES_SOURCE_URL} className="text-[var(--brand)] underline">
+                      UK government advice on energy needs
+                    </a>
+                    .
+                  </p>
+                )}
+                {childAges.under4 > 0 && (
+                  <p className="mt-2 text-sm font-semibold">{BABY_MILK_NOTE}</p>
+                )}
+              </fieldset>
 
               <div>
                 <label className="mb-2 block text-sm font-semibold">Budget</label>
@@ -660,58 +691,8 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
                               })()}
                               <div className="mt-4 grid gap-4 sm:grid-cols-3">
                 <div className="rounded-2xl bg-[var(--accent)] p-4">
-                  <div className="flex items-center gap-2">
-                    <p className="text-xs text-[var(--muted)]">
-                      Daily calories needed
-                    </p>
-                    {children > 0 && (
-                      <button
-                        type="button"
-                        onClick={() => setShowAgeBands((v) => !v)}
-                        className="text-[10px] text-[var(--brand)] underline hover:text-[var(--brand-dark)]"
-                      >
-                        {showAgeBands ? "hide" : "change"}
-                      </button>
-                    )}
-                  </div>
+                  <p className="text-xs text-[var(--muted)]">Daily calories needed</p>
                   <p className="mt-1 text-xl font-serif">{result.dailyCaloriesNeeded.toLocaleString()}</p>
-                  {children > 0 && (
-                    <p className="mt-0.5 text-[11px] text-[var(--muted)]">
-                      assumes {childCalorieRatio === 0.5 ? "toddler" : childCalorieRatio === 0.8 ? "teen" : "school-age"} child
-                    </p>
-                  )}
-                  {showAgeBands && children > 0 && (
-                    <div className="mt-3 pt-3 border-t border-[var(--border)]">
-                      <p className="mb-2 text-[11px] font-semibold text-[var(--muted)]">Child age band</p>
-                      <div className="grid grid-cols-3 gap-1.5">
-                        {[
-                          { label: "Toddler", sub: "1–3", ratio: 0.5 },
-                          { label: "School-age", sub: "4–10", ratio: 0.6 },
-                          { label: "Teen", sub: "11–17", ratio: 0.8 },
-                        ].map((band) => (
-                          <label
-                            key={band.ratio}
-                            className={`flex cursor-pointer flex-col items-center rounded-lg border px-2 py-1.5 text-center transition-colors ${
-                              childCalorieRatio === band.ratio
-                                ? "border-[var(--brand)] bg-[var(--brand)]/5 text-[var(--brand-dark)]"
-                                : "border-[var(--border)] bg-[var(--card)] text-[var(--muted)] hover:bg-[var(--accent)]"
-                            }`}
-                          >
-                            <input
-                              type="radio"
-                              name="childCalorieRatio"
-                              value={band.ratio}
-                              checked={childCalorieRatio === band.ratio}
-                              onChange={() => setChildCalorieRatio(band.ratio)}
-                              className="sr-only"
-                            />
-                            <span className="text-[11px] font-medium leading-tight">{band.label}</span>
-                            <span className="text-[10px] opacity-75">{band.sub}</span>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </div>
                 <div className="rounded-2xl bg-[var(--accent)] p-4">
                   <p className="text-xs text-[var(--muted)]">Calories planned</p>
