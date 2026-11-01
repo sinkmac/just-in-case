@@ -322,7 +322,13 @@
       ],
       "may_contain": [],
       "source": "https://groceries.morrisons.com/products/john-west-tuna-chunks-in-spring-water-4x125g-102g-drained/113887082",
-      "checked": "2026-11-01"
+      "checked": "2026-11-01",
+      "also_checked": {
+        "source": "Open Food Facts",
+        "checked": "2026-11-01",
+        "product": "Aldi The Fishmonger Tuna Chunks in Spring Water"
+      },
+      "note": "Priced at Aldi. Allergens from the label we checked, and fish confirmed for the Aldi product on Open Food Facts. Aldi's own label not yet read."
     },
     "price_checked": {
       "shop": "Aldi",
@@ -396,7 +402,8 @@
         "nuts"
       ],
       "source": "https://sainsburys.co.uk/groceries/product/sainsburys-peanut-butter-smooth-340g",
-      "checked": "2026-11-01"
+      "checked": "2026-11-01",
+      "note": "Priced at Aldi, but allergens are from the label we checked. Aldi's website doesn't show allergens; its own label not yet read."
     },
     "price_checked": {
       "shop": "Aldi",
@@ -452,7 +459,8 @@
       "contains": [],
       "may_contain": [],
       "source": "https://www.sainsburys.co.uk/groceries/product/sainsburys-baked-beans-in-tomato-sauce-400g",
-      "checked": "2026-11-01"
+      "checked": "2026-11-01",
+      "note": "Priced at Aldi, but allergens are from the label we checked. Aldi's website doesn't show allergens; its own label not yet read."
     },
     "price_checked": {
       "shop": "Aldi",
@@ -656,7 +664,8 @@
       "contains": [],
       "may_contain": [],
       "source": "https://sainsburys.co.uk/groceries/product/sainsburys-chopped-tomatoes-can-400g",
-      "checked": "2026-11-01"
+      "checked": "2026-11-01",
+      "note": "Priced at Aldi, but allergens are from the label we checked. Aldi's website doesn't show allergens; its own label not yet read."
     },
     "price_checked": {
       "shop": "Aldi",
@@ -692,7 +701,8 @@
       "contains": [],
       "may_contain": [],
       "source": "https://www.tesco.com/shop/en-GB/products/254875197",
-      "checked": "2026-11-01"
+      "checked": "2026-11-01",
+      "note": "Priced at Aldi, but allergens are from the label we checked. Aldi's website doesn't show allergens; its own label not yet read."
     },
     "price_checked": {
       "shop": "Aldi",
@@ -749,7 +759,8 @@
       "contains": [],
       "may_contain": [],
       "source": "https://www.sainsburys.co.uk/groceries/product/sainsburys-garden-peas-in-water-300g-185g",
-      "checked": "2026-11-01"
+      "checked": "2026-11-01",
+      "note": "Priced at Aldi, but allergens are from the label we checked. Aldi's website doesn't show allergens; its own label not yet read."
     },
     "price_checked": {
       "shop": "Aldi",
@@ -786,7 +797,8 @@
       "contains": [],
       "may_contain": [],
       "source": "https://sainsburys.co.uk/groceries/product/sainsburys-peach-slices-in-fruit-juice-411g",
-      "checked": "2026-11-01"
+      "checked": "2026-11-01",
+      "note": "Priced at Aldi, but allergens are from the label we checked. Aldi's website doesn't show allergens; its own label not yet read."
     },
     "price_checked": {
       "shop": "Aldi",
@@ -939,7 +951,8 @@
       "contains": [],
       "may_contain": [],
       "source": "https://sainsburys.co.uk/groceries/product/sainsburys-runny-honey-340g",
-      "checked": "2026-11-01"
+      "checked": "2026-11-01",
+      "note": "Priced at Aldi, but allergens are from the label we checked. Aldi's website doesn't show allergens; its own label not yet read."
     },
     "not_for_babies": true,
     "price_checked": {
@@ -1270,9 +1283,20 @@
       "contains": [
         "gluten"
       ],
-      "may_contain": [],
+      "may_contain": [
+        "milk",
+        "nuts",
+        "peanuts",
+        "soya"
+      ],
       "source": "https://www.waitrose.com/ecom/products/essential-waitrose-corn-flakes/001204-144-145",
-      "checked": "2026-11-01"
+      "checked": "2026-11-01",
+      "also_checked": {
+        "source": "https://world.openfoodfacts.org/product/4088600248646/harvest-morn-corn-flakes-aldi",
+        "checked": "2026-11-01",
+        "product": "Aldi Harvest Morn Corn Flakes (Open Food Facts, edited Sep 2026)"
+      },
+      "note": "Warnings combined from the Waitrose label and the Aldi product on Open Food Facts. Aldi's own label not yet read."
     },
     "three_day_only": true,
     "price_checked": {

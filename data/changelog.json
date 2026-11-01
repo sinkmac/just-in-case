@@ -4,6 +4,11 @@
   "entries": [
     {
       "date": "2026-11-01",
+      "kind": "item",
+      "text": "Cornflakes may contain milk, nuts, peanuts and soya, so they are now left out when any of those allergies is ticked. Aldi's website doesn't show allergens, so for foods priced at Aldi we use the warnings from the label we checked, plus anything known about the Aldi product."
+    },
+    {
+      "date": "2026-11-01",
       "kind": "price",
       "text": "Checked the price of every food in the three-day basket on the Aldi website, or Sainsbury's where Aldi had no match. Shop prices may differ. Some pack sizes changed: oatcakes 250g, raisins 500g, dried mango 100g, honey 454g, tuna 145g. Where a shop's page didn't say how much of a tin is drained weight, we count the smaller amount and mark the price as an estimate. Sardine and salmon prices are still estimates."
     },

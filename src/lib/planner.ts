@@ -65,7 +65,16 @@ export type FoodItem = {
   cal_verified?: { source: string; checked: string } | null;
   /** Read off a named label. Absent => not checked, so never offered to
    *  someone who has ticked an allergy. */
-  allergens?: { contains: Allergen[]; may_contain: Allergen[]; source: string; checked: string };
+  allergens?: {
+    contains: Allergen[];
+    may_contain: Allergen[];
+    source: string;
+    checked: string;
+    /** A second source for the product we price, when it differs from the label above. */
+    also_checked?: { source: string; checked: string; product: string };
+    /** What's still unchecked, e.g. the priced shop's own label. */
+    note?: string;
+  };
   /** Not for babies under a year (honey). Left out when a child under 4 is
    *  counted, since the planner can't tell a baby from a toddler. */
   not_for_babies?: boolean;
