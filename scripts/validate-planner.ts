@@ -769,6 +769,18 @@ for (const f of noCookPool(foods).filter((x) => x.cal_per_100g != null)) {
 const salmon = foods.find((f) => f.id === 'tinned-salmon')!;
 check(!/drained weight, so calories/.test(salmon.priceNote ?? ''), 'tinned-salmon: calorie note is not shown as a price note');
 
+// Aldi-priced foods: the Aldi label isn't read yet, so warnings combine what
+// we know, and each one says what's still unchecked.
+{
+  const cf = foods.find((f) => f.id === 'cornflakes')!;
+  for (const a of ['milk', 'nuts', 'peanuts', 'soya'] as const) {
+    check(cf.allergens!.may_contain.includes(a), `cornflakes: may contain ${a} (Aldi product, Open Food Facts)`);
+  }
+  for (const f of foods.filter((x) => x.price_checked?.shop === 'Aldi')) {
+    check(!!f.allergens?.note, `${f.id}: priced at Aldi, and says the Aldi label isn't checked yet`);
+  }
+}
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 
 console.log(`\n══════════════════════════════════════════════════════════`);
