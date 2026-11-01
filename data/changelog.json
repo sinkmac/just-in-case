@@ -4,6 +4,11 @@
   "entries": [
     {
       "date": "2026-11-01",
+      "kind": "price",
+      "text": "Checked the prices of the longer-store foods on the Aldi website, or Sainsbury's where Aldi had no price. Shop prices may differ. Some pack sizes changed: pasta 1kg, olive oil 1 litre, lard 250g, milk powder 340g, instant noodles 100g, herbs 11g, stock cubes 10 x 10g. Oils are now counted by volume, which lowers their calories a little. Instant noodles are priced as chicken flavour, so they no longer appear in vegetarian plans. Every price now either says where and when it was checked or is marked as an estimate."
+    },
+    {
+      "date": "2026-11-01",
       "kind": "item",
       "text": "Cornflakes may contain milk, nuts, peanuts and soya, so they are now left out when any of those allergies is ticked. Aldi's website doesn't show allergens, so for foods priced at Aldi we use the warnings from the label we checked, plus anything known about the Aldi product."
     },

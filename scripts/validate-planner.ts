@@ -765,6 +765,18 @@ suite('Prices — three-day basket');
 for (const f of noCookPool(foods).filter((x) => x.cal_per_100g != null)) {
   check(!!f.price_checked || !!f.priceNote, `${f.id}: price checked, or marked as an estimate`);
 }
+// Longer stores too: every food, not only the basket's.
+for (const f of foods) {
+  check(!!f.price_checked || !!f.priceNote, `${f.id}: price checked or marked as an estimate (all foods)`);
+}
+check(
+  !foods.find((f) => f.id === 'instant-noodles')!.vegetarian,
+  'instant-noodles: priced as chicken flavour, so not counted as vegetarian',
+);
+check(
+  !/rapeseed/i.test(foods.find((f) => f.id === 'vegetable-oil')!.name),
+  "vegetable-oil: doesn't claim rapeseed (the Aldi label doesn't say)",
+);
 // The † mark means "price is an estimate", so a price note must be about price.
 const salmon = foods.find((f) => f.id === 'tinned-salmon')!;
 check(!/drained weight, so calories/.test(salmon.priceNote ?? ''), 'tinned-salmon: calorie note is not shown as a price note');
@@ -776,7 +788,7 @@ check(!/drained weight, so calories/.test(salmon.priceNote ?? ''), 'tinned-salmo
   for (const a of ['milk', 'nuts', 'peanuts', 'soya'] as const) {
     check(cf.allergens!.may_contain.includes(a), `cornflakes: may contain ${a} (Aldi product, Open Food Facts)`);
   }
-  for (const f of foods.filter((x) => x.price_checked?.shop === 'Aldi')) {
+  for (const f of foods.filter((x) => x.price_checked?.shop === 'Aldi' && x.allergens)) {
     check(!!f.allergens?.note, `${f.id}: priced at Aldi, and says the Aldi label isn't checked yet`);
   }
 }
