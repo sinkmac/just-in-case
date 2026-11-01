@@ -12,6 +12,8 @@ import {
   CHILD_CALORIES_SOURCE_URL,
   childCount,
   childDailyCalories,
+  ALLERGENS,
+  type Allergen,
   type DietaryFlags,
   type FoodItem,
 } from "@/lib/planner";
@@ -27,7 +29,7 @@ import {
   foodUnit,
   householdLabel,
   listName,
-  noCookPool,
+  basketPool,
   packSize,
   people,
   plural,
@@ -116,6 +118,8 @@ export function ThreeDayPlanner({
   const [basketOverrides, setBasketOverrides] = useState<Record<string, number>>({});
   const [dietaryFlags, setDietaryFlags] = useState<DietaryFlags>({ vegetarian: false, glutenFree: false, noDairy: false });
   const [showDietary, setShowDietary] = useState(false);
+  const [allergies, setAllergies] = useState<Allergen[]>([]);
+  const [showAllergies, setShowAllergies] = useState(false);
   const [tasksDone, setTasksDone] = useState<Record<string, boolean>>({});
   // Lines ticked on the shopping list, with what "I have" held before, so a
   // mis-tap can be undone from the list itself.
@@ -126,18 +130,21 @@ export function ThreeDayPlanner({
   const blankets = blanketsOverride ?? people(household);
   const groups = fixedGroups(household, blankets);
 
-  const basket = useMemo(() => exampleBasket(household, ALL_FOODS, dietaryFlags), [household, dietaryFlags]);
+  const basket = useMemo(
+    () => exampleBasket(household, ALL_FOODS, dietaryFlags, allergies),
+    [household, dietaryFlags, allergies],
+  );
 
   // Solver lines plus any line the person has changed, in that order.
   const basketLines = useMemo(() => {
-    const eligible = new Map(noCookPool(ALL_FOODS).map((f) => [f.id, f]));
+    const eligible = new Map(basketPool(household, ALL_FOODS, allergies).map((f) => [f.id, f]));
     const lines = basket.lines.map((l) => ({ item: l.item, quantity: basketOverrides[l.item.id] ?? l.quantity }));
     for (const [id, qty] of Object.entries(basketOverrides)) {
       const item = eligible.get(id);
       if (item && !lines.some((l) => l.item.id === id)) lines.push({ item, quantity: qty });
     }
     return lines;
-  }, [basket, basketOverrides]);
+  }, [basket, basketOverrides, household, allergies]);
 
   const coverage = basketCoverage(basketLines, basket.dailyCaloriesNeeded);
 
@@ -363,6 +370,28 @@ export function ThreeDayPlanner({
                   </div>
                 )}
               </div>
+              <div className="mt-3 rounded-xl border border-[var(--border)] bg-[var(--card)] px-4">
+                <button type="button" onClick={() => setShowAllergies((v) => !v)} className="min-h-11 w-full text-left font-semibold">
+                  Allergies {allergies.length > 0 ? `(${allergies.length} ticked) ` : ""}{showAllergies ? "−" : "+"}
+                </button>
+                {showAllergies && (
+                  <div className="pb-2">
+                    <p className="text-[var(--secondary)]">
+                      Tick any allergy in your household. We leave out foods that contain it, and foods whose
+                      label says they may contain it.
+                    </p>
+                    {ALLERGENS.map((a) => (
+                      <Tick
+                        key={a.key}
+                        checked={allergies.includes(a.key)}
+                        onChange={(v) => setAllergies((list) => (v ? [...list, a.key] : list.filter((x) => x !== a.key)))}
+                      >
+                        {a.label}
+                      </Tick>
+                    ))}
+                  </div>
+                )}
+              </div>
               <ul className="mt-1">{foodGroup.lines.map(renderLine)}</ul>
               <p className="mt-3 font-serif text-[19px] font-semibold">
                 {!coverage.short
@@ -393,6 +422,7 @@ export function ThreeDayPlanner({
               {household.childAges.under4 > 0 && (
                 <p className="mt-2 font-semibold">{BABY_MILK_NOTE}</p>
               )}
+              <p className="mt-2 font-semibold">Brands differ. Check the label on what you buy.</p>
               <p className="mt-2 text-[var(--secondary)]">
                 Many tinned foods need refrigeration once opened. Follow the storage instructions on the
                 label. If you cannot keep leftovers safely chilled, choose tins your household can

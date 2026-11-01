@@ -1,3 +1,33 @@
+/** The UK's legal allergens that appear on our labels, plus oats (which some
+ *  people avoid even when they are gluten-free). */
+export type Allergen = "peanuts" | "nuts" | "milk" | "egg" | "fish" | "soya" | "sesame" | "sulphites" | "gluten" | "oats";
+
+export const ALLERGENS: { key: Allergen; label: string }[] = [
+  { key: "peanuts", label: "Peanuts" },
+  { key: "nuts", label: "Other nuts" },
+  { key: "milk", label: "Milk" },
+  { key: "egg", label: "Egg" },
+  { key: "fish", label: "Fish" },
+  { key: "soya", label: "Soya" },
+  { key: "sesame", label: "Sesame" },
+  { key: "sulphites", label: "Sulphites" },
+  { key: "gluten", label: "Wheat, barley or rye (gluten)" },
+  { key: "oats", label: "Oats" },
+];
+
+/** Safe for every ticked allergy: label checked, and the allergen is neither
+ *  in it nor on its "may contain" line. */
+/** The foods the longer-stores planner may use. */
+export function longerStoresFoods(foods: FoodItem[]): FoodItem[] {
+  return foods.filter((f) => !f.three_day_only);
+}
+
+export function passesAllergies(item: FoodItem, allergies: readonly Allergen[]): boolean {
+  if (allergies.length === 0) return true;
+  if (!item.allergens) return false;
+  return !allergies.some((a) => item.allergens!.contains.includes(a) || item.allergens!.may_contain.includes(a));
+}
+
 export type DietaryFlags = {
   vegetarian?: boolean;
   glutenFree?: boolean;
@@ -32,6 +62,14 @@ export type FoodItem = {
   nutrition_basis?: "drained" | "as-sold";
   /** Set only where the figures were read off a named product label. */
   cal_verified?: { source: string; checked: string } | null;
+  /** Read off a named label. Absent => not checked, so never offered to
+   *  someone who has ticked an allergy. */
+  allergens?: { contains: Allergen[]; may_contain: Allergen[]; source: string; checked: string };
+  /** Not for babies under a year (honey). Left out when a child under 4 is
+   *  counted, since the planner can't tell a baby from a toddler. */
+  not_for_babies?: boolean;
+  /** Offered in the three-day basket only, not in longer stores. */
+  three_day_only?: boolean;
   typical_unit_price_gbp: number;
   shelf_life_months: number;
   storage_litres_per_unit: number;

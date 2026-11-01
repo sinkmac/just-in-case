@@ -6,7 +6,10 @@ import {
   CHILD_CALORIES_SOURCE_URL,
   childDailyCalories,
   edibleGrams,
+  ALLERGENS,
   householdDailyCalories,
+  passesAllergies,
+  longerStoresFoods,
   NO_CHILDREN,
   type ChildAges,
   type DietaryFlags,
@@ -20,6 +23,7 @@ import {
   exampleBasket,
   fixedGroups,
   listName,
+  basketPool,
   noCookPool,
   householdLabel,
   people,
@@ -35,6 +39,8 @@ function hh(a: number, c: number, band: keyof ChildAges = 'from4to10'): Househol
 const foods = JSON.parse(
   readFileSync(join(process.cwd(), 'data', 'foods.json'), 'utf8'),
 ) as FoodItem[];
+/** What the longer-stores planner sees. */
+const longerFoods = longerStoresFoods(foods);
 
 const WEEKS = 4;
 const BUDGET_TIERS = [60, 120, 250];
@@ -88,7 +94,7 @@ suite('1. Matrix Integrity — all 48 combinations produce valid plans');
 for (const adults of ADULT_RANGE) {
   for (const children of CHILD_RANGE) {
     for (const budget of BUDGET_TIERS) {
-      const result = buildPlan({ adults, children, budgetGbp: budget, weeks: WEEKS }, foods);
+      const result = buildPlan({ adults, children, budgetGbp: budget, weeks: WEEKS }, longerFoods);
       const id = label(adults, children, budget);
 
       // Budget discipline
@@ -131,7 +137,7 @@ suite('2. Variety Disclosure — unconstrained profiles are silent');
 for (const adults of ADULT_RANGE) {
   for (const children of CHILD_RANGE) {
     for (const budget of BUDGET_TIERS) {
-      const result = buildPlan({ adults, children, budgetGbp: budget, weeks: WEEKS }, foods);
+      const result = buildPlan({ adults, children, budgetGbp: budget, weeks: WEEKS }, longerFoods);
       const id = label(adults, children, budget);
 
       // High budget (£250) should always be unconstrained for any household size
@@ -165,7 +171,7 @@ suite('3. Constrained Profiles — algorithm produces valid plans under pressure
 
 // 3a. Extreme constraint: large household, tiny budget
 {
-  const result = buildPlan({ adults: 4, children: 3, budgetGbp: 50, weeks: 4 }, foods);
+  const result = buildPlan({ adults: 4, children: 3, budgetGbp: 50, weeks: 4 }, longerFoods);
   const id = 'A4C3B£50';
   check(
     result.droppedCategories.length === 0,
@@ -187,7 +193,7 @@ suite('3. Constrained Profiles — algorithm produces valid plans under pressure
 
 // 3b. Medium constraint: large household, low budget
 {
-  const result = buildPlan({ adults: 4, children: 2, budgetGbp: 60, weeks: 4 }, foods);
+  const result = buildPlan({ adults: 4, children: 2, budgetGbp: 60, weeks: 4 }, longerFoods);
   const id = 'A4C2B£60';
   check(
     result.droppedCategories.length === 0,
@@ -201,7 +207,7 @@ suite('3. Constrained Profiles — algorithm produces valid plans under pressure
 
 // 3c. Mild constraint: modest household, tight budget
 {
-  const result = buildPlan({ adults: 3, children: 2, budgetGbp: 60, weeks: 4 }, foods);
+  const result = buildPlan({ adults: 3, children: 2, budgetGbp: 60, weeks: 4 }, longerFoods);
   const id = 'A3C2B£60';
   check(
     result.droppedCategories.length === 0,
@@ -226,7 +232,7 @@ suite('4. Relaxation Loop — no item exceeds 25% hard ceiling');
 for (const adults of ADULT_RANGE) {
   for (const children of CHILD_RANGE) {
     for (const budget of BUDGET_TIERS) {
-      const result = buildPlan({ adults, children, budgetGbp: budget, weeks: WEEKS }, foods);
+      const result = buildPlan({ adults, children, budgetGbp: budget, weeks: WEEKS }, longerFoods);
       const id = label(adults, children, budget);
 
       const maxItemCalories = Math.max(...result.ranked.map(r => r.totalCalories));
@@ -249,7 +255,7 @@ suite('5. Item Diversity — plans contain ≥5 distinct items');
 for (const adults of ADULT_RANGE) {
   for (const children of CHILD_RANGE) {
     for (const budget of BUDGET_TIERS) {
-      const result = buildPlan({ adults, children, budgetGbp: budget, weeks: WEEKS }, foods);
+      const result = buildPlan({ adults, children, budgetGbp: budget, weeks: WEEKS }, longerFoods);
       const id = label(adults, children, budget);
 
       // Constrained budgets (£60) can have 5 items when morale is skipped.
@@ -272,7 +278,7 @@ const REQUIRED_CATEGORY_KEYS = ['staple_carb', 'protein', 'fat', 'vegetable', 'm
 for (const adults of ADULT_RANGE) {
   for (const children of CHILD_RANGE) {
     for (const budget of BUDGET_TIERS) {
-      const result = buildPlan({ adults, children, budgetGbp: budget, weeks: WEEKS }, foods);
+      const result = buildPlan({ adults, children, budgetGbp: budget, weeks: WEEKS }, longerFoods);
       const id = label(adults, children, budget);
 
       // Morale has minUnits override = 0, making it an optional category.
@@ -306,7 +312,7 @@ suite('7. Per-Item Cap — no single item exceeds 20% in any standard profile');
 for (const adults of ADULT_RANGE) {
   for (const children of CHILD_RANGE) {
     for (const budget of [120, 250]) {
-      const result = buildPlan({ adults, children, budgetGbp: budget, weeks: WEEKS }, foods);
+      const result = buildPlan({ adults, children, budgetGbp: budget, weeks: WEEKS }, longerFoods);
       const id = label(adults, children, budget);
 
       const maxItemShare = Math.max(...result.ranked.map(r => r.totalCalories)) / result.totalCaloriesNeeded;
@@ -331,7 +337,7 @@ suite('8. Relaxation Gate — relaxation loop logic is structurally sound');
 // Edge case: single adult, no children, low budget — 4 weeks
 // Verifies the algorithm doesn't drop categories even when budget is tight
 {
-  const result = buildPlan({ adults: 1, children: 0, budgetGbp: 30, weeks: 4 }, foods);
+  const result = buildPlan({ adults: 1, children: 0, budgetGbp: 30, weeks: 4 }, longerFoods);
   const id = 'A1C0B£30W4';
   check(
     result.droppedCategories.length === 0,
@@ -349,7 +355,7 @@ suite('8. Relaxation Gate — relaxation loop logic is structurally sound');
 
 // Edge case: maximum household, maximum budget
 {
-  const result = buildPlan({ adults: 6, children: 6, budgetGbp: 500, weeks: 12 }, foods);
+  const result = buildPlan({ adults: 6, children: 6, budgetGbp: 500, weeks: 12 }, longerFoods);
   const id = 'A6C6B£500W12';
   check(
     result.droppedCategories.length === 0,
@@ -368,7 +374,7 @@ suite('8. Relaxation Gate — relaxation loop logic is structurally sound');
 // Edge case: zero children (adults only)
 {
   for (const adults of [1, 2, 4]) {
-    const result = buildPlan({ adults, children: 0, budgetGbp: 120, weeks: 4 }, foods);
+    const result = buildPlan({ adults, children: 0, budgetGbp: 120, weeks: 4 }, longerFoods);
     const id = `A${adults}C0B£120`;
     check(
       result.droppedCategories.length === 0,
@@ -548,7 +554,7 @@ for (const [name, flags] of [
 
 for (const h of [{ adults: 1, children: 0 }, { adults: 2, children: 1 }]) {
   for (const weeks of [2, 4, 12]) {
-    const p = buildPlan({ ...h, weeks, budgetGbp: 250 }, foods);
+    const p = buildPlan({ ...h, weeks, budgetGbp: 250 }, longerFoods);
     const morale = p.ranked
       .filter((l) => l.category === 'morale')
       .reduce((s, l) => s + l.totalCalories, 0);
@@ -631,7 +637,7 @@ suite('13. Staples — every three-day basket has a starchy food, gluten-free in
   for (const flags of [{}, { vegetarian: true }, { noDairy: true }] as DietaryFlags[]) {
     for (const weeks of [2, 4, 12]) {
       for (const budgetGbp of [60, 120, 250]) {
-        const p = buildPlan({ adults: 2, children: 1, weeks, budgetGbp, dietaryFlags: flags }, foods);
+        const p = buildPlan({ adults: 2, children: 1, weeks, budgetGbp, dietaryFlags: flags }, longerFoods);
         leaked += p.ranked.filter((l) => l.item.only_for_diet && !flags[l.item.only_for_diet]).length;
       }
     }
@@ -682,6 +688,65 @@ check(
   }
   check(short === 0, 'three-day basket reaches three days for 1 to 6 children in every age group');
   check(CHILD_CALORIES_SOURCE_URL.startsWith('https://www.gov.uk/'), 'children\'s calorie source links to gov.uk');
+}
+
+// ── Allergies ─────────────────────────────────────────────────────────────────
+
+suite('Allergies — three-day basket');
+
+// Every food the basket counts calories for has its allergens read off a
+// named label. (Salt, vinegar and the like add no calories, so never appear.)
+for (const f of noCookPool(foods).filter((x) => x.cal_per_100g != null)) {
+  check(!!f.allergens && !!f.allergens.source && !!f.allergens.checked, `${f.id}: allergens label-checked`);
+}
+check(
+  !passesAllergies({ ...foods[0], allergens: undefined }, ['milk']),
+  'a food with no allergen check is never offered when an allergy is ticked',
+);
+check(
+  !foods.find((f) => f.id === 'dark-chocolate')!.gluten_free,
+  'dark chocolate is not counted as gluten-free (label: not for wheat allergy)',
+);
+
+{
+  const households: Household[] = [hh(1, 0), hh(2, 1), hh(2, 2, 'under4'), hh(4, 3, 'from11to17')];
+  const sets = [...ALLERGENS.map((a) => [a.key]), ALLERGENS.map((a) => a.key)];
+  const leaked: string[] = [];
+  const short: string[] = [];
+  for (const h of households) {
+    for (const set of sets) {
+      const b = exampleBasket(h, foods, {}, set);
+      const name = `${householdLabel(h)} / ${set.length > 1 ? 'all' : set[0]}`;
+      for (const l of b.lines) {
+        if (l.quantity > 0 && set.some((a) => l.item.allergens!.contains.includes(a) || l.item.allergens!.may_contain.includes(a))) {
+          leaked.push(`${name}: ${l.item.id}`);
+        }
+      }
+      if (basketCoverage(b.lines, b.dailyCaloriesNeeded).short) short.push(name);
+    }
+  }
+  check(leaked.length === 0, `no basket holds a food that contains or may contain a ticked allergen${leaked.length ? ': ' + leaked.slice(0, 5).join('; ') : ''}`);
+  check(short.length === 0, `every allergy basket still reaches three days${short.length ? ': ' + short.join('; ') : ''}`);
+
+  const glutenBasket = exampleBasket(hh(2, 1), foods, {}, ['gluten']);
+  check(
+    glutenBasket.lines.some((l) => l.quantity > 0 && l.item.category === 'staple_carb'),
+    'a gluten allergy still gets a starchy food (the gluten-free crackers or rice cakes)',
+  );
+}
+
+// Honey is not safe for babies under one; the planner can't tell a baby from
+// a toddler, so no honey when any child under 4 is counted.
+{
+  const withToddler = hh(2, 1, 'under4');
+  check(!basketPool(withToddler, foods, []).some((f) => f.id === 'honey'), 'no honey offered when a child under 4 is counted');
+  check(basketPool(hh(2, 1), foods, []).some((f) => f.id === 'honey'), 'honey still offered with no child under 4');
+}
+
+// Flapjack and cornflakes are for the three-day basket only.
+for (const id of ['flapjack', 'cornflakes']) {
+  check(basketPool(hh(2, 1), foods, []).some((f) => f.id === id), `${id}: offered in the three-day basket`);
+  check(!longerFoods.some((f) => f.id === id), `${id}: not in longer stores`);
 }
 
 // ── Summary ───────────────────────────────────────────────────────────────────
