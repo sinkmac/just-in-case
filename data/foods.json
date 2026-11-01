@@ -142,7 +142,17 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "staple_carb",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "allergens": {
+      "contains": [
+        "oats"
+      ],
+      "may_contain": [
+        "gluten"
+      ],
+      "source": "https://www.sainsburys.co.uk/groceries/product/sainsburys-rough-oatcakes-250g",
+      "checked": "2026-11-01"
+    }
   },
   {
     "id": "gf-rice-cakes",
@@ -169,7 +179,17 @@
     "region": "uk",
     "prep": "no-cook",
     "notes": "Label: wholegrain rice, sea salt; may contain milk, sesame, soya. Once opened keep airtight, eat within a week. Shelf life and storage volume are estimates, not from the label.",
-    "only_for_diet": "glutenFree"
+    "only_for_diet": "glutenFree",
+    "allergens": {
+      "contains": [],
+      "may_contain": [
+        "milk",
+        "sesame",
+        "soya"
+      ],
+      "source": "https://www.ocado.com/products/kallo-lightly-salted-wholegrain-rice-cakes/39208011",
+      "checked": "2026-11-01"
+    }
   },
   {
     "id": "gf-oat-crackers",
@@ -196,7 +216,18 @@
     "region": "uk",
     "prep": "no-cook",
     "notes": "Label: gluten-free oats 51%, maize and rice flour, palm oil. Contains oats: a small number of people with coeliac disease also react to oats. Made on equipment that handles milk; nut-free recipe, nuts not guaranteed absent. Shelf life and storage volume are estimates, not from the label.",
-    "only_for_diet": "glutenFree"
+    "only_for_diet": "glutenFree",
+    "allergens": {
+      "contains": [
+        "oats"
+      ],
+      "may_contain": [
+        "milk",
+        "nuts"
+      ],
+      "source": "https://www.tesco.com/groceries/en-GB/products/317284719",
+      "checked": "2026-11-01"
+    }
   },
   {
     "id": "red-lentils",
@@ -240,7 +271,15 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "allergens": {
+      "contains": [
+        "sulphites"
+      ],
+      "may_contain": [],
+      "source": "https://sainsburys.co.uk/groceries/product/sainsburys-chickpeas-in-water-400g-240g",
+      "checked": "2026-11-01"
+    }
   },
   {
     "id": "tinned-tuna",
@@ -265,7 +304,15 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "allergens": {
+      "contains": [
+        "fish"
+      ],
+      "may_contain": [],
+      "source": "https://groceries.morrisons.com/products/john-west-tuna-chunks-in-spring-water-4x125g-102g-drained/113887082",
+      "checked": "2026-11-01"
+    }
   },
   {
     "id": "tinned-sardines",
@@ -289,7 +336,15 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "allergens": {
+      "contains": [
+        "fish"
+      ],
+      "may_contain": [],
+      "source": "https://www.sainsburys.co.uk/groceries/product/sainsburys-sardines-in-brine-120g-90g",
+      "checked": "2026-11-01"
+    }
   },
   {
     "id": "peanut-butter",
@@ -313,7 +368,17 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "allergens": {
+      "contains": [
+        "peanuts"
+      ],
+      "may_contain": [
+        "nuts"
+      ],
+      "source": "https://sainsburys.co.uk/groceries/product/sainsburys-peanut-butter-smooth-340g",
+      "checked": "2026-11-01"
+    }
   },
   {
     "id": "powdered-milk",
@@ -357,7 +422,13 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "allergens": {
+      "contains": [],
+      "may_contain": [],
+      "source": "https://www.sainsburys.co.uk/groceries/product/sainsburys-baked-beans-in-tomato-sauce-400g",
+      "checked": "2026-11-01"
+    }
   },
   {
     "id": "almonds",
@@ -381,7 +452,17 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "allergens": {
+      "contains": [
+        "nuts"
+      ],
+      "may_contain": [
+        "sesame"
+      ],
+      "source": "https://sainsburys.co.uk/groceries/product/sainsburys-whole-almonds-300g",
+      "checked": "2026-11-01"
+    }
   },
   {
     "id": "walnuts",
@@ -405,7 +486,17 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "allergens": {
+      "contains": [
+        "nuts"
+      ],
+      "may_contain": [
+        "sesame"
+      ],
+      "source": "https://mcgrocer.com/products/sainsburys-walnuts-pieces-200g",
+      "checked": "2026-11-01"
+    }
   },
   {
     "id": "uht-milk",
@@ -529,7 +620,13 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "vegetable",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "allergens": {
+      "contains": [],
+      "may_contain": [],
+      "source": "https://sainsburys.co.uk/groceries/product/sainsburys-chopped-tomatoes-can-400g",
+      "checked": "2026-11-01"
+    }
   },
   {
     "id": "tinned-sweetcorn",
@@ -553,7 +650,13 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "vegetable",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "allergens": {
+      "contains": [],
+      "may_contain": [],
+      "source": "https://www.tesco.com/shop/en-GB/products/254875197",
+      "checked": "2026-11-01"
+    }
   },
   {
     "id": "tomato-puree",
@@ -597,7 +700,13 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "vegetable",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "allergens": {
+      "contains": [],
+      "may_contain": [],
+      "source": "https://www.sainsburys.co.uk/groceries/product/sainsburys-garden-peas-in-water-300g-185g",
+      "checked": "2026-11-01"
+    }
   },
   {
     "id": "tinned-fruit",
@@ -621,7 +730,13 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "micronutrient",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "allergens": {
+      "contains": [],
+      "may_contain": [],
+      "source": "https://sainsburys.co.uk/groceries/product/sainsburys-peach-slices-in-fruit-juice-411g",
+      "checked": "2026-11-01"
+    }
   },
   {
     "id": "dried-mango",
@@ -645,7 +760,15 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "micronutrient",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "allergens": {
+      "contains": [
+        "sulphites"
+      ],
+      "may_contain": [],
+      "source": "https://sainsburys.co.uk/groceries/product/sainsburys-dried-mango-100g",
+      "checked": "2026-11-01"
+    }
   },
   {
     "id": "multivitamins",
@@ -684,12 +807,25 @@
     "storage_litres_per_unit": 0.12,
     "vegetarian": true,
     "vegan": false,
-    "gluten_free": true,
+    "gluten_free": false,
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "morale",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "allergens": {
+      "contains": [
+        "soya"
+      ],
+      "may_contain": [
+        "nuts",
+        "milk",
+        "gluten"
+      ],
+      "source": "https://www.mcgrocer.com/products/stamford-street-co-dark-chocolate-100g",
+      "checked": "2026-11-01"
+    },
+    "notes": "Label: not suitable for nut, milk or wheat allergy, so not counted as gluten-free."
   },
   {
     "id": "instant-coffee",
@@ -733,7 +869,14 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "morale",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "allergens": {
+      "contains": [],
+      "may_contain": [],
+      "source": "https://sainsburys.co.uk/groceries/product/sainsburys-runny-honey-340g",
+      "checked": "2026-11-01"
+    },
+    "not_for_babies": true
   },
   {
     "id": "salt",
@@ -838,7 +981,15 @@
     "category": "protein",
     "region": "uk",
     "prep": "no-cook",
-    "noCookReady": true
+    "noCookReady": true,
+    "allergens": {
+      "contains": [
+        "fish"
+      ],
+      "may_contain": [],
+      "source": "https://sainsburys.co.uk/groceries/product/sainsburys-82g-brine-mackerel-fillets",
+      "checked": "2026-11-01"
+    }
   },
   {
     "id": "tinned-salmon",
@@ -864,7 +1015,15 @@
     "category": "protein",
     "region": "uk",
     "prep": "no-cook",
-    "noCookReady": true
+    "noCookReady": true,
+    "allergens": {
+      "contains": [
+        "fish"
+      ],
+      "may_contain": [],
+      "source": "https://www.mcgrocer.com/products/sainsburys-wild-pacific-red-salmon-105g",
+      "checked": "2026-11-01"
+    }
   },
   {
     "id": "stock-cubes",
@@ -908,7 +1067,15 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "micronutrient",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "allergens": {
+      "contains": [
+        "sulphites"
+      ],
+      "may_contain": [],
+      "source": "https://www.mcgrocer.com/products/sainsburys-dried-apricots-500g",
+      "checked": "2026-11-01"
+    }
   },
   {
     "id": "raisins",
@@ -933,6 +1100,87 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "micronutrient",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "allergens": {
+      "contains": [],
+      "may_contain": [],
+      "source": "https://sainsburys.co.uk/groceries/product/sainsburys-raisins-seedless-500g",
+      "checked": "2026-11-01"
+    }
+  },
+  {
+    "id": "flapjack",
+    "name": "Flapjack",
+    "cal_per_100g": 421,
+    "typical_unit_g": 160,
+    "edible_unit_g": 160,
+    "nutrition_basis": "as-sold",
+    "cal_verified": {
+      "source": "Sainsbury's Flapjack Slices 5x32g, label read by Sink",
+      "checked": "2026-11-01",
+      "pack_size_matches_source": true
+    },
+    "typical_unit_price_gbp": 1.25,
+    "priceNote": "Sainsbury's price, 1 Nov 2026. Not checked at Aldi.",
+    "shelf_life_months": 6,
+    "storage_litres_per_unit": 0.4,
+    "vegetarian": true,
+    "vegan": false,
+    "gluten_free": false,
+    "dairy_free": false,
+    "amazon_asin": "XXXXXXXXXX",
+    "category": "staple_carb",
+    "region": "uk",
+    "prep": "no-cook",
+    "notes": "Five 32g slices. Shelf life and storage volume are estimates, not from the label.",
+    "allergens": {
+      "contains": [
+        "oats",
+        "milk"
+      ],
+      "may_contain": [
+        "nuts",
+        "egg",
+        "gluten"
+      ],
+      "source": "Sainsbury's Flapjack Slices 5x32g, label read by Sink",
+      "checked": "2026-11-01"
+    },
+    "three_day_only": true
+  },
+  {
+    "id": "cornflakes",
+    "name": "Cornflakes",
+    "cal_per_100g": 384,
+    "typical_unit_g": 500,
+    "edible_unit_g": 500,
+    "nutrition_basis": "as-sold",
+    "cal_verified": {
+      "source": "https://www.waitrose.com/ecom/products/essential-waitrose-corn-flakes/001204-144-145",
+      "checked": "2026-11-01",
+      "pack_size_matches_source": true
+    },
+    "typical_unit_price_gbp": 1.4,
+    "priceNote": "Waitrose Essential price, 1 Nov 2026. Not checked at Aldi.",
+    "shelf_life_months": 12,
+    "storage_litres_per_unit": 3.7,
+    "vegetarian": true,
+    "vegan": false,
+    "gluten_free": false,
+    "dairy_free": true,
+    "amazon_asin": "XXXXXXXXXX",
+    "category": "staple_carb",
+    "region": "uk",
+    "prep": "no-cook",
+    "notes": "Eaten dry, no milk needed. Contains barley malt. Shelf life and storage volume (a 500g box) are estimates, not from the label.",
+    "allergens": {
+      "contains": [
+        "gluten"
+      ],
+      "may_contain": [],
+      "source": "https://www.waitrose.com/ecom/products/essential-waitrose-corn-flakes/001204-144-145",
+      "checked": "2026-11-01"
+    },
+    "three_day_only": true
   }
 ]

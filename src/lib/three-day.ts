@@ -3,6 +3,8 @@ import {
   childCount,
   edibleGrams,
   NO_CHILDREN,
+  passesAllergies,
+  type Allergen,
   type ChildAges,
   type DietaryFlags,
   type FoodItem,
@@ -209,6 +211,15 @@ export function noCookPool(foods: FoodItem[]): FoodItem[] {
   );
 }
 
+/** The foods this household's basket may hold: no-cook, safe for every ticked
+ *  allergy, and no honey when a child under 4 is counted. Lines the person has
+ *  changed are held to this too, so a ticked allergy always wins. */
+export function basketPool(h: Household, foods: FoodItem[], allergies: readonly Allergen[]): FoodItem[] {
+  return noCookPool(foods).filter(
+    (f) => passesAllergies(f, allergies) && !(f.not_for_babies && h.childAges.under4 > 0),
+  );
+}
+
 export function caloriesPerPack(item: FoodItem): number {
   return item.cal_per_100g == null ? 0 : (item.cal_per_100g / 100) * edibleGrams(item);
 }
@@ -231,7 +242,7 @@ const BASKET_MAX_PER_FOOD = 3;
 const BASKET_MUST_INCLUDE = [
   // A starchy food, so there is something to eat the rest with. The
   // gluten-free ones only come in when the filter is on.
-  ["crackers-oatcakes", "gf-oat-crackers", "gf-rice-cakes"],
+  ["crackers-oatcakes", "gf-oat-crackers", "gf-rice-cakes", "flapjack", "cornflakes"],
   ["tinned-tuna", "tinned-sardines", "tinned-mackerel", "tinned-salmon"],
   ["tinned-tomatoes", "tinned-sweetcorn", "tinned-peas", "tinned-fruit"],
   ["dried-apricots", "raisins", "dried-mango"],
@@ -243,11 +254,20 @@ export type Basket = {
 };
 
 /** The solver's cheapest-possible basket, power-out, for exactly three days. */
-export function exampleBasket(h: Household, foods: FoodItem[], dietaryFlags: DietaryFlags): Basket {
+export function exampleBasket(
+  h: Household,
+  foods: FoodItem[],
+  dietaryFlags: DietaryFlags,
+  allergies: readonly Allergen[] = [],
+): Basket {
+  const pool = basketPool(h, foods, allergies);
+  // A gluten allergy needs what the gluten-free diet gets: the labelled
+  // gluten-free crackers and rice cakes.
+  const flags: DietaryFlags = allergies.includes("gluten") ? { ...dietaryFlags, glutenFree: true } : dietaryFlags;
   const plan = (maxUnitsPerItem: number) =>
     buildCheapestPlan(
-      { adults: h.adults, children: childCount(h.childAges), childAges: h.childAges, weeks: THREE_DAYS / 7, dietaryFlags, powerOut: true },
-      noCookPool(foods),
+      { adults: h.adults, children: childCount(h.childAges), childAges: h.childAges, weeks: THREE_DAYS / 7, dietaryFlags: flags, powerOut: true },
+      pool,
       {
         skipCategoryMinimums: true,
         allowPartialWeek: true,

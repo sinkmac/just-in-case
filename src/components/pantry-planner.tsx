@@ -9,6 +9,7 @@ import {
   buildCheapestPlan,
   BABY_MILK_NOTE,
   CHILD_AGE_BANDS,
+  longerStoresFoods,
   CHILD_CALORIES_SOURCE_URL,
   childCount,
   NO_CHILDREN,
@@ -25,6 +26,9 @@ type DietaryFlags = {
 };
 
 export type DurationTier = "weekend" | "fortnight" | "month" | "season";
+
+// Flapjack and cornflakes are three-day basket foods only, for now.
+const LONGER_FOODS = longerStoresFoods(foods as FoodItem[]);
 
 const TIER_DATA: Record<DurationTier, { label: string; weeks: number; register: string; pictogram: string }> = {
   weekend: {
@@ -289,7 +293,7 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
           childAges,
           powerOut: powerState === "out",
         },
-        foods as FoodItem[],
+        LONGER_FOODS,
       ),
     [adults, children, budgetGbp, tier, dietaryFlags, childAges, powerState],
   );
@@ -305,7 +309,7 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
           childAges,
           powerOut: powerState === "out",
         },
-        foods as FoodItem[],
+        LONGER_FOODS,
       ),
     [adults, children, tier, dietaryFlags, childAges, powerState],
   );
