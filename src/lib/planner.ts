@@ -134,6 +134,13 @@ export const CHILD_DAILY_CALORIES = ADULT_DAILY_CALORIES * CHILD_CALORIE_RATIO;
 // The adult 2,000 is itself below SACN's adult average (about 2,470), so a
 // teenager counted as one adult keeps the same proportion. Teenage boys
 // often need more than this.
+/** Where the children's figures come from, linked on the page. */
+export const CHILD_CALORIES_SOURCE_URL =
+  "https://www.gov.uk/government/publications/sacn-dietary-reference-values-for-energy";
+
+/** Shown wherever a child under 4 is counted: a baby needs milk, not tins. */
+export const BABY_MILK_NOTE = "For a baby, keep a supply of their usual milk or formula.";
+
 export type ChildAges = { under4: number; from4to10: number; from11to17: number };
 
 /** `label` heads a counter; `phrase` follows a number or "Children". */

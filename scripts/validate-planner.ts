@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import {
   ADULT_DAILY_CALORIES,
   buildPlan,
+  CHILD_CALORIES_SOURCE_URL,
   childDailyCalories,
   edibleGrams,
   householdDailyCalories,
@@ -680,6 +681,7 @@ check(
     }
   }
   check(short === 0, 'three-day basket reaches three days for 1 to 6 children in every age group');
+  check(CHILD_CALORIES_SOURCE_URL.startsWith('https://www.gov.uk/'), 'children\'s calorie source links to gov.uk');
 }
 
 // ── Summary ───────────────────────────────────────────────────────────────────

@@ -7,7 +7,9 @@ import { printOnly } from "@/lib/print";
 import { scrollBehavior } from "@/lib/motion";
 import {
   ADULT_DAILY_CALORIES,
+  BABY_MILK_NOTE,
   CHILD_AGE_BANDS,
+  CHILD_CALORIES_SOURCE_URL,
   childCount,
   childDailyCalories,
   type DietaryFlags,
@@ -378,7 +380,19 @@ export function ThreeDayPlanner({
                     `and ${childDailyCalories("under4").toLocaleString()} per child under 4: ` +
                     `${basket.dailyCaloriesNeeded.toLocaleString()} kcal for your household. Actual needs vary, ` +
                     `and teenagers often need more.`}
+                {childCount(household.childAges) > 0 && (
+                  <>
+                    {" "}The children&apos;s figures are based on{" "}
+                    <a href={CHILD_CALORIES_SOURCE_URL} className="text-[var(--brand)] underline underline-offset-2 hover:text-[var(--brand-dark)]">
+                      UK government advice on energy needs
+                    </a>
+                    .
+                  </>
+                )}
               </p>
+              {household.childAges.under4 > 0 && (
+                <p className="mt-2 font-semibold">{BABY_MILK_NOTE}</p>
+              )}
               <p className="mt-2 text-[var(--secondary)]">
                 Many tinned foods need refrigeration once opened. Follow the storage instructions on the
                 label. If you cannot keep leftovers safely chilled, choose tins your household can

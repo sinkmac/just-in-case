@@ -7,7 +7,9 @@ import foods from "../../data/foods.json";
 import {
   buildPlan,
   buildCheapestPlan,
+  BABY_MILK_NOTE,
   CHILD_AGE_BANDS,
+  CHILD_CALORIES_SOURCE_URL,
   childCount,
   NO_CHILDREN,
   type ChildAges,
@@ -530,6 +532,18 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
                     </div>
                   ))}
                 </div>
+                {children > 0 && (
+                  <p className="mt-2 text-xs text-[var(--muted)]">
+                    Calories by age are based on{" "}
+                    <a href={CHILD_CALORIES_SOURCE_URL} className="text-[var(--brand)] underline">
+                      UK government advice on energy needs
+                    </a>
+                    .
+                  </p>
+                )}
+                {childAges.under4 > 0 && (
+                  <p className="mt-2 text-sm font-semibold">{BABY_MILK_NOTE}</p>
+                )}
               </fieldset>
 
               <div>
