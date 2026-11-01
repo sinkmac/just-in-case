@@ -1,6 +1,17 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { buildPlan, edibleGrams, type DietaryFlags, type FoodItem, type PlannerResult } from '../src/lib/planner';
+import {
+  ADULT_DAILY_CALORIES,
+  buildPlan,
+  childDailyCalories,
+  edibleGrams,
+  householdDailyCalories,
+  NO_CHILDREN,
+  type ChildAges,
+  type DietaryFlags,
+  type FoodItem,
+  type PlannerResult,
+} from '../src/lib/planner';
 import {
   basketCoverage,
   caloriesPerPack,
@@ -9,8 +20,16 @@ import {
   fixedGroups,
   listName,
   noCookPool,
+  householdLabel,
+  people,
   shoppingListText,
+  type Household,
 } from '../src/lib/three-day';
+
+/** A three-day household with `c` children, all in one age group (4 to 10 unless named). */
+function hh(a: number, c: number, band: keyof ChildAges = 'from4to10'): Household {
+  return { adults: a, childAges: { ...NO_CHILDREN, [band]: c } };
+}
 
 const foods = JSON.parse(
   readFileSync(join(process.cwd(), 'data', 'foods.json'), 'utf8'),
@@ -428,7 +447,7 @@ for (const [id, e] of Object.entries(EXPECTED)) {
         { noDairy: true },
         { vegetarian: true, glutenFree: true },
       ]) {
-        for (const l of exampleBasket({ adults: a, children: c }, foods, df ?? {}).lines) {
+        for (const l of exampleBasket(hh(a, c), foods, df ?? {}).lines) {
           if (l.quantity > 0) reachable.add(l.item.id);
         }
       }
@@ -503,7 +522,7 @@ for (const [name, flags] of [
   ['veg+GF', { vegetarian: true, glutenFree: true }],
 ] as const) {
   for (const h of [{ adults: 1, children: 0 }, { adults: 2, children: 1 }, { adults: 4, children: 3 }]) {
-    const b = exampleBasket(h, foods, flags as never);
+    const b = exampleBasket(hh(h.adults, h.children), foods, flags as never);
     const total = b.lines.reduce((s, l) => s + caloriesPerPack(l.item) * l.quantity, 0);
     const morale = b.lines
       .filter((l) => l.item.category === 'morale')
@@ -587,7 +606,7 @@ suite('13. Staples — every three-day basket has a starchy food, gluten-free in
   for (let a = 1; a <= 10; a++) {
     for (let c = 0; c <= 10; c++) {
       for (const [name, flags] of DIETS) {
-        const lines = exampleBasket({ adults: a, children: c }, foods, flags).lines;
+        const lines = exampleBasket(hh(a, c, c % 2 ? 'from11to17' : 'from4to10'), foods, flags).lines;
         checked++;
         if (!lines.some((l) => l.quantity > 0 && l.item.category === 'staple_carb')) {
           missing.push(`A${a}C${c} ${name}`);
@@ -628,6 +647,39 @@ for (const id of ['gf-rice-cakes', 'gf-oat-crackers']) {
   check(f.prep === 'no-cook' && f.category === 'staple_carb', `${id}: no-cook staple`);
   check(!!f.cal_verified, `${id}: calories read off a named label`);
   check(f.only_for_diet === 'glutenFree', `${id}: offered only when gluten-free is ticked`);
+}
+
+// Children's ages: each age group counts its own share of an adult's calories.
+check(childDailyCalories('under4') === 1000, 'child under 4: 1,000 kcal a day');
+check(childDailyCalories('from4to10') === 1600, 'child aged 4 to 10: 1,600 kcal a day');
+check(childDailyCalories('from11to17') === ADULT_DAILY_CALORIES, 'child aged 11 to 17: same as an adult');
+check(
+  householdDailyCalories({ adults: 2, children: 0, childAges: { under4: 1, from4to10: 1, from11to17: 1 } }) === 8600,
+  'two adults and one child in each age group: 8,600 kcal a day',
+);
+check(
+  householdDailyCalories({ adults: 2, children: 1 }) === 5200,
+  'children without ages still use the old 0.6 share',
+);
+{
+  const mixed: Household = { adults: 2, childAges: { under4: 1, from4to10: 0, from11to17: 2 } };
+  check(people(mixed) === 5, 'people() counts children in every age group');
+  check(householdLabel(mixed) === '2 adults and 3 children', 'household label counts children in every age group');
+  // Older children need more food: the basket for teenagers must be bigger.
+  const packs = (h: Household) => exampleBasket(h, foods, {}).lines.reduce((n, l) => n + l.quantity, 0);
+  const young = packs(hh(2, 2, 'under4'));
+  const teens = packs(hh(2, 2, 'from11to17'));
+  check(teens > young, `three-day basket grows with age (under 4: ${young} packs, 11 to 17: ${teens} packs)`);
+  // Every age mix still reaches three days.
+  let short = 0;
+  for (const band of ['under4', 'from4to10', 'from11to17'] as const) {
+    for (let c = 1; c <= 6; c++) {
+      const b = exampleBasket(hh(2, c, band), foods, {});
+      const cov = basketCoverage(b.lines, b.dailyCaloriesNeeded);
+      if (cov.short) short++;
+    }
+  }
+  check(short === 0, 'three-day basket reaches three days for 1 to 6 children in every age group');
 }
 
 // ── Summary ───────────────────────────────────────────────────────────────────

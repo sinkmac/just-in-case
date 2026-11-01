@@ -7,7 +7,9 @@ import { printOnly } from "@/lib/print";
 import { scrollBehavior } from "@/lib/motion";
 import {
   ADULT_DAILY_CALORIES,
-  CHILD_DAILY_CALORIES,
+  CHILD_AGE_BANDS,
+  childCount,
+  childDailyCalories,
   type DietaryFlags,
   type FoodItem,
 } from "@/lib/planner";
@@ -317,10 +319,21 @@ export function ThreeDayPlanner({
                 <span className="w-20 font-semibold">Adults</span>
                 <Stepper label="Adults" value={household.adults} min={1} max={10} onChange={(v) => setHousehold((h) => ({ ...h, adults: v }))} />
               </div>
-              <div className="flex items-center gap-3">
-                <span className="w-20 font-semibold">Children</span>
-                <Stepper label="Children" value={household.children} min={0} max={10} onChange={(v) => setHousehold((h) => ({ ...h, children: v }))} />
-              </div>
+            </div>
+            <p className="mt-4 font-semibold">Children, by age</p>
+            <div className="mt-2 flex flex-wrap gap-x-8 gap-y-3">
+              {CHILD_AGE_BANDS.map((band) => (
+                <div key={band.key} className="flex items-center gap-3">
+                  <span className="w-20">{band.label}</span>
+                  <Stepper
+                    label={`Children ${band.phrase}`}
+                    value={household.childAges[band.key]}
+                    min={0}
+                    max={10}
+                    onChange={(v) => setHousehold((h) => ({ ...h, childAges: { ...h.childAges, [band.key]: v } }))}
+                  />
+                </div>
+              ))}
             </div>
           </section>
 
@@ -357,11 +370,14 @@ export function ThreeDayPlanner({
                     : `This basket gives about ${coverage.label} days of energy — short of three days.`}
               </p>
               <p className="mt-1 text-[var(--secondary)]">
-                {`We’ve used planning estimates of ${ADULT_DAILY_CALORIES.toLocaleString()} kcal per adult ` +
-                  `and ${CHILD_DAILY_CALORIES.toLocaleString()} per child each day: ` +
-                  `${basket.dailyCaloriesNeeded.toLocaleString()} kcal for your household. Actual needs vary. ` +
-                  `The child allowance does not account for age and may underestimate older ` +
-                  `children’s and teenagers’ needs.`}
+                {childCount(household.childAges) === 0
+                  ? `We’ve used a planning estimate of ${ADULT_DAILY_CALORIES.toLocaleString()} kcal per adult ` +
+                    `each day: ${basket.dailyCaloriesNeeded.toLocaleString()} kcal for your household. Actual needs vary.`
+                  : `We’ve used planning estimates each day of ${ADULT_DAILY_CALORIES.toLocaleString()} kcal per adult ` +
+                    `or child aged 11 to 17, ${childDailyCalories("from4to10").toLocaleString()} per child aged 4 to 10 ` +
+                    `and ${childDailyCalories("under4").toLocaleString()} per child under 4: ` +
+                    `${basket.dailyCaloriesNeeded.toLocaleString()} kcal for your household. Actual needs vary, ` +
+                    `and teenagers often need more.`}
               </p>
               <p className="mt-2 text-[var(--secondary)]">
                 Many tinned foods need refrigeration once opened. Follow the storage instructions on the

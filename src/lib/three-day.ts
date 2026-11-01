@@ -1,4 +1,12 @@
-import { buildCheapestPlan, edibleGrams, type DietaryFlags, type FoodItem } from "./planner";
+import {
+  buildCheapestPlan,
+  childCount,
+  edibleGrams,
+  NO_CHILDREN,
+  type ChildAges,
+  type DietaryFlags,
+  type FoodItem,
+} from "./planner";
 
 // The three-day planner. Pure logic only: what each line needs for a
 // household, what's still to get, and the plain-text shopping list. Nothing
@@ -7,9 +15,9 @@ import { buildCheapestPlan, edibleGrams, type DietaryFlags, type FoodItem } from
 export const THREE_DAYS = 3;
 export const WATER_LITRES_PER_PERSON_PER_DAY = 3;
 
-export type Household = { adults: number; children: number };
+export type Household = { adults: number; childAges: ChildAges };
 
-export const DEFAULT_HOUSEHOLD: Household = { adults: 2, children: 1 };
+export const DEFAULT_HOUSEHOLD: Household = { adults: 2, childAges: { ...NO_CHILDREN, from4to10: 1 } };
 
 export type Unit = { one: string; many: string };
 
@@ -40,7 +48,7 @@ export type Group = {
 const LITRES: Unit = { one: "litre", many: "litres" };
 
 export function people(h: Household): number {
-  return h.adults + h.children;
+  return h.adults + childCount(h.childAges);
 }
 
 export function plural(n: number, unit: Unit): string {
@@ -49,8 +57,9 @@ export function plural(n: number, unit: Unit): string {
 
 export function householdLabel(h: Household): string {
   const adults = `${h.adults} adult${h.adults === 1 ? "" : "s"}`;
-  if (h.children === 0) return adults;
-  return `${adults} and ${h.children} ${h.children === 1 ? "child" : "children"}`;
+  const children = childCount(h.childAges);
+  if (children === 0) return adults;
+  return `${adults} and ${children} ${children === 1 ? "child" : "children"}`;
 }
 
 /** Every group except Food, whose lines come from the solver. */
@@ -234,7 +243,7 @@ export type Basket = {
 export function exampleBasket(h: Household, foods: FoodItem[], dietaryFlags: DietaryFlags): Basket {
   const plan = (maxUnitsPerItem: number) =>
     buildCheapestPlan(
-      { adults: h.adults, children: h.children, weeks: THREE_DAYS / 7, dietaryFlags, powerOut: true },
+      { adults: h.adults, children: childCount(h.childAges), childAges: h.childAges, weeks: THREE_DAYS / 7, dietaryFlags, powerOut: true },
       noCookPool(foods),
       {
         skipCategoryMinimums: true,

@@ -11,6 +11,9 @@ export type HouseholdInput = {
   weeks: number;
   dietaryFlags?: DietaryFlags;
   childCalorieRatio?: number;
+  /** How many children are in each age group. When given, this decides the
+   *  children's calories and replaces `children` and `childCalorieRatio`. */
+  childAges?: ChildAges;
   /** Scenario Mode: when the power's out, prefer no-cook protein so a plan
    *  stays edible without heat. Absent/false => pure cost-per-calorie ranking. */
   powerOut?: boolean;
@@ -122,6 +125,46 @@ export const ADULT_DAILY_CALORIES = 2000;
 export const CHILD_CALORIE_RATIO = 0.6;
 export const CHILD_DAILY_CALORIES = ADULT_DAILY_CALORIES * CHILD_CALORIE_RATIO;
 
+// Children by age. Each group's share of the adult figure comes from the UK
+// estimated average energy requirements (SACN, Dietary Reference Values for
+// Energy, 2011), averaged across boys and girls in the group:
+//   1 to 3:   about 950 kcal   -> 0.5 (1,000)
+//   4 to 10:  about 1,630 kcal -> 0.8 (1,600)
+//   11 to 17: about 2,450 kcal -> 1.0 (the same as an adult here)
+// The adult 2,000 is itself below SACN's adult average (about 2,470), so a
+// teenager counted as one adult keeps the same proportion. Teenage boys
+// often need more than this.
+export type ChildAges = { under4: number; from4to10: number; from11to17: number };
+
+/** `label` heads a counter; `phrase` follows a number or "Children". */
+export const CHILD_AGE_BANDS: { key: keyof ChildAges; label: string; phrase: string; ratio: number }[] = [
+  { key: "under4", label: "Under 4", phrase: "under 4", ratio: 0.5 },
+  { key: "from4to10", label: "4 to 10", phrase: "aged 4 to 10", ratio: 0.8 },
+  { key: "from11to17", label: "11 to 17", phrase: "aged 11 to 17", ratio: 1 },
+];
+
+export const NO_CHILDREN: ChildAges = { under4: 0, from4to10: 0, from11to17: 0 };
+
+export function childDailyCalories(key: keyof ChildAges): number {
+  const band = CHILD_AGE_BANDS.find((b) => b.key === key)!;
+  return Math.round(band.ratio * ADULT_DAILY_CALORIES);
+}
+
+export function childCount(ages: ChildAges): number {
+  return CHILD_AGE_BANDS.reduce((n, b) => n + Math.max(0, ages[b.key]), 0);
+}
+
+/** Daily calories for the household: adults plus children, by age when known. */
+export function householdDailyCalories(
+  input: Pick<HouseholdInput, "adults" | "children" | "childCalorieRatio" | "childAges">,
+): number {
+  const adults = Math.max(0, input.adults);
+  const childAdultEquivalents = input.childAges
+    ? CHILD_AGE_BANDS.reduce((sum, b) => sum + Math.max(0, input.childAges![b.key]) * b.ratio, 0)
+    : Math.max(0, input.children) * (input.childCalorieRatio ?? CHILD_CALORIE_RATIO);
+  return Math.round((adults + childAdultEquivalents) * ADULT_DAILY_CALORIES);
+}
+
 const NO_COOK_PROTEIN_POWER_OUT_BOOST = 1.6;
 
 function isNoCookProtein(item: FoodItem): boolean {
@@ -214,15 +257,12 @@ function addUnit(lines: Map<string, RankedItem>, item: FoodItem, powerOut = fals
 }
 
 export function buildPlan(input: HouseholdInput, foods: FoodItem[]): PlannerResult {
-  const adults = Math.max(0, input.adults);
-  const children = Math.max(0, input.children);
   const weeks = Math.max(1, input.weeks);
   const budgetGbp = Math.max(0, input.budgetGbp);
   const dietaryFlags = input.dietaryFlags ?? {};
   const powerOut = input.powerOut === true;
 
-  const childRatio = input.childCalorieRatio ?? CHILD_CALORIE_RATIO;
-  const dailyCaloriesNeeded = Math.round((adults + children * childRatio) * ADULT_DAILY_CALORIES);
+  const dailyCaloriesNeeded = householdDailyCalories(input);
   const totalCaloriesNeeded = dailyCaloriesNeeded * (weeks * 7);
   const BASELINE_MAX_CALORIES_PER_ITEM = totalCaloriesNeeded * 0.15;
 
@@ -394,14 +434,11 @@ export function buildCheapestPlan(
   foods: FoodItem[],
   options: CheapestPlanOptions = {},
 ): CheapestPlanResult {
-  const adults = Math.max(0, input.adults);
-  const children = Math.max(0, input.children);
   const weeks = options.allowPartialWeek ? Math.max(0, input.weeks) : Math.max(1, input.weeks);
   const dietaryFlags = input.dietaryFlags ?? {};
   const powerOut = input.powerOut === true;
 
-  const childRatio = input.childCalorieRatio ?? CHILD_CALORIE_RATIO;
-  const dailyCaloriesNeeded = Math.round((adults + children * childRatio) * ADULT_DAILY_CALORIES);
+  const dailyCaloriesNeeded = householdDailyCalories(input);
   const totalCaloriesNeeded = dailyCaloriesNeeded * (weeks * 7);
 
   const eligible = foods.filter((item) => passesDietaryFlags(item, dietaryFlags));
