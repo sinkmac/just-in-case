@@ -421,11 +421,13 @@ for (const f of foods.filter((x) => x.nutrition_basis === 'as-sold')) {
 // The specific regressions, with the figures read off the labels.
 const EXPECTED: Record<string, { cal: number; pack: number; edible: number; perPack: number }> = {
   'tinned-chickpeas': { cal: 122, pack: 400, edible: 240, perPack: 293 },
-  'tinned-peas': { cal: 65, pack: 300, edible: 185, perPack: 120 },
+  // Peas, sweetcorn and beans: Aldi packs from the 1 Nov 2026 price check.
+  // Where Aldi gives no drained weight we count the smaller, scaled-down amount.
+  'tinned-peas': { cal: 65, pack: 290, edible: 179, perPack: 116 },
   'tinned-mackerel': { cal: 200, pack: 125, edible: 82, perPack: 164 },
   'tinned-sardines': { cal: 181, pack: 120, edible: 90, perPack: 163 },
-  'tinned-sweetcorn': { cal: 77, pack: 340, edible: 285, perPack: 219 },
-  'tinned-beans': { cal: 77, pack: 400, edible: 400, perPack: 308 },
+  'tinned-sweetcorn': { cal: 77, pack: 285, edible: 239, perPack: 184 },
+  'tinned-beans': { cal: 77, pack: 410, edible: 410, perPack: 316 },
 };
 for (const [id, e] of Object.entries(EXPECTED)) {
   const f = foods.find((x) => x.id === id);
@@ -753,6 +755,19 @@ for (const id of ['flapjack', 'cornflakes']) {
   check(basketPool(hh(2, 1), foods, []).some((f) => f.id === id), `${id}: offered in the three-day basket`);
   check(!longerFoods.some((f) => f.id === id), `${id}: not in longer stores`);
 }
+
+// ── Prices ────────────────────────────────────────────────────────────────────
+
+suite('Prices — three-day basket');
+
+// Every food the basket counts has either a checked price (shop, product,
+// date) or an estimate note, which shows the † mark.
+for (const f of noCookPool(foods).filter((x) => x.cal_per_100g != null)) {
+  check(!!f.price_checked || !!f.priceNote, `${f.id}: price checked, or marked as an estimate`);
+}
+// The † mark means "price is an estimate", so a price note must be about price.
+const salmon = foods.find((f) => f.id === 'tinned-salmon')!;
+check(!/drained weight, so calories/.test(salmon.priceNote ?? ''), 'tinned-salmon: calorie note is not shown as a price note');
 
 // ── Summary ───────────────────────────────────────────────────────────────────
 

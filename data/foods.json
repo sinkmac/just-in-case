@@ -124,17 +124,17 @@
     "id": "crackers-oatcakes",
     "name": "Crackers / oatcakes",
     "cal_per_100g": 446,
-    "typical_unit_g": 300,
-    "edible_unit_g": 300,
+    "typical_unit_g": 250,
+    "edible_unit_g": 250,
     "nutrition_basis": "as-sold",
     "cal_verified": {
       "source": "https://www.sainsburys.co.uk/groceries/product/sainsburys-rough-oatcakes-250g",
       "checked": "2026-10-27",
-      "pack_size_matches_source": false
+      "pack_size_matches_source": true
     },
-    "typical_unit_price_gbp": 1.8,
+    "typical_unit_price_gbp": 1.35,
     "shelf_life_months": 9,
-    "storage_litres_per_unit": 0.9,
+    "storage_litres_per_unit": 0.75,
     "vegetarian": true,
     "vegan": true,
     "gluten_free": false,
@@ -152,6 +152,12 @@
       ],
       "source": "https://www.sainsburys.co.uk/groceries/product/sainsburys-rough-oatcakes-250g",
       "checked": "2026-11-01"
+    },
+    "price_checked": {
+      "shop": "Sainsbury's",
+      "product": "Sainsbury's Rough Oatcakes",
+      "checked": "2026-11-01",
+      "online": true
     }
   },
   {
@@ -261,7 +267,7 @@
       "checked": "2026-10-27",
       "pack_size_matches_source": true
     },
-    "typical_unit_price_gbp": 0.65,
+    "typical_unit_price_gbp": 0.41,
     "shelf_life_months": 36,
     "storage_litres_per_unit": 0.45,
     "vegetarian": true,
@@ -279,13 +285,19 @@
       "may_contain": [],
       "source": "https://sainsburys.co.uk/groceries/product/sainsburys-chickpeas-in-water-400g-240g",
       "checked": "2026-11-01"
+    },
+    "price_checked": {
+      "shop": "Sainsbury's",
+      "product": "Sainsbury's Chickpeas in Water",
+      "checked": "2026-11-01",
+      "online": true
     }
   },
   {
     "id": "tinned-tuna",
     "name": "Tinned tuna",
     "cal_per_100g": 106,
-    "typical_unit_g": 125,
+    "typical_unit_g": 145,
     "edible_unit_g": 102,
     "nutrition_basis": "drained",
     "cal_verified": {
@@ -293,10 +305,9 @@
       "checked": "2026-10-27",
       "pack_size_matches_source": true
     },
-    "typical_unit_price_gbp": 1.2,
-    "priceNote": "Pack size corrected to 125g; price not yet rechecked for this size.",
+    "typical_unit_price_gbp": 0.65,
     "shelf_life_months": 36,
-    "storage_litres_per_unit": 0.18,
+    "storage_litres_per_unit": 0.21,
     "vegetarian": false,
     "vegan": false,
     "gluten_free": true,
@@ -312,7 +323,14 @@
       "may_contain": [],
       "source": "https://groceries.morrisons.com/products/john-west-tuna-chunks-in-spring-water-4x125g-102g-drained/113887082",
       "checked": "2026-11-01"
-    }
+    },
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "The Fishmonger Tuna Chunks in Spring Water",
+      "checked": "2026-11-01",
+      "online": true
+    },
+    "priceNote": "Aldi's 145g tin, £0.65. Its page doesn't give a drained weight, so we count 102g, from the label we checked."
   },
   {
     "id": "tinned-sardines",
@@ -344,7 +362,8 @@
       "may_contain": [],
       "source": "https://www.sainsburys.co.uk/groceries/product/sainsburys-sardines-in-brine-120g-90g",
       "checked": "2026-11-01"
-    }
+    },
+    "priceNote": "Not settled: Aldi sells these only in oil (£0.55, 120g); Sainsbury's in brine was out of stock, 1 Nov 2026."
   },
   {
     "id": "peanut-butter",
@@ -358,7 +377,7 @@
       "checked": "2026-10-27",
       "pack_size_matches_source": true
     },
-    "typical_unit_price_gbp": 1.75,
+    "typical_unit_price_gbp": 0.95,
     "shelf_life_months": 12,
     "storage_litres_per_unit": 0.45,
     "vegetarian": true,
@@ -378,6 +397,12 @@
       ],
       "source": "https://sainsburys.co.uk/groceries/product/sainsburys-peanut-butter-smooth-340g",
       "checked": "2026-11-01"
+    },
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Grandessa Smooth Peanut Butter",
+      "checked": "2026-11-01",
+      "online": true
     }
   },
   {
@@ -404,17 +429,17 @@
     "id": "tinned-beans",
     "name": "Tinned beans",
     "cal_per_100g": 77,
-    "typical_unit_g": 400,
-    "edible_unit_g": 400,
+    "typical_unit_g": 410,
+    "edible_unit_g": 410,
     "nutrition_basis": "as-sold",
     "cal_verified": {
       "source": "https://www.sainsburys.co.uk/groceries/product/sainsburys-baked-beans-in-tomato-sauce-400g",
       "checked": "2026-10-27",
       "pack_size_matches_source": true
     },
-    "typical_unit_price_gbp": 0.45,
+    "typical_unit_price_gbp": 0.27,
     "shelf_life_months": 36,
-    "storage_litres_per_unit": 0.46,
+    "storage_litres_per_unit": 0.47,
     "vegetarian": true,
     "vegan": true,
     "gluten_free": true,
@@ -428,6 +453,12 @@
       "may_contain": [],
       "source": "https://www.sainsburys.co.uk/groceries/product/sainsburys-baked-beans-in-tomato-sauce-400g",
       "checked": "2026-11-01"
+    },
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Everyday Essentials Baked Beans",
+      "checked": "2026-11-01",
+      "online": true
     }
   },
   {
@@ -610,7 +641,7 @@
       "checked": "2026-10-27",
       "pack_size_matches_source": true
     },
-    "typical_unit_price_gbp": 0.55,
+    "typical_unit_price_gbp": 0.43,
     "shelf_life_months": 36,
     "storage_litres_per_unit": 0.45,
     "vegetarian": true,
@@ -626,23 +657,29 @@
       "may_contain": [],
       "source": "https://sainsburys.co.uk/groceries/product/sainsburys-chopped-tomatoes-can-400g",
       "checked": "2026-11-01"
+    },
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Everyday Essentials Chopped Tomatoes",
+      "checked": "2026-11-01",
+      "online": true
     }
   },
   {
     "id": "tinned-sweetcorn",
     "name": "Tinned sweetcorn",
     "cal_per_100g": 77,
-    "typical_unit_g": 340,
-    "edible_unit_g": 285,
+    "typical_unit_g": 285,
+    "edible_unit_g": 239,
     "nutrition_basis": "drained",
     "cal_verified": {
       "source": "https://sainsburys.co.uk/groceries/product/green-giant-original-sweet-corn-340g-285g",
       "checked": "2026-10-27",
       "pack_size_matches_source": true
     },
-    "typical_unit_price_gbp": 0.7,
+    "typical_unit_price_gbp": 0.55,
     "shelf_life_months": 36,
-    "storage_litres_per_unit": 0.4,
+    "storage_litres_per_unit": 0.34,
     "vegetarian": true,
     "vegan": true,
     "gluten_free": true,
@@ -656,7 +693,14 @@
       "may_contain": [],
       "source": "https://www.tesco.com/shop/en-GB/products/254875197",
       "checked": "2026-11-01"
-    }
+    },
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Four Seasons Supersweet Sweetcorn in Water",
+      "checked": "2026-11-01",
+      "online": true
+    },
+    "priceNote": "Aldi, £0.55. Its page says 285g but not whether that is the tin or the drained weight, so we count the smaller amount (239g drained)."
   },
   {
     "id": "tomato-puree",
@@ -682,17 +726,17 @@
     "id": "tinned-peas",
     "name": "Tinned peas",
     "cal_per_100g": 65,
-    "typical_unit_g": 300,
-    "edible_unit_g": 185,
+    "typical_unit_g": 290,
+    "edible_unit_g": 179,
     "nutrition_basis": "drained",
     "cal_verified": {
       "source": "https://www.sainsburys.co.uk/groceries/product/sainsburys-garden-peas-in-water-300g-185g",
       "checked": "2026-10-27",
       "pack_size_matches_source": true
     },
-    "typical_unit_price_gbp": 0.55,
+    "typical_unit_price_gbp": 0.41,
     "shelf_life_months": 36,
-    "storage_litres_per_unit": 0.35,
+    "storage_litres_per_unit": 0.34,
     "vegetarian": true,
     "vegan": true,
     "gluten_free": true,
@@ -706,7 +750,14 @@
       "may_contain": [],
       "source": "https://www.sainsburys.co.uk/groceries/product/sainsburys-garden-peas-in-water-300g-185g",
       "checked": "2026-11-01"
-    }
+    },
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Four Seasons Garden Peas in Water",
+      "checked": "2026-11-01",
+      "online": true
+    },
+    "priceNote": "Aldi, 290g, £0.41. Its page doesn't give a drained weight, so we scale down from the label we checked (179g drained)."
   },
   {
     "id": "tinned-fruit",
@@ -720,7 +771,7 @@
       "checked": "2026-10-27",
       "pack_size_matches_source": true
     },
-    "typical_unit_price_gbp": 0.95,
+    "typical_unit_price_gbp": 0.85,
     "shelf_life_months": 36,
     "storage_litres_per_unit": 0.5,
     "vegetarian": true,
@@ -736,23 +787,30 @@
       "may_contain": [],
       "source": "https://sainsburys.co.uk/groceries/product/sainsburys-peach-slices-in-fruit-juice-411g",
       "checked": "2026-11-01"
-    }
+    },
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Four Seasons Peach Slices in Juice",
+      "checked": "2026-11-01",
+      "online": true
+    },
+    "priceNote": "Aldi, £0.85. Its page gives only the drained weight (250g), so the 411g tin size is from the label we checked."
   },
   {
     "id": "dried-mango",
     "name": "Dried mango",
     "cal_per_100g": 334,
-    "typical_unit_g": 150,
-    "edible_unit_g": 150,
+    "typical_unit_g": 100,
+    "edible_unit_g": 100,
     "nutrition_basis": "as-sold",
     "cal_verified": {
       "source": "https://sainsburys.co.uk/groceries/product/sainsburys-dried-mango-100g",
       "checked": "2026-10-27",
-      "pack_size_matches_source": false
+      "pack_size_matches_source": true
     },
-    "typical_unit_price_gbp": 2.5,
+    "typical_unit_price_gbp": 2.65,
     "shelf_life_months": 12,
-    "storage_litres_per_unit": 0.3,
+    "storage_litres_per_unit": 0.2,
     "vegetarian": true,
     "vegan": true,
     "gluten_free": true,
@@ -768,6 +826,12 @@
       "may_contain": [],
       "source": "https://sainsburys.co.uk/groceries/product/sainsburys-dried-mango-100g",
       "checked": "2026-11-01"
+    },
+    "price_checked": {
+      "shop": "Sainsbury's",
+      "product": "Sainsbury's Dried Mango",
+      "checked": "2026-11-01",
+      "online": true
     }
   },
   {
@@ -825,7 +889,8 @@
       "source": "https://www.mcgrocer.com/products/stamford-street-co-dark-chocolate-100g",
       "checked": "2026-11-01"
     },
-    "notes": "Label: not suitable for nut, milk or wheat allergy, so not counted as gluten-free."
+    "notes": "Label: not suitable for nut, milk or wheat allergy, so not counted as gluten-free.",
+    "priceNote": "Sainsbury's Stamford Street, not rechecked 1 Nov 2026. Aldi's Moser Roth 70% is £2.49 for 125g."
   },
   {
     "id": "instant-coffee",
@@ -851,17 +916,17 @@
     "id": "honey",
     "name": "Honey",
     "cal_per_100g": 329,
-    "typical_unit_g": 340,
-    "edible_unit_g": 340,
+    "typical_unit_g": 454,
+    "edible_unit_g": 454,
     "nutrition_basis": "as-sold",
     "cal_verified": {
       "source": "https://sainsburys.co.uk/groceries/product/sainsburys-runny-honey-340g",
       "checked": "2026-10-27",
       "pack_size_matches_source": true
     },
-    "typical_unit_price_gbp": 2.2,
+    "typical_unit_price_gbp": 1.39,
     "shelf_life_months": 120,
-    "storage_litres_per_unit": 0.35,
+    "storage_litres_per_unit": 0.47,
     "vegetarian": true,
     "vegan": false,
     "gluten_free": true,
@@ -876,7 +941,13 @@
       "source": "https://sainsburys.co.uk/groceries/product/sainsburys-runny-honey-340g",
       "checked": "2026-11-01"
     },
-    "not_for_babies": true
+    "not_for_babies": true,
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Grandessa Squeezy Honey",
+      "checked": "2026-11-01",
+      "online": true
+    }
   },
   {
     "id": "salt",
@@ -970,7 +1041,7 @@
       "checked": "2026-10-27",
       "pack_size_matches_source": true
     },
-    "typical_unit_price_gbp": 0.85,
+    "typical_unit_price_gbp": 1.45,
     "shelf_life_months": 36,
     "storage_litres_per_unit": 0.16,
     "vegetarian": false,
@@ -989,6 +1060,12 @@
       "may_contain": [],
       "source": "https://sainsburys.co.uk/groceries/product/sainsburys-82g-brine-mackerel-fillets",
       "checked": "2026-11-01"
+    },
+    "price_checked": {
+      "shop": "Sainsbury's",
+      "product": "Sainsbury's Mackerel Fillets in Brine",
+      "checked": "2026-11-01",
+      "online": true
     }
   },
   {
@@ -1003,8 +1080,8 @@
       "checked": "2026-10-27",
       "pack_size_matches_source": true
     },
-    "typical_unit_price_gbp": 1.65,
-    "priceNote": "Label states no drained weight, so calories count the whole tin.",
+    "typical_unit_price_gbp": 3.5,
+    "priceNote": "Not settled: no current Aldi or Sainsbury's price. Tesco is £3.50 for 105g (1 Nov 2026), so we use that.",
     "shelf_life_months": 36,
     "storage_litres_per_unit": 0.14,
     "vegetarian": false,
@@ -1023,7 +1100,8 @@
       "may_contain": [],
       "source": "https://www.mcgrocer.com/products/sainsburys-wild-pacific-red-salmon-105g",
       "checked": "2026-11-01"
-    }
+    },
+    "notes": "Label states no drained weight, so calories count the whole tin."
   },
   {
     "id": "stock-cubes",
@@ -1057,7 +1135,7 @@
       "checked": "2026-10-27",
       "pack_size_matches_source": false
     },
-    "typical_unit_price_gbp": 1.75,
+    "typical_unit_price_gbp": 2.45,
     "shelf_life_months": 12,
     "storage_litres_per_unit": 0.3,
     "vegetarian": true,
@@ -1075,24 +1153,29 @@
       "may_contain": [],
       "source": "https://www.mcgrocer.com/products/sainsburys-dried-apricots-500g",
       "checked": "2026-11-01"
+    },
+    "price_checked": {
+      "shop": "Sainsbury's",
+      "product": "Sainsbury's Ready to Eat Apricots",
+      "checked": "2026-11-01",
+      "online": true
     }
   },
   {
     "id": "raisins",
     "name": "Raisins",
     "cal_per_100g": 297,
-    "typical_unit_g": 200,
-    "edible_unit_g": 200,
+    "typical_unit_g": 500,
+    "edible_unit_g": 500,
     "nutrition_basis": "as-sold",
     "cal_verified": {
       "source": "https://sainsburys.co.uk/groceries/product/sainsburys-raisins-seedless-500g",
       "checked": "2026-10-27",
-      "pack_size_matches_source": false
+      "pack_size_matches_source": true
     },
-    "typical_unit_price_gbp": 1.25,
-    "priceNote": "No Aldi/Lidl equivalent stocked; price is an estimate, not verified against reference tier",
+    "typical_unit_price_gbp": 2.35,
     "shelf_life_months": 12,
-    "storage_litres_per_unit": 0.3,
+    "storage_litres_per_unit": 0.75,
     "vegetarian": true,
     "vegan": true,
     "gluten_free": true,
@@ -1106,6 +1189,12 @@
       "may_contain": [],
       "source": "https://sainsburys.co.uk/groceries/product/sainsburys-raisins-seedless-500g",
       "checked": "2026-11-01"
+    },
+    "price_checked": {
+      "shop": "Sainsbury's",
+      "product": "Sainsbury's Seedless Raisins",
+      "checked": "2026-11-01",
+      "online": true
     }
   },
   {
@@ -1121,7 +1210,6 @@
       "pack_size_matches_source": true
     },
     "typical_unit_price_gbp": 1.25,
-    "priceNote": "Sainsbury's price, 1 Nov 2026. Not checked at Aldi.",
     "shelf_life_months": 6,
     "storage_litres_per_unit": 0.4,
     "vegetarian": true,
@@ -1132,7 +1220,7 @@
     "category": "staple_carb",
     "region": "uk",
     "prep": "no-cook",
-    "notes": "Five 32g slices. Shelf life and storage volume are estimates, not from the label.",
+    "notes": "Five 32g slices. Aldi showed no price online, 1 Nov 2026. Shelf life and storage volume are estimates, not from the label.",
     "allergens": {
       "contains": [
         "oats",
@@ -1146,7 +1234,13 @@
       "source": "Sainsbury's Flapjack Slices 5x32g, label read by Sink",
       "checked": "2026-11-01"
     },
-    "three_day_only": true
+    "three_day_only": true,
+    "price_checked": {
+      "shop": "Sainsbury's",
+      "product": "Sainsbury's Flapjack Slices 5x32g",
+      "checked": "2026-11-01",
+      "online": true
+    }
   },
   {
     "id": "cornflakes",
@@ -1160,8 +1254,7 @@
       "checked": "2026-11-01",
       "pack_size_matches_source": true
     },
-    "typical_unit_price_gbp": 1.4,
-    "priceNote": "Waitrose Essential price, 1 Nov 2026. Not checked at Aldi.",
+    "typical_unit_price_gbp": 0.99,
     "shelf_life_months": 12,
     "storage_litres_per_unit": 3.7,
     "vegetarian": true,
@@ -1172,7 +1265,7 @@
     "category": "staple_carb",
     "region": "uk",
     "prep": "no-cook",
-    "notes": "Eaten dry, no milk needed. Contains barley malt. Shelf life and storage volume (a 500g box) are estimates, not from the label.",
+    "notes": "Eaten dry, no milk needed. Contains barley malt. Shelf life and storage volume (a 500g box) are estimates, not from the label. Price is for Aldi's Harvest Morn; calories and allergens are from the Waitrose Essential label.",
     "allergens": {
       "contains": [
         "gluten"
@@ -1181,6 +1274,12 @@
       "source": "https://www.waitrose.com/ecom/products/essential-waitrose-corn-flakes/001204-144-145",
       "checked": "2026-11-01"
     },
-    "three_day_only": true
+    "three_day_only": true,
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Harvest Morn Corn Flakes",
+      "checked": "2026-11-01",
+      "online": true
+    }
   }
 ]
