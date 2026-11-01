@@ -8,6 +8,7 @@ import {
   buildPlan,
   buildCheapestPlan,
   BABY_MILK_NOTE,
+  NO_HONEY_NOTE,
   CHILD_AGE_BANDS,
   longerStoresFoods,
   CHILD_CALORIES_SOURCE_URL,
@@ -27,8 +28,7 @@ type DietaryFlags = {
 
 export type DurationTier = "weekend" | "fortnight" | "month" | "season";
 
-// Flapjack and cornflakes are three-day basket foods only, for now.
-const LONGER_FOODS = longerStoresFoods(foods as FoodItem[]);
+const ALL_FOODS = foods as FoodItem[];
 
 const TIER_DATA: Record<DurationTier, { label: string; weeks: number; register: string; pictogram: string }> = {
   weekend: {
@@ -281,6 +281,10 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
     };
   }, []);
 
+  // Flapjack and cornflakes are three-day basket foods only, for now; no
+  // honey when a child under 4 is counted.
+  const longerFoods = useMemo(() => longerStoresFoods(ALL_FOODS, childAges), [childAges]);
+
   const result = useMemo(
     () =>
       buildPlan(
@@ -293,9 +297,9 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
           childAges,
           powerOut: powerState === "out",
         },
-        LONGER_FOODS,
+        longerFoods,
       ),
-    [adults, children, budgetGbp, tier, dietaryFlags, childAges, powerState],
+    [adults, children, budgetGbp, tier, dietaryFlags, childAges, powerState, longerFoods],
   );
 
   const cheapestPlan = useMemo(
@@ -309,9 +313,9 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
           childAges,
           powerOut: powerState === "out",
         },
-        LONGER_FOODS,
+        longerFoods,
       ),
-    [adults, children, tier, dietaryFlags, childAges, powerState],
+    [adults, children, tier, dietaryFlags, childAges, powerState, longerFoods],
   );
 
   const activeResult = floorMode ? cheapestPlan : result;
@@ -546,7 +550,10 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
                   </p>
                 )}
                 {childAges.under4 > 0 && (
-                  <p className="mt-2 text-sm font-semibold">{BABY_MILK_NOTE}</p>
+                  <>
+                    <p className="mt-2 text-sm font-semibold">{BABY_MILK_NOTE}</p>
+                    <p className="mt-1 text-sm font-semibold">{NO_HONEY_NOTE}</p>
+                  </>
                 )}
               </fieldset>
 

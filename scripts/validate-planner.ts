@@ -741,6 +741,11 @@ check(
   const withToddler = hh(2, 1, 'under4');
   check(!basketPool(withToddler, foods, []).some((f) => f.id === 'honey'), 'no honey offered when a child under 4 is counted');
   check(basketPool(hh(2, 1), foods, []).some((f) => f.id === 'honey'), 'honey still offered with no child under 4');
+  check(
+    !longerStoresFoods(foods, withToddler.childAges).some((f) => f.id === 'honey'),
+    'longer stores: no honey when a child under 4 is counted',
+  );
+  check(longerStoresFoods(foods).some((f) => f.id === 'honey'), 'longer stores: honey still offered otherwise');
 }
 
 // Flapjack and cornflakes are for the three-day basket only.

@@ -18,8 +18,9 @@ export const ALLERGENS: { key: Allergen; label: string }[] = [
 /** Safe for every ticked allergy: label checked, and the allergen is neither
  *  in it nor on its "may contain" line. */
 /** The foods the longer-stores planner may use. */
-export function longerStoresFoods(foods: FoodItem[]): FoodItem[] {
-  return foods.filter((f) => !f.three_day_only);
+export function longerStoresFoods(foods: FoodItem[], childAges?: ChildAges): FoodItem[] {
+  const under4 = (childAges?.under4 ?? 0) > 0;
+  return foods.filter((f) => !f.three_day_only && !(under4 && f.not_for_babies));
 }
 
 export function passesAllergies(item: FoodItem, allergies: readonly Allergen[]): boolean {
@@ -178,6 +179,9 @@ export const CHILD_CALORIES_SOURCE_URL =
 
 /** Shown wherever a child under 4 is counted: a baby needs milk, not tins. */
 export const BABY_MILK_NOTE = "For a baby, keep a supply of their usual milk or formula.";
+
+/** Shown with BABY_MILK_NOTE, since honey is left out for under-4s. */
+export const NO_HONEY_NOTE = "No honey: it isn't safe for babies under one.";
 
 export type ChildAges = { under4: number; from4to10: number; from11to17: number };
 

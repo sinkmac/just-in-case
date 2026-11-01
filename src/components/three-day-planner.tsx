@@ -8,6 +8,7 @@ import { scrollBehavior } from "@/lib/motion";
 import {
   ADULT_DAILY_CALORIES,
   BABY_MILK_NOTE,
+  NO_HONEY_NOTE,
   CHILD_AGE_BANDS,
   CHILD_CALORIES_SOURCE_URL,
   childCount,
@@ -420,7 +421,10 @@ export function ThreeDayPlanner({
                 )}
               </p>
               {household.childAges.under4 > 0 && (
-                <p className="mt-2 font-semibold">{BABY_MILK_NOTE}</p>
+                <>
+                  <p className="mt-2 font-semibold">{BABY_MILK_NOTE}</p>
+                  <p className="mt-1 font-semibold">{NO_HONEY_NOTE}</p>
+                </>
               )}
               <p className="mt-2 font-semibold">Brands differ. Check the label on what you buy.</p>
               <p className="mt-2 text-[var(--secondary)]">
