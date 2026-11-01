@@ -188,7 +188,10 @@ export const TASKS: { id: string; text: string }[] = [
 // ── Food basket ──────────────────────────────────────────────────────────────
 
 // Milk is left out for now (no small long-life cartons in the data yet).
-const BASKET_EXCLUDED_IDS = new Set(["uht-milk", "powdered-milk"]);
+// Almonds and walnuts are left out because few households eat them in any
+// quantity, and they pushed the basket to over half nuts. Peanut butter
+// stays: it is a familiar spread to eat with the crackers.
+const BASKET_EXCLUDED_IDS = new Set(["uht-milk", "powdered-milk", "almonds", "walnuts"]);
 
 /** Strict no-cook pool for the three-day basket: no heat, no fridge, no oils or fats. */
 export function noCookPool(foods: FoodItem[]): FoodItem[] {
