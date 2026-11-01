@@ -338,27 +338,27 @@ export function buildPlan(input: HouseholdInput, foods: FoodItem[]): PlannerResu
       eligible.filter((item) => item.category === category && scoreItem(item, powerOut) != null),
       powerOut,
     );
-    // Prefer items that don't exceed the 15% baseline cap in the first pass.
-    // If every item in the category exceeds the cap, fall back to the best scorer.
-    const pick = candidates.find(item => {
-      const existing = rankedLines.get(item.id);
-      const existingCalories = existing?.totalCalories ?? 0;
-      const nextUnitCalories = caloriesPerUnit(item) ?? 0;
-      return existingCalories + nextUnitCalories <= BASELINE_MAX_CALORIES_PER_ITEM;
-    }) ?? candidates[0];
+    // Fill the category's minimum one unit at a time, best scorer first,
+    // moving to the next food once one would pass the 15% per-food cap. Only
+    // if every food in the category is over the cap does the best scorer
+    // take the rest, so a cheap 1kg bag can't fill a small plan on its own.
     const minUnits = CATEGORY_MIN_UNITS_OVERRIDE[category] ?? CATEGORY_MIN_UNITS[category] ?? 1;
-    if (!pick) {
+    if (!candidates.length) {
       droppedCategories.push(category);
       requiredQueue.shift();
       continue;
     }
+    const withinCap = (item: FoodItem) =>
+      (rankedLines.get(item.id)?.totalCalories ?? 0) + (caloriesPerUnit(item) ?? 0) <= BASELINE_MAX_CALORIES_PER_ITEM;
+    const affordable = (item: FoodItem) =>
+      remainingBudget >= item.typical_unit_price_gbp && canAddUnitWithinCaps(rankedLines, item, budgetGbp);
 
     let allocated = 0;
-    while (
-      allocated < minUnits &&
-      remainingBudget >= pick.typical_unit_price_gbp &&
-      canAddUnitWithinCaps(rankedLines, pick, budgetGbp)
-    ) {
+    while (allocated < minUnits) {
+      const pick =
+        candidates.find((item) => withinCap(item) && affordable(item)) ??
+        (candidates.some(withinCap) ? undefined : candidates.find(affordable));
+      if (!pick) break;
       addUnit(rankedLines, pick, powerOut);
       remainingBudget -= pick.typical_unit_price_gbp;
       allocated += 1;

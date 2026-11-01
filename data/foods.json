@@ -7,7 +7,7 @@
     "edible_unit_g": 1000,
     "nutrition_basis": "as-sold",
     "cal_verified": null,
-    "typical_unit_price_gbp": 1.2,
+    "typical_unit_price_gbp": 0.52,
     "shelf_life_months": 24,
     "storage_litres_per_unit": 1.4,
     "vegetarian": true,
@@ -17,19 +17,25 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "staple_carb",
     "region": "uk",
-    "prep": "needs-heat"
+    "prep": "needs-heat",
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Everyday Essentials Long Grain White Rice",
+      "checked": "2026-11-01",
+      "online": true
+    }
   },
   {
     "id": "dried-pasta",
     "name": "Pasta (dried)",
     "cal_per_100g": 370,
-    "typical_unit_g": 500,
-    "edible_unit_g": 500,
+    "typical_unit_g": 1000,
+    "edible_unit_g": 1000,
     "nutrition_basis": "as-sold",
     "cal_verified": null,
-    "typical_unit_price_gbp": 0.95,
+    "typical_unit_price_gbp": 1.19,
     "shelf_life_months": 24,
-    "storage_litres_per_unit": 0.9,
+    "storage_litres_per_unit": 1.8,
     "vegetarian": true,
     "vegan": true,
     "gluten_free": false,
@@ -37,17 +43,27 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "staple_carb",
     "region": "uk",
-    "prep": "needs-heat"
+    "prep": "needs-heat",
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Cucina Fusilli",
+      "checked": "2026-11-01",
+      "online": true
+    }
   },
   {
     "id": "rolled-oats",
     "name": "Rolled oats",
-    "cal_per_100g": 370,
+    "cal_per_100g": 359,
     "typical_unit_g": 1000,
     "edible_unit_g": 1000,
     "nutrition_basis": "as-sold",
-    "cal_verified": null,
-    "typical_unit_price_gbp": 1.35,
+    "cal_verified": {
+      "source": "Aldi website, Everyday Essentials Porridge Oats",
+      "checked": "2026-11-01",
+      "pack_size_matches_source": true
+    },
+    "typical_unit_price_gbp": 0.85,
     "shelf_life_months": 18,
     "storage_litres_per_unit": 2.1,
     "vegetarian": true,
@@ -57,27 +73,40 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "staple_carb",
     "region": "uk",
-    "prep": "needs-heat"
+    "prep": "needs-heat",
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Everyday Essentials Porridge Oats",
+      "checked": "2026-11-01",
+      "online": true
+    }
   },
   {
     "id": "instant-noodles",
     "name": "Instant noodles",
     "cal_per_100g": 430,
-    "typical_unit_g": 300,
-    "edible_unit_g": 300,
+    "typical_unit_g": 100,
+    "edible_unit_g": 100,
     "nutrition_basis": "as-sold",
     "cal_verified": null,
-    "typical_unit_price_gbp": 1.75,
+    "typical_unit_price_gbp": 0.39,
     "shelf_life_months": 12,
-    "storage_litres_per_unit": 1.0,
-    "vegetarian": true,
+    "storage_litres_per_unit": 0.33,
+    "vegetarian": false,
     "vegan": false,
     "gluten_free": false,
     "dairy_free": true,
     "amazon_asin": "XXXXXXXXXX",
     "category": "staple_carb",
     "region": "uk",
-    "prep": "needs-heat"
+    "prep": "needs-heat",
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Bramwells Express Chicken Instant Noodles",
+      "checked": "2026-11-01",
+      "online": true
+    },
+    "notes": "Priced as Aldi's chicken flavour noodles, so not counted as vegetarian until a vegetarian pack is checked."
   },
   {
     "id": "freeze-dried-noodles",
@@ -98,19 +127,24 @@
     "category": "staple_carb",
     "region": "uk",
     "prep": "needs-heat",
-    "notes": "Freeze-dried superior to instant — longer shelf life, lighter, better morale value"
+    "notes": "Freeze-dried superior to instant — longer shelf life, lighter, better morale value",
+    "priceNote": "Not checked: a specialist item, not sold at Aldi or Sainsbury's."
   },
   {
     "id": "porridge-sachets",
     "name": "Porridge sachets",
-    "cal_per_100g": 370,
-    "typical_unit_g": 360,
-    "edible_unit_g": 360,
+    "cal_per_100g": 373,
+    "typical_unit_g": 270,
+    "edible_unit_g": 270,
     "nutrition_basis": "as-sold",
-    "cal_verified": null,
-    "typical_unit_price_gbp": 2.25,
+    "cal_verified": {
+      "source": "Aldi website, Harvest Morn Original Instant Porridge",
+      "checked": "2026-11-01",
+      "pack_size_matches_source": true
+    },
+    "typical_unit_price_gbp": 0.95,
     "shelf_life_months": 12,
-    "storage_litres_per_unit": 1.0,
+    "storage_litres_per_unit": 0.75,
     "vegetarian": true,
     "vegan": false,
     "gluten_free": false,
@@ -118,7 +152,14 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "staple_carb",
     "region": "uk",
-    "prep": "needs-heat"
+    "prep": "needs-heat",
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Harvest Morn Original Instant Porridge, 10 sachets",
+      "checked": "2026-11-01",
+      "online": true
+    },
+    "priceNote": "Aldi, 10 sachets, £0.95. The pack weight isn't shown, so we count 10 x 27g, the usual sachet size."
   },
   {
     "id": "crackers-oatcakes",
@@ -243,7 +284,7 @@
     "edible_unit_g": 500,
     "nutrition_basis": "as-sold",
     "cal_verified": null,
-    "typical_unit_price_gbp": 1.1,
+    "typical_unit_price_gbp": 0.89,
     "shelf_life_months": 24,
     "storage_litres_per_unit": 0.7,
     "vegetarian": true,
@@ -253,7 +294,13 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
     "region": "uk",
-    "prep": "needs-heat"
+    "prep": "needs-heat",
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Worldwide Foods Red Lentils",
+      "checked": "2026-11-01",
+      "online": true
+    }
   },
   {
     "id": "tinned-chickpeas",
@@ -416,13 +463,13 @@
     "id": "powdered-milk",
     "name": "Powdered milk",
     "cal_per_100g": 500,
-    "typical_unit_g": 400,
-    "edible_unit_g": 400,
+    "typical_unit_g": 340,
+    "edible_unit_g": 340,
     "nutrition_basis": "as-sold",
     "cal_verified": null,
-    "typical_unit_price_gbp": 4.5,
+    "typical_unit_price_gbp": 3.5,
     "shelf_life_months": 24,
-    "storage_litres_per_unit": 0.8,
+    "storage_litres_per_unit": 0.68,
     "vegetarian": true,
     "vegan": false,
     "gluten_free": true,
@@ -430,7 +477,13 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "price_checked": {
+      "shop": "Sainsbury's",
+      "product": "Sainsbury's Skimmed Milk Powder",
+      "checked": "2026-11-01",
+      "online": true
+    }
   },
   {
     "id": "tinned-beans",
@@ -481,7 +534,7 @@
       "checked": "2026-10-27",
       "pack_size_matches_source": false
     },
-    "typical_unit_price_gbp": 2.75,
+    "typical_unit_price_gbp": 1.69,
     "shelf_life_months": 12,
     "storage_litres_per_unit": 0.35,
     "vegetarian": true,
@@ -500,7 +553,14 @@
         "sesame"
       ],
       "source": "https://sainsburys.co.uk/groceries/product/sainsburys-whole-almonds-300g",
-      "checked": "2026-11-01"
+      "checked": "2026-11-01",
+      "note": "Priced at Aldi, but allergens are from the label we checked. Aldi's website doesn't show allergens; its own label not yet read."
+    },
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "The Foodie Market Whole Almonds",
+      "checked": "2026-11-01",
+      "online": true
     }
   },
   {
@@ -515,7 +575,7 @@
       "checked": "2026-10-27",
       "pack_size_matches_source": true
     },
-    "typical_unit_price_gbp": 2.95,
+    "typical_unit_price_gbp": 1.65,
     "shelf_life_months": 6,
     "storage_litres_per_unit": 0.35,
     "vegetarian": true,
@@ -534,7 +594,14 @@
         "sesame"
       ],
       "source": "https://mcgrocer.com/products/sainsburys-walnuts-pieces-200g",
-      "checked": "2026-11-01"
+      "checked": "2026-11-01",
+      "note": "Priced at Aldi, but allergens are from the label we checked. Aldi's website doesn't show allergens; its own label not yet read."
+    },
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "The Foodie Market Walnut Halves",
+      "checked": "2026-11-01",
+      "online": true
     }
   },
   {
@@ -545,7 +612,7 @@
     "edible_unit_g": 1000,
     "nutrition_basis": "as-sold",
     "cal_verified": null,
-    "typical_unit_price_gbp": 1.1,
+    "typical_unit_price_gbp": 0.65,
     "shelf_life_months": 9,
     "storage_litres_per_unit": 1.0,
     "vegetarian": true,
@@ -555,7 +622,13 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "protein",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Everyday Essentials Semi Skimmed UHT Milk",
+      "checked": "2026-11-01",
+      "online": true
+    }
   },
   {
     "id": "coconut-oil",
@@ -575,19 +648,20 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "fat",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "priceNote": "Not settled: no current price found, 1 Nov 2026."
   },
   {
     "id": "olive-oil",
     "name": "Olive oil",
-    "cal_per_100g": 900,
-    "typical_unit_g": 500,
-    "edible_unit_g": 500,
+    "cal_per_100g": 825,
+    "typical_unit_g": 1000,
+    "edible_unit_g": 1000,
     "nutrition_basis": "as-sold",
     "cal_verified": null,
-    "typical_unit_price_gbp": 4.5,
+    "typical_unit_price_gbp": 5.99,
     "shelf_life_months": 18,
-    "storage_litres_per_unit": 0.55,
+    "storage_litres_per_unit": 1.1,
     "vegetarian": true,
     "vegan": true,
     "gluten_free": true,
@@ -595,17 +669,28 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "fat",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Solesta Extra Virgin Olive Oil",
+      "checked": "2026-11-01",
+      "online": true
+    },
+    "notes": "Calories are per 100ml, taken as the same as Aldi's vegetable oil (oils differ very little by volume); not read off the olive oil label. The pack is counted as 1,000ml."
   },
   {
     "id": "vegetable-oil",
-    "name": "Vegetable oil (rapeseed)",
-    "cal_per_100g": 900,
+    "name": "Vegetable oil",
+    "cal_per_100g": 825,
     "typical_unit_g": 1000,
     "edible_unit_g": 1000,
     "nutrition_basis": "as-sold",
-    "cal_verified": null,
-    "typical_unit_price_gbp": 1.65,
+    "cal_verified": {
+      "source": "Aldi website, Solesta Vegetable Oil",
+      "checked": "2026-11-01",
+      "pack_size_matches_source": true
+    },
+    "typical_unit_price_gbp": 1.45,
     "shelf_life_months": 18,
     "storage_litres_per_unit": 1.0,
     "vegetarian": true,
@@ -615,19 +700,26 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "fat",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Solesta Vegetable Oil",
+      "checked": "2026-11-01",
+      "online": true
+    },
+    "notes": "Calories are per 100ml, and the pack is counted as 1,000ml. The label doesn't say which oil it is."
   },
   {
     "id": "lard",
     "name": "Lard",
     "cal_per_100g": 900,
-    "typical_unit_g": 500,
-    "edible_unit_g": 500,
+    "typical_unit_g": 250,
+    "edible_unit_g": 250,
     "nutrition_basis": "as-sold",
     "cal_verified": null,
-    "typical_unit_price_gbp": 2.5,
+    "typical_unit_price_gbp": 0.5,
     "shelf_life_months": 24,
-    "storage_litres_per_unit": 0.55,
+    "storage_litres_per_unit": 0.28,
     "vegetarian": false,
     "vegan": false,
     "gluten_free": true,
@@ -635,7 +727,13 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "fat",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Everyday Essentials Pork Lard",
+      "checked": "2026-11-01",
+      "online": true
+    }
   },
   {
     "id": "tinned-tomatoes",
@@ -720,7 +818,7 @@
     "edible_unit_g": 200,
     "nutrition_basis": "as-sold",
     "cal_verified": null,
-    "typical_unit_price_gbp": 0.65,
+    "typical_unit_price_gbp": 0.59,
     "shelf_life_months": 24,
     "storage_litres_per_unit": 0.2,
     "vegetarian": true,
@@ -730,7 +828,14 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "vegetable",
     "region": "uk",
-    "prep": "needs-heat"
+    "prep": "needs-heat",
+    "price_checked": {
+      "shop": "Sainsbury's",
+      "product": "Sainsbury's Double Concentrate Tomato Puree",
+      "checked": "2026-11-01",
+      "online": true
+    },
+    "priceNote": "Sainsbury's, £0.59, found through a price comparison site, not the shop's own page. To recheck."
   },
   {
     "id": "tinned-peas",
@@ -854,7 +959,7 @@
     "edible_unit_g": 60,
     "nutrition_basis": "as-sold",
     "cal_verified": null,
-    "typical_unit_price_gbp": 4.0,
+    "typical_unit_price_gbp": 1.79,
     "shelf_life_months": 24,
     "storage_litres_per_unit": 0.1,
     "vegetarian": true,
@@ -864,7 +969,13 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "micronutrient",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Activ-Max High Strength Multivitamins",
+      "checked": "2026-11-01",
+      "online": true
+    }
   },
   {
     "id": "dark-chocolate",
@@ -912,7 +1023,7 @@
     "edible_unit_g": 200,
     "nutrition_basis": "as-sold",
     "cal_verified": null,
-    "typical_unit_price_gbp": 4.75,
+    "typical_unit_price_gbp": 2.4,
     "shelf_life_months": 24,
     "storage_litres_per_unit": 0.3,
     "vegetarian": true,
@@ -922,7 +1033,13 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "morale",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "price_checked": {
+      "shop": "Sainsbury's",
+      "product": "Sainsbury's Rich Roast Instant Coffee",
+      "checked": "2026-11-01",
+      "online": true
+    }
   },
   {
     "id": "honey",
@@ -970,7 +1087,7 @@
     "edible_unit_g": 750,
     "nutrition_basis": "as-sold",
     "cal_verified": null,
-    "typical_unit_price_gbp": 0.75,
+    "typical_unit_price_gbp": 0.65,
     "shelf_life_months": 240,
     "storage_litres_per_unit": 0.6,
     "vegetarian": true,
@@ -980,7 +1097,13 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "flavour",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Ready Set Cook British Table Salt",
+      "checked": "2026-11-01",
+      "online": true
+    }
   },
   {
     "id": "soy-sauce",
@@ -990,7 +1113,7 @@
     "edible_unit_g": 150,
     "nutrition_basis": "as-sold",
     "cal_verified": null,
-    "typical_unit_price_gbp": 1.35,
+    "typical_unit_price_gbp": 0.55,
     "shelf_life_months": 24,
     "storage_litres_per_unit": 0.2,
     "vegetarian": true,
@@ -1000,19 +1123,25 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "flavour",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Asia Specialities Light Soy Sauce",
+      "checked": "2026-11-01",
+      "online": true
+    }
   },
   {
     "id": "vinegar",
     "name": "Vinegar",
     "cal_per_100g": null,
-    "typical_unit_g": 500,
-    "edible_unit_g": 500,
+    "typical_unit_g": 568,
+    "edible_unit_g": 568,
     "nutrition_basis": "as-sold",
     "cal_verified": null,
-    "typical_unit_price_gbp": 0.9,
+    "typical_unit_price_gbp": 0.35,
     "shelf_life_months": 120,
-    "storage_litres_per_unit": 0.55,
+    "storage_litres_per_unit": 0.62,
     "vegetarian": true,
     "vegan": true,
     "gluten_free": true,
@@ -1020,19 +1149,25 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "flavour",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Bramwells Malt Vinegar",
+      "checked": "2026-11-01",
+      "online": true
+    }
   },
   {
     "id": "dried-herbs-spices",
     "name": "Dried herbs / spices",
     "cal_per_100g": null,
-    "typical_unit_g": 100,
-    "edible_unit_g": 100,
+    "typical_unit_g": 11,
+    "edible_unit_g": 11,
     "nutrition_basis": "as-sold",
     "cal_verified": null,
-    "typical_unit_price_gbp": 2.0,
+    "typical_unit_price_gbp": 0.59,
     "shelf_life_months": 24,
-    "storage_litres_per_unit": 0.2,
+    "storage_litres_per_unit": 0.05,
     "vegetarian": true,
     "vegan": true,
     "gluten_free": true,
@@ -1040,7 +1175,13 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "flavour",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "price_checked": {
+      "shop": "Aldi",
+      "product": "Ready Set Cook Mixed Herbs",
+      "checked": "2026-11-01",
+      "online": true
+    }
   },
   {
     "id": "tinned-mackerel",
@@ -1120,13 +1261,13 @@
     "id": "stock-cubes",
     "name": "Stock cubes / bouillon powder",
     "cal_per_100g": null,
-    "typical_unit_g": 60,
-    "edible_unit_g": 60,
+    "typical_unit_g": 100,
+    "edible_unit_g": 100,
     "nutrition_basis": "as-sold",
     "cal_verified": null,
-    "typical_unit_price_gbp": 0.35,
+    "typical_unit_price_gbp": 1.1,
     "shelf_life_months": 24,
-    "storage_litres_per_unit": 0.1,
+    "storage_litres_per_unit": 0.17,
     "vegetarian": true,
     "vegan": true,
     "gluten_free": true,
@@ -1134,7 +1275,13 @@
     "amazon_asin": "XXXXXXXXXX",
     "category": "flavour",
     "region": "uk",
-    "prep": "no-cook"
+    "prep": "no-cook",
+    "price_checked": {
+      "shop": "Sainsbury's",
+      "product": "Sainsbury's Vegetable Stock Cubes, 10 x 10g",
+      "checked": "2026-11-01",
+      "online": true
+    }
   },
   {
     "id": "dried-apricots",
