@@ -69,6 +69,8 @@ export type FoodItem = {
   /** Not for babies under a year (honey). Left out when a child under 4 is
    *  counted, since the planner can't tell a baby from a toddler. */
   not_for_babies?: boolean;
+  /** Where and when the price was checked. Absent => an older figure. */
+  price_checked?: { shop: string; product: string; checked: string; online: boolean };
   /** Offered in the three-day basket only, not in longer stores. */
   three_day_only?: boolean;
   typical_unit_price_gbp: number;
