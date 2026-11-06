@@ -108,8 +108,7 @@ export default function Page() {
             — the Scottish Government&rsquo;s official preparedness guidance, written
             plainly for households. From there, your local council&rsquo;s emergency
             planning page (search &ldquo;[council name] emergency plan&rdquo;) will
-            tell you what&rsquo;s specific to your area. For UK-wide guidance,{" "}
-            <span>The UK Government's </span>
+            tell you what&rsquo;s specific to your area. The UK Government's{" "}
             <a
               href="https://beready.campaign.gov.uk/be-ready-for-emergencies/"
               target="_blank"
