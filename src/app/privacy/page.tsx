@@ -18,7 +18,6 @@ export default function Page() {
         <p className="mt-4 text-base leading-7 text-[var(--muted)]">We don't use analytics or tracking cookies, and there are no adverts on the site at the moment. If that ever changes, we'll update this page first.</p>
         <p className="mt-4 text-base leading-7 text-[var(--muted)]">Some gear links go to Amazon. They're marked. If you buy through one, we may earn a small commission at no extra cost to you. Once you're on Amazon's site, their privacy policy applies. See our <Link href="/affiliate-disclosure" className="underline">affiliate disclosure</Link>.</p>
         <p className="mt-4 text-base leading-7 text-[var(--muted)]">The site is hosted by Netlify, which keeps standard technical logs (such as IP addresses) to run and protect the service.</p>
-        <p className="mt-4 text-base leading-7 text-[var(--muted)]">Questions? Email <a href="mailto:hello@justincase.scot" className="underline">hello@justincase.scot</a></p>
         <p className="mt-4 text-base leading-7 text-[var(--muted)]">Last updated: November 2026</p>
       </div>
     </main>

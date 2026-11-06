@@ -14,9 +14,8 @@ export default function Page() {
       <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
         <Link className="text-sm text-[var(--brand)] underline" href="/">← Back to Just In Case</Link>
         <h1 className="mt-6 text-3xl font-bold text-[var(--brand-dark)]">Contact</h1>
-        <p className="mt-4 text-base leading-7 text-[var(--muted)]">Spotted a mistake, a price that's changed, or advice that's out of date? Please tell us. Corrections are the most useful thing you can send.</p>
-        <p className="mt-4 text-base leading-7 text-[var(--muted)]">Email: <a href="mailto:hello@justincase.scot" className="underline">hello@justincase.scot</a></p>
-        <p className="mt-4 text-base leading-7 text-[var(--muted)]">Just In Case is an independent site, made in Scotland. We read everything, but we can't give personal emergency advice. In an emergency, call 999.</p>
+        <p className="mt-4 text-base leading-7 text-[var(--muted)]">We're setting up a contact address and it will appear here soon.</p>
+        <p className="mt-4 text-base leading-7 text-[var(--muted)]">Just In Case is an independent site, made in Scotland. We can't give personal emergency advice. In an emergency, call 999.</p>
       </div>
     </main>
   );
