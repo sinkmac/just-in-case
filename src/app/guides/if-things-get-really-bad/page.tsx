@@ -109,6 +109,7 @@ export default function Page() {
             plainly for households. From there, your local council&rsquo;s emergency
             planning page (search &ldquo;[council name] emergency plan&rdquo;) will
             tell you what&rsquo;s specific to your area. For UK-wide guidance,{" "}
+            <span>The UK Government's </span>
             <a
               href="https://beready.campaign.gov.uk/be-ready-for-emergencies/"
               target="_blank"
@@ -117,7 +118,7 @@ export default function Page() {
             >
               Be Ready
             </a>{" "}
-            covers the same ground for England, Wales, and Northern Ireland.
+            campaign covers the whole UK, Scotland included, and it's where the three-day advice comes from.
           </p>
           <p>
             Find these once, bookmark them, and you&rsquo;ve done something that
