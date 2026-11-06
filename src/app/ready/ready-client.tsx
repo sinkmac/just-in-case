@@ -514,7 +514,7 @@ export default function Page() {
                 key={opt.value}
                 type="button"
                 onClick={() => setAnswer(q.id, opt.value)}
-                className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                className={`rounded-full border min-w-[44px] min-h-11 inline-flex items-center justify-center px-3 py-3 text-sm font-medium transition-colors ${
                   isSelected
                     ? 'bg-[var(--brand)] text-white border-[var(--brand)]'
                     : 'border-[var(--border)] bg-[var(--card)] text-[var(--muted)] hover:bg-[var(--accent)]'
@@ -526,7 +526,7 @@ export default function Page() {
           })}
         </div>
         {q.id === 'q16' && (
-          <p className="mt-2 text-xs leading-relaxed text-[var(--muted)]">
+          <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">
             Worth having ready: photos or copies of your passport, driving licence, tenancy or mortgage documents, and insurance policy — kept somewhere secure, or backed up online. Free, and one less thing to think about in a hurry.
           </p>
         )}
@@ -548,8 +548,8 @@ export default function Page() {
     return (
       <div className="mb-3">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-xs font-medium text-[var(--foreground)]">{DOMAIN_LABELS[domain]}</span>
-          <span className={`text-xs font-medium ${barLabelColor(state)}`}>{barLabel(state)}</span>
+          <span className="text-sm font-medium text-[var(--foreground)]">{DOMAIN_LABELS[domain]}</span>
+          <span className={`text-sm font-medium ${barLabelColor(state)}`}>{barLabel(state)}</span>
         </div>
         <div className="h-2 w-full rounded-full bg-[var(--border)] overflow-hidden">
           <div className={`h-full rounded-full transition-all duration-500 ${barFillColor(state)} ${barFillWidth(state)}`} />
@@ -571,7 +571,7 @@ export default function Page() {
           <p className="mt-2 text-sm italic text-[var(--muted)]">
             Seventeen quick questions. About three minutes. No right answers \u2014 just an honest picture and the cheapest ways to improve it.
           </p>
-          <p className="mt-3 text-xs text-[var(--muted)] border-l-2 border-[var(--border)] pl-3 leading-relaxed">
+          <p className="mt-3 text-sm text-[var(--muted)] border-l-2 border-[var(--border)] pl-3 leading-relaxed">
             Your answers stay on your device. Nothing is stored, nothing is sent \u2014 we never see them.
           </p>
         </div>
@@ -579,11 +579,11 @@ export default function Page() {
         {/* Progress indicator */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-1">
-            <span className="text-xs font-medium text-[var(--muted)]">
+            <span className="text-sm font-medium text-[var(--muted)]">
               {answeredCount} of {totalQuestions} answered
             </span>
             {allAnswered && (
-              <span className="text-xs font-medium text-[var(--success)]">All done</span>
+              <span className="text-sm font-medium text-[var(--success)]">All done</span>
             )}
           </div>
           <div className="h-1.5 w-full rounded-full bg-[var(--border)] overflow-hidden">
@@ -634,7 +634,7 @@ export default function Page() {
 
               {/* Power heat steer */}
               {powerHeatSteer && (
-                <p className="mb-3 ml-1 text-xs text-[var(--muted)] italic">{powerHeatSteer}</p>
+                <p className="mb-3 ml-1 text-sm text-[var(--muted)] italic">{powerHeatSteer}</p>
               )}
 
               {renderBar('info-money', domainBars['info-money'])}
@@ -657,7 +657,7 @@ export default function Page() {
               )}
               {findOutActions.length > 0 && (
                 <div className="mt-4">
-                  <p className="text-xs font-medium text-[var(--muted)] mb-2">Find out first</p>
+                  <p className="text-sm font-medium text-[var(--muted)] mb-2">Find out first</p>
                   <ul className="space-y-2">
                     {findOutActions.map((action, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-[var(--muted)]">
