@@ -82,19 +82,19 @@ export default function HomePage() {
           <nav className="mt-3 flex flex-wrap gap-4 text-sm text-[var(--brand)]">
             <Link
               href="/planner"
-              className="underline decoration-1 underline-offset-2 hover:text-[var(--brand-dark)] transition-colors"
+              className="min-h-11 inline-flex items-center px-3 underline decoration-1 underline-offset-2 hover:text-[var(--brand-dark)] transition-colors"
             >
               Planner
             </Link>
             <Link
               href="/guides"
-              className="underline decoration-1 underline-offset-2 hover:text-[var(--brand-dark)] transition-colors"
+              className="min-h-11 inline-flex items-center px-3 underline decoration-1 underline-offset-2 hover:text-[var(--brand-dark)] transition-colors"
             >
               Guides
             </Link>
             <Link
               href="/why"
-              className="underline decoration-1 underline-offset-2 hover:text-[var(--brand-dark)] transition-colors"
+              className="min-h-11 inline-flex items-center px-3 underline decoration-1 underline-offset-2 hover:text-[var(--brand-dark)] transition-colors"
             >
               Why we built this
             </Link>

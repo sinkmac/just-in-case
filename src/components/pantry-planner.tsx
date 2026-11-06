@@ -469,10 +469,10 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
           <h1 className="mt-2 text-3xl font-bold text-[var(--brand-dark)]">Just In Case</h1>
           <p className="mt-2 text-sm text-[var(--muted)]">Planning for the future you hope never comes. But just might.</p>
           <nav className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-[var(--brand)]">
-            <Link href="/guides" className="underline decoration-1 underline-offset-2 hover:text-[var(--brand-dark)] transition-colors">
+            <Link href="/guides" className="min-h-11 inline-flex items-center px-3 underline decoration-1 underline-offset-2 hover:text-[var(--brand-dark)] transition-colors">
               Guide library
             </Link>
-            <Link href="/ready" className="underline decoration-1 underline-offset-2 hover:text-[var(--brand-dark)] transition-colors">
+            <Link href="/ready" className="min-h-11 inline-flex items-center px-3 underline decoration-1 underline-offset-2 hover:text-[var(--brand-dark)] transition-colors">
               Readiness check
             </Link>
           </nav>
@@ -639,9 +639,10 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
                 </button>
                 {showDietary && (
                   <div className="mt-3 space-y-3 text-sm text-[var(--muted)]">
-                    <label className="flex items-center gap-3">
+                    <label className="flex min-h-11 items-center gap-3">
                       <input
                         type="checkbox"
+                        className="h-6 w-6 shrink-0 accent-[var(--brand)]"
                         checked={dietaryFlags.vegetarian}
                         onChange={(event) =>
                           setDietaryFlags((current) => ({ ...current, vegetarian: event.target.checked }))
@@ -649,9 +650,10 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
                       />
                       Vegetarian
                     </label>
-                    <label className="flex items-center gap-3">
+                    <label className="flex min-h-11 items-center gap-3">
                       <input
                         type="checkbox"
+                        className="h-6 w-6 shrink-0 accent-[var(--brand)]"
                         checked={dietaryFlags.glutenFree}
                         onChange={(event) =>
                           setDietaryFlags((current) => ({ ...current, glutenFree: event.target.checked }))
@@ -659,9 +661,10 @@ export function PantryPlanner({ initialTier, embedded = false }: { initialTier?:
                       />
                       Gluten-free
                     </label>
-                    <label className="flex items-center gap-3">
+                    <label className="flex min-h-11 items-center gap-3">
                       <input
                         type="checkbox"
+                        className="h-6 w-6 shrink-0 accent-[var(--brand)]"
                         checked={dietaryFlags.noDairy}
                         onChange={(event) =>
                           setDietaryFlags((current) => ({ ...current, noDairy: event.target.checked }))

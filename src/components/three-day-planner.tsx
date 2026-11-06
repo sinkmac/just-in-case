@@ -81,7 +81,7 @@ function Stepper({
 
 function Tick({ checked, onChange, children }: { checked: boolean; onChange: (v: boolean) => void; children: React.ReactNode }) {
   return (
-    <label className="flex min-h-11 cursor-pointer items-center gap-3 py-1 leading-6">
+    <label className="flex min-h-11 cursor-pointer items-center gap-3 px-3 py-1 leading-6">
       <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="h-6 w-6 shrink-0 accent-[var(--brand)]" />
       <span>{children}</span>
     </label>
@@ -310,9 +310,9 @@ export function ThreeDayPlanner({
             <Link href="/" className="inline-flex min-h-11 items-center">Just In Case</Link>
           </p>
           <nav className="mt-1 flex flex-wrap gap-x-4 text-sm">
-            <Link href="/planner" className={linkClass}>Planner</Link>
-            <Link href="/guides" className={linkClass}>Guides</Link>
-            <Link href="/why" className={linkClass}>Why we built this</Link>
+            <Link href="/planner" className={`${linkClass} px-3`}>Planner</Link>
+            <Link href="/guides" className={`${linkClass} px-3`}>Guides</Link>
+            <Link href="/why" className={`${linkClass} px-3`}>Why we built this</Link>
           </nav>
         </header>
 
