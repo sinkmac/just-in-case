@@ -313,16 +313,21 @@ export function basketCoverage(
 
 // ── What's left ──────────────────────────────────────────────────────────────
 
+export type Choice = "need" | "some" | "got";
+
 export type Entries = {
-  /** "I have" amounts, by line id. */
+  /** The per-line choice: need the full amount, have some, or got it. */
+  choice: Record<string, Choice>;
+  /** "I have" amounts for lines on "Have some", by line id. */
   have: Record<string, number>;
-  /** "Got it" ticks, by line id. */
-  got: Record<string, boolean>;
 };
 
 export function remaining(line: Line, entries: Entries): number {
-  if (line.amount == null) return entries.got[line.id] ? 0 : 1;
-  return Math.max(0, line.amount - (entries.have[line.id] ?? 0));
+  const choice = entries.choice[line.id] ?? "need";
+  if (line.amount == null) return choice === "got" ? 0 : 1;
+  if (choice === "got") return Math.max(0, line.amount - (entries.have[line.id] ?? line.amount));
+  if (choice === "some") return Math.max(0, line.amount - (entries.have[line.id] ?? 0));
+  return line.amount;
 }
 
 /** Name as shown on the shopping list: optional lines say so. */

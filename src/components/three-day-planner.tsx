@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import foods from "../../data/foods.json";
 import { printOnly } from "@/lib/print";
@@ -37,6 +37,7 @@ import {
   remaining,
   shoppingListHeading,
   shoppingListText,
+  type Choice,
   type Entries,
   type Group,
   type Household,
@@ -63,7 +64,7 @@ function Stepper({
   onChange: (v: number) => void;
 }) {
   const btn =
-    "h-11 w-11 shrink-0 rounded-full border border-[var(--strong-border)] bg-[var(--card)] text-xl text-[var(--brand-dark)] disabled:opacity-40";
+    "h-11 w-11 shrink-0 rounded-full border border-[var(--strong-border)] bg-[var(--card)] text-xl text-[var(--brand-dark)] disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand)]";
   return (
     <div className="flex items-center gap-2">
       <button type="button" className={btn} aria-label={`${label}: fewer`} disabled={value <= min} onClick={() => onChange(Math.max(min, value - 1))}>
@@ -106,6 +107,207 @@ function HaveBox({ line, value, onChange }: { line: Line; value: number; onChang
   );
 }
 
+function RadioOption({
+  name,
+  value,
+  checked,
+  onChange,
+  label,
+}: {
+  name: string;
+  value: Choice;
+  checked: boolean;
+  onChange: (c: Choice) => void;
+  label: string;
+}) {
+  return (
+    <label className="inline-flex min-h-11 cursor-pointer items-center gap-1.5 text-[15px]">
+      <input
+        type="radio"
+        name={name}
+        value={value}
+        checked={checked}
+        onChange={() => onChange(value)}
+        className="h-5 w-5 accent-[var(--brand)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand)]"
+      />
+      <span>{label}</span>
+    </label>
+  );
+}
+
+function ChoiceGroup({
+  line,
+  choice,
+  onChoice,
+  hasSome,
+}: {
+  line: Line;
+  choice: Choice;
+  onChoice: (c: Choice) => void;
+  hasSome: boolean;
+}) {
+  const name = `choice-${line.id}`;
+  return (
+    <div
+      role="radiogroup"
+      aria-labelledby={`${line.id}-name`}
+      className="flex flex-wrap items-center gap-x-3 gap-y-1"
+    >
+      <RadioOption name={name} value="need" checked={choice === "need"} onChange={onChoice} label="Need" />
+      {hasSome && (
+        <RadioOption name={name} value="some" checked={choice === "some"} onChange={onChoice} label="Have some" />
+      )}
+      <RadioOption name={name} value="got" checked={choice === "got"} onChange={onChoice} label="Got it" />
+    </div>
+  );
+}
+
+function HaveSome({
+  line,
+  value,
+  onChange,
+}: {
+  line: Line;
+  value: number;
+  onChange: (v: number) => void;
+}) {
+  // Water keeps the existing "I have" number field; everything else uses a
+  // − / + stepper.
+  if (line.id === "water-drink") {
+    return <HaveBox line={line} value={value} onChange={onChange} />;
+  }
+  const max = line.amount ?? 99;
+  const btn =
+    "h-11 w-11 shrink-0 rounded-full border border-[var(--strong-border)] bg-[var(--card)] text-xl text-[var(--brand-dark)] disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand)]";
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <button
+        type="button"
+        className={btn}
+        aria-label={`${line.name}: fewer`}
+        disabled={value <= 0}
+        onClick={() => onChange(Math.max(0, value - 1))}
+      >
+        −
+      </button>
+      <span className="min-w-8 text-center text-[19px] font-semibold tabular-nums" aria-live="polite" aria-label={`${line.name}: ${value}`}>
+        {value}
+      </span>
+      <button
+        type="button"
+        className={btn}
+        aria-label={`${line.name}: more`}
+        disabled={value >= max}
+        onClick={() => onChange(Math.min(max, value + 1))}
+      >
+        +
+      </button>
+      <span>{line.unit ? plural(value, line.unit) : ""}</span>
+    </div>
+  );
+}
+
+function LineRow({
+  line,
+  entries,
+  onChoice,
+  onHave,
+  onAmount,
+}: {
+  line: Line;
+  entries: Entries;
+  onChoice: (id: string, c: Choice) => void;
+  onHave: (id: string, v: number) => void;
+  onAmount: (line: Line, v: number) => void;
+}) {
+  const [adjustOpen, setAdjustOpen] = useState(false);
+  const choice = entries.choice[line.id] ?? "need";
+  const have = entries.have[line.id] ?? 0;
+  const left = remaining(line, entries);
+  const hasAmount = line.amount != null && line.amount > 0;
+  const threeWay = hasAmount && (line.amount ?? 0) > 1;
+  const showSome = choice === "some" && hasAmount;
+
+  return (
+    <li className="border-b border-dashed border-[var(--border)] py-3 last:border-b-0">
+      <div className="flex flex-col gap-2 min-[600px]:flex-row min-[600px]:items-start min-[600px]:justify-between min-[600px]:gap-4">
+        <div className="min-w-0">
+          <p id={`${line.id}-name`} className="font-semibold">
+            {line.name}
+            {hasAmount && (
+              <span className="ml-2 font-normal text-[var(--muted)]">
+                {line.amount} {plural(line.amount!, line.unit!)}
+              </span>
+            )}
+          </p>
+          {line.note && <p className="mt-1 text-[15px] text-[var(--secondary)]">{line.note}</p>}
+          {line.editable && line.amount != null && (
+            <div className="mt-1">
+              <button
+                type="button"
+                onClick={() => setAdjustOpen((v) => !v)}
+                className="text-sm text-[var(--brand)] underline underline-offset-2 hover:text-[var(--brand-dark)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand)]"
+                aria-expanded={adjustOpen}
+              >
+                Adjust
+              </button>
+              {adjustOpen && (
+                <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <Stepper label={`${line.name} (suggested amount)`} value={line.amount!} min={0} max={99} onChange={(v) => onAmount(line, v)} />
+                  <span>{plural(line.amount!, line.unit!)}</span>
+                  {line.id.startsWith("food-") &&
+                    (line.amount! > 0 ? (
+                      <button
+                        type="button"
+                        onClick={() => onAmount(line, 0)}
+                        className="text-sm text-[var(--brand)] underline underline-offset-2"
+                      >
+                        Remove
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => onAmount(line, 1)}
+                        className="text-sm text-[var(--brand)] underline underline-offset-2"
+                      >
+                        Add back
+                      </button>
+                    ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+        <div className="shrink-0">
+          <ChoiceGroup
+            line={line}
+            choice={choice}
+            onChoice={(c) => {
+              // "Got it" records the amount held, so if the suggested amount
+              // later rises the item reappears on the list (today's behaviour).
+              if (c === "got" && line.amount != null) onHave(line.id, line.amount);
+              // "Have some" starts at 0 each time it is picked.
+              if (c === "some" && choice !== "some") onHave(line.id, 0);
+              onChoice(line.id, c);
+            }}
+            hasSome={threeWay}
+          />
+        </div>
+      </div>
+      {showSome && (
+        <div className="mt-2">
+          <HaveSome line={line} value={have} onChange={(v) => onHave(line.id, v)} />
+          {amountLeftText(line, left) && (
+            <p className={`mt-1 text-[15px] ${left > 0 ? "font-semibold text-[var(--brand)]" : "text-[var(--success)]"}`}>
+              {amountLeftText(line, left)}
+            </p>
+          )}
+        </div>
+      )}
+    </li>
+  );
+}
+
 export function ThreeDayPlanner({
   longerStores,
   initialLongerOpen = false,
@@ -114,7 +316,7 @@ export function ThreeDayPlanner({
   initialLongerOpen?: boolean;
 }) {
   const [household, setHousehold] = useState<Household>(DEFAULT_HOUSEHOLD);
-  const [entries, setEntries] = useState<Entries>({ have: {}, got: {} });
+  const [entries, setEntries] = useState<Entries>({ choice: {}, have: {} });
   const [blanketsOverride, setBlanketsOverride] = useState<number | null>(null);
   const [basketOverrides, setBasketOverrides] = useState<Record<string, number>>({});
   const [dietaryFlags, setDietaryFlags] = useState<DietaryFlags>({ vegetarian: false, glutenFree: false, noDairy: false });
@@ -124,9 +326,20 @@ export function ThreeDayPlanner({
   const [tasksDone, setTasksDone] = useState<Record<string, boolean>>({});
   // Lines ticked on the shopping list, with what "I have" held before, so a
   // mis-tap can be undone from the list itself.
-  const [bought, setBought] = useState<Record<string, Entries>>({});
+  const [bought, setBought] = useState<Record<string, { choice: Choice; have: number }>>({});
   const [shareStatus, setShareStatus] = useState<string | null>(null);
   const [longerOpen, setLongerOpen] = useState(initialLongerOpen);
+
+  // The phone bottom bar hides while the shopping list card is on screen.
+  const listRef = useRef<HTMLElement>(null);
+  const [listVisible, setListVisible] = useState(false);
+  useEffect(() => {
+    const el = listRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const obs = new IntersectionObserver(([entry]) => setListVisible(entry.isIntersecting), { threshold: 0.1 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   const blankets = blanketsOverride ?? people(household);
   const groups = fixedGroups(household, blankets);
@@ -173,23 +386,27 @@ export function ThreeDayPlanner({
   const tasksLeft = TASKS.filter((t) => !tasksDone[t.id]);
 
   const setHave = (id: string, v: number) => setEntries((e) => ({ ...e, have: { ...e.have, [id]: v } }));
-  const setGot = (id: string, v: boolean) => setEntries((e) => ({ ...e, got: { ...e.got, [id]: v } }));
+  const setChoice = (id: string, c: Choice) => setEntries((e) => ({ ...e, choice: { ...e.choice, [id]: c } }));
 
   const setAmount = (line: Line, v: number) => {
     if (line.id === "blankets") setBlanketsOverride(v);
     else setBasketOverrides((o) => ({ ...o, [line.id.replace(/^food-/, "")]: v }));
   };
 
-  // Ticking on the list means bought: what they have rises to the full amount.
+  // Ticking on the list means bought: the line is marked "Got it", so it comes
+  // off the list. Undo restores the choice and amount it had before.
   const markBought = (line: Line) => {
-    setBought((b) => ({ ...b, [line.id]: { have: { [line.id]: entries.have[line.id] ?? 0 }, got: { [line.id]: false } } }));
-    if (line.amount == null) setGot(line.id, true);
-    else setHave(line.id, line.amount);
+    setBought((b) => ({
+      ...b,
+      [line.id]: { choice: entries.choice[line.id] ?? "need", have: entries.have[line.id] ?? 0 },
+    }));
+    if (line.amount != null) setHave(line.id, line.amount);
+    setChoice(line.id, "got");
   };
   const undoBought = (line: Line) => {
     const before = bought[line.id];
-    if (line.amount == null) setGot(line.id, false);
-    else setHave(line.id, before?.have[line.id] ?? 0);
+    setChoice(line.id, before?.choice ?? "need");
+    setHave(line.id, before?.have ?? 0);
     setBought((b) => {
       const next = { ...b };
       delete next[line.id];
@@ -241,49 +458,15 @@ export function ThreeDayPlanner({
   const linkClass = "inline-flex min-h-11 items-center text-[var(--brand)] underline underline-offset-2 hover:text-[var(--brand-dark)] transition-colors";
 
   function renderLine(line: Line) {
-    const left = remaining(line, entries);
     return (
-      <li key={line.id} className="border-b border-dashed border-[var(--border)] py-3 last:border-b-0">
-        <div className="flex flex-wrap items-baseline justify-between gap-x-4">
-          <p className="font-semibold">{line.name}</p>
-          {line.amount != null && !line.editable && (
-            <p className="text-[var(--muted)]">
-              {line.amount} {plural(line.amount, line.unit!)}
-            </p>
-          )}
-        </div>
-        {line.note && <p className="mt-1 text-[var(--secondary)]">{line.note}</p>}
-        {line.editable && line.amount != null && (
-          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
-            <Stepper label={line.name} value={line.amount} min={0} max={99} onChange={(v) => setAmount(line, v)} />
-            <span>{plural(line.amount, line.unit!)}</span>
-            {line.id.startsWith("food-") &&
-              (line.amount > 0 ? (
-                <button type="button" onClick={() => setAmount(line, 0)} className={linkClass}>
-                  Remove
-                </button>
-              ) : (
-                <button type="button" onClick={() => setAmount(line, 1)} className={linkClass}>
-                  Add back
-                </button>
-              ))}
-          </div>
-        )}
-        {line.amount == null ? (
-          <div className="mt-1">
-            <Tick checked={!!entries.got[line.id]} onChange={(v) => setGot(line.id, v)}>
-              Got it
-            </Tick>
-          </div>
-        ) : (
-          line.amount > 0 && (
-            <div className="mt-1 flex flex-wrap items-center gap-x-4">
-              <HaveBox line={line} value={entries.have[line.id] ?? 0} onChange={(v) => setHave(line.id, v)} />
-              <p className={left > 0 ? "font-semibold text-[var(--brand)]" : "text-[var(--success)]"}>{amountLeftText(line, left)}</p>
-            </div>
-          )
-        )}
-      </li>
+      <LineRow
+        key={line.id}
+        line={line}
+        entries={entries}
+        onChoice={setChoice}
+        onHave={setHave}
+        onAmount={setAmount}
+      />
     );
   }
 
@@ -303,8 +486,8 @@ export function ThreeDayPlanner({
   );
 
   return (
-    <div className="py-8 text-[17px] leading-7 text-[var(--brand-dark)]">
-      <div className="print-three-day mx-auto max-w-[760px] px-4 sm:px-6">
+    <div className="py-8 pb-24 text-[17px] leading-7 text-[var(--brand-dark)] min-[900px]:pb-0">
+      <div className="print-three-day mx-auto max-w-[1120px] px-4 sm:px-6">
         <header className="no-print mb-8">
           <p className="font-serif text-3xl font-semibold tracking-tight">
             <Link href="/" className="inline-flex min-h-11 items-center">Just In Case</Link>
@@ -316,6 +499,8 @@ export function ThreeDayPlanner({
           </nav>
         </header>
 
+        <div className="min-[900px]:grid min-[900px]:grid-cols-[3fr_2fr] min-[900px]:gap-8 min-[900px]:items-start print:block">
+          <div className="min-w-0">
         <div className="no-print">
           <h1 className="font-serif text-[30px] font-semibold leading-tight sm:text-[40px]">
             Three days for {householdLabel(household)}
@@ -347,7 +532,7 @@ export function ThreeDayPlanner({
             </div>
           </section>
 
-          <p className="mt-4 lg:hidden">
+          <p className="mt-4 min-[900px]:hidden">
             <a href="#shopping-list" className={linkClass}>Go to my shopping list</a>
           </p>
 
@@ -444,8 +629,9 @@ export function ThreeDayPlanner({
             ))}
           </div>
         </div>
-
-        <section id="shopping-list" className="mt-10 rounded-2xl border-2 border-[var(--strong-border)] bg-[var(--card)] p-4 sm:p-6 print:border-0 print:p-0">
+          </div>
+          <aside className="min-[900px]:sticky min-[900px]:top-6 min-[900px]:max-h-[calc(100vh-3rem)] min-[900px]:overflow-y-auto print:static print:max-h-none print:overflow-visible">
+        <section id="shopping-list" ref={listRef} className="rounded-2xl border-2 border-[var(--strong-border)] bg-[var(--card)] p-4 sm:p-6 print:border-0 print:p-0">
           {finished ? (
             <div className="no-print">
               <h2 className="font-serif text-[28px] font-semibold leading-tight">That&apos;s our three days sorted.</h2>
@@ -464,10 +650,7 @@ export function ThreeDayPlanner({
             </div>
           ) : (
             <>
-              <h2 className="font-serif text-[28px] font-semibold leading-tight">{shoppingListHeading(toGet.length)}</h2>
-              <p className="mt-2">{SHOPPING_LIST_NOTE}</p>
-
-              <div className="no-print mt-4 flex flex-col gap-3 sm:flex-row sm:items-start">
+              <div className="no-print sticky top-0 z-10 bg-[var(--card)] pb-3">
                 <div className="flex flex-wrap gap-2">
                   <button type="button" onClick={share} className="h-12 rounded-full bg-[var(--brand)] px-6 font-semibold text-white hover:bg-[var(--brand-dark)]">
                     Share list
@@ -479,16 +662,19 @@ export function ThreeDayPlanner({
                     Print
                   </button>
                 </div>
-                <p className="text-[15px] leading-6 text-[var(--secondary)] sm:max-w-[260px]">{STORAGE_NOTE}</p>
+                <p className="mt-2 text-[15px] leading-6 text-[var(--secondary)]">{STORAGE_NOTE}</p>
+                {shareStatus && <p className="mt-2 text-[15px] font-semibold" role="status">{shareStatus}</p>}
               </div>
-              {shareStatus && <p className="no-print mt-2 text-[15px] font-semibold" role="status">{shareStatus}</p>}
+
+              <h2 className="font-serif text-[28px] font-semibold leading-tight">{shoppingListHeading(toGet.length)}</h2>
+              <p className="mt-2">{SHOPPING_LIST_NOTE}</p>
 
               <ul className="mt-4">
                 {toGet.map(({ line, left }) => (
                   <li key={line.id} className="border-b border-dashed border-[var(--border)] last:border-b-0">
                     <Tick checked={false} onChange={() => markBought(line)}>
                       <span className="font-semibold">{listName(line)}</span>
-                      {amountLeftText(line, left) && <span className="block text-[15px]">{amountLeftText(line, left)}</span>}
+                      {amountLeftText(line, left) && <span className="text-[15px] text-[var(--secondary)]"> — {amountLeftText(line, left)}</span>}
                     </Tick>
                   </li>
                 ))}
@@ -512,6 +698,8 @@ export function ThreeDayPlanner({
             </ul>
           </div>
         </section>
+          </aside>
+        </div>
 
         <section className="no-print mt-10">
           <h2 className="font-serif text-[21px] font-semibold">How we worked this out</h2>
@@ -523,6 +711,19 @@ export function ThreeDayPlanner({
           </p>
         </section>
       </div>
+
+      {!listVisible && (
+        <div className="no-print fixed inset-x-0 bottom-0 z-40 min-[900px]:hidden" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
+          <a
+            href="#shopping-list"
+            className="flex min-h-12 items-center justify-center gap-2 bg-[var(--brand)] px-4 text-center text-[17px] font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          >
+            {toGet.length === 0
+              ? "Nothing left to buy"
+              : `${toGet.length} item${toGet.length === 1 ? "" : "s"} left to buy`} · View list
+          </a>
+        </div>
+      )}
 
       <details
         id="longer-stores"
