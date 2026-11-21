@@ -137,7 +137,7 @@ export default function HomePage() {
                 Show me what I need &rarr;
               </Link>
               <span className="text-[17px] text-[var(--brand-dark)]">
-                Takes about five minutes.
+                No sign-up. Nothing you enter is stored.
               </span>
             </div>
 
@@ -203,6 +203,14 @@ export default function HomePage() {
           <p className="mt-2 text-[21px] text-[var(--brand-dark)] leading-7 font-serif">
             A little preparation now can make a difficult few days easier. Just in case.
           </p>
+          <div className="mt-6">
+            <Link
+              href="/planner?tier=weekend"
+              className="flex sm:inline-flex w-full sm:w-auto h-[60px] items-center justify-center bg-[var(--brand)] text-white px-8 rounded-full font-medium text-[21px] hover:bg-[var(--brand-dark)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:ring-offset-2 focus:ring-offset-[var(--background)]"
+            >
+              Show me what I need &rarr;
+            </Link>
+          </div>
           <p className="mt-2 text-[19px] text-[var(--brand-dark)] leading-7">
             <Link
               href="/about"
